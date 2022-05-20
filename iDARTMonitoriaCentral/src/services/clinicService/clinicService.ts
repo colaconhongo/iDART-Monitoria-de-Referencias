@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Clinic from 'src/stores/models/clinic/clinic';
 import api from '../apiService/apiService';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 const clinic = useRepo(Clinic);
 
@@ -11,23 +12,38 @@ export default {
       .then((resp) => {
         console.log(resp);
         clinic.save(resp.data);
+        alert(
+          'Sucesso!',
+          'O Registo foi efectuado com sucesso',
+          null,
+          null,
+          null
+        );
       })
       .catch((error) => {
-        if (error.response) {
-          console.error(error.response);
+        if (error.request != null) {
+          const arrayErrors = JSON.parse(error.request.response);
+          const listErrors = [];
+          if (arrayErrors.total == null) {
+            listErrors.push(arrayErrors.message);
+          } else {
+            arrayErrors._embedded.errors.forEach((element) => {
+              listErrors.push(element.message);
+            });
+          }
+          alert('Erro no registo', listErrors, null, null, null);
         } else if (error.request) {
-          console.error(error.request);
+          alert('Erro no registo', error.request, null, null, null);
         } else {
-          console.error('Error', error.message);
+          alert('Erro no registo', error.message, null, null, null);
         }
       });
   },
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('clinic?offset=' + offset + '&max=100')
+        .get('clinic?offset=' + offset + '&limit=100')
         .then((resp) => {
-          console.log(resp);
           clinic.save(resp.data);
           offset = offset + 100;
           if (resp.data.length > 0) {
@@ -35,16 +51,23 @@ export default {
           }
         })
         .catch((error) => {
-          if (error.response) {
-            console.error(error.response);
+          if (error.request != null) {
+            const arrayErrors = JSON.parse(error.request.response);
+            const listErrors = [];
+            if (arrayErrors.total == null) {
+              listErrors.push(arrayErrors.message);
+            } else {
+              arrayErrors._embedded.errors.forEach((element) => {
+                listErrors.push(element.message);
+              });
+            }
+            alert('Erro no registo', listErrors, null, null, null);
           } else if (error.request) {
-            console.error(error.request);
+            alert('Erro no registo', error.request, null, null, null);
           } else {
-            console.error('Error', error.message);
+            alert('Erro no registo', error.message, null, null, null);
           }
         });
-    } else {
-      console.error('Error: Request without a valid offset');
     }
   },
   patch(id: number, params: string) {
@@ -53,14 +76,30 @@ export default {
       .then((resp) => {
         console.log(resp);
         clinic.save(resp.data);
+        alert(
+          'Sucesso!',
+          'O Registo foi alterado com sucesso',
+          null,
+          null,
+          null
+        );
       })
       .catch((error) => {
-        if (error.response) {
-          console.error(error.response);
+        if (error.request != null) {
+          const arrayErrors = JSON.parse(error.request.response);
+          const listErrors = [];
+          if (arrayErrors.total == null) {
+            listErrors.push(arrayErrors.message);
+          } else {
+            arrayErrors._embedded.errors.forEach((element) => {
+              listErrors.push(element.message);
+            });
+          }
+          alert('Erro no registo', listErrors, '', '', '');
         } else if (error.request) {
-          console.error(error.request);
+          alert('Erro no registo', error.request, '', '', '');
         } else {
-          console.error('Error', error.message);
+          alert('Erro no registo', error.message, '', '', '');
         }
       });
   },
@@ -70,15 +109,56 @@ export default {
       .then((resp) => {
         console.log(resp);
         clinic.destroy(id);
+        alert(
+          'Sucesso!',
+          'O Registo foi removido com sucesso',
+          null,
+          null,
+          null
+        );
       })
       .catch((error) => {
-        if (error.response) {
-          console.error(error.response);
+        if (error.request != null) {
+          const arrayErrors = JSON.parse(error.request.response);
+          const listErrors = [];
+          if (arrayErrors.total == null) {
+            listErrors.push(arrayErrors.message);
+          } else {
+            arrayErrors._embedded.errors.forEach((element) => {
+              listErrors.push(element.message);
+            });
+          }
+          alert('Erro no registo', listErrors, null, null, null);
         } else if (error.request) {
-          console.error(error.request);
+          alert('Erro no registo', error.request, null, null, null);
         } else {
-          console.error('Error', error.message);
+          alert('Erro no registo', error.message, null, null, null);
         }
       });
+  },
+  // Confirmation
+  closeAlert() {
+    return false;
+  },
+  // Local Storage Pinia
+  newInstanceEntity() {
+    return clinic.getModel().$newInstance();
+  },
+
+  getAllFromStorage() {
+    return clinic.all();
+  },
+  getAllDDPharm() {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype !== 'Unidade Sanitária' &&
+          clinics.province === localStorage.getItem('province_name')
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
   },
 };

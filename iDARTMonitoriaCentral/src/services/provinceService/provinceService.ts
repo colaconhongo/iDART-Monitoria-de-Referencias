@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('province?offset=' + offset + '&max=100')
+        .get('province?offset=' + offset + '&limit=100')
         .then((resp) => {
           province.save(resp.data);
           offset = offset + 100;
@@ -46,5 +46,17 @@ export default {
   },
   getAllFromStorage() {
     return province.all();
+  },
+  getProvinceByNameFromStorage() {
+    return province
+      .query()
+      .where('name', localStorage.getItem('province_name'))
+      .get();
+  },
+  getFirstProvinceByNameFromStorage() {
+    return province
+      .query()
+      .where('name', localStorage.getItem('province_name'))
+      .first();
   },
 };
