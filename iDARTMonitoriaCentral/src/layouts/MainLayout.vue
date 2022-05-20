@@ -58,7 +58,7 @@
               :to="'/settings'"
               name="settings"
               icon="settings"
-              label="Administração"
+              label="Parametros"
             />
           </q-tabs>
           <q-btn-dropdown

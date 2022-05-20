@@ -14,6 +14,7 @@ const router = useRouter();
 */
 onMounted(() => {
   localStorage.setItem('user', null);
+  localStorage.setItem('token', null);
   router.push({
     path: '/Login',
   });

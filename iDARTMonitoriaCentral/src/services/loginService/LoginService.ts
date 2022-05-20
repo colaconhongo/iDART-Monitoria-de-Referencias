@@ -1,50 +1,131 @@
-import { useRepo } from 'pinia-orm';
-import Province from 'src/stores/models/province/province';
 import api from '../apiService/apiService';
+import { ShowNotification } from '../../components/Shared/Directives/Plugins/Notify/notify';
 
-const province = useRepo(Province);
+export const logout = () => {
+  return api()
+    .get('logout')
+    .catch((error) => {
+      if (error.response) {
+        console.log(JSON.stringify(error.response));
+        alert(JSON.stringify(error.response.data));
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
+};
 
-export default {
-  // Axios API call
-  post(params: string) {
-    return api()
-      .post('province', params)
-      .then((resp) => {
-        province.save(resp.data);
-      });
-  },
-  get(offset: number) {
-    if (offset >= 0) {
-      return api()
-        .get('province?offset=' + offset + '&max=100')
-        .then((resp) => {
-          province.save(resp.data);
-          offset = offset + 100;
-          if (resp.data.length > 0) {
-            setTimeout(this.get, 2);
-          }
-        });
-    }
-  },
-  patch(id: number, params: string) {
-    return api()
-      .patch('province/' + id, params)
-      .then((resp) => {
-        province.save(resp.data);
-      });
-  },
-  delete(id: number) {
-    return api()
-      .delete('province/' + id)
-      .then(() => {
-        province.destroy(id);
-      });
-  },
-  // Local Storage Pinia
-  newInstanceEntity() {
-    return province.getModel().$newInstance();
-  },
-  getAllFromStorage() {
-    return province.all();
-  },
+export const fetchUsers = () => {
+  return api()
+    .get('secUser')
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+        alert(error.response.data);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
+};
+
+export const signup = (params: string) => {
+  return api()
+    .post('user/signup', params)
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+        alert(error.response.data);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
+};
+
+export const login = (params: string) => {
+  return (
+    api()
+      .post('/rpc/login', params)
+      //return Api().post('login', params) //
+      .catch((error) => {
+        if (error.response) {
+          ShowNotification(
+            'announcement',
+            'Username or Password is invalid',
+            'negative',
+            true,
+            3000,
+            'top',
+            'negative',
+            'white',
+            'glossy'
+          );
+          console.log(error.response);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          ShowNotification(
+            'announcement',
+            'Problemas ao conectar-se com o Servidor.',
+            'negative',
+            true,
+            3000,
+            'top',
+            'negative',
+            'white',
+            'glossy'
+          );
+          console.log('Error', error.message);
+        }
+      })
+  );
+};
+
+export const updateUser = (params: object) => {
+  return api()
+    .put('secUser/' + params.id, params)
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
+};
+
+export const getUser = (id: number) => {
+  return api()
+    .get('secUser/' + id)
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
+};
+
+export const deleteUser = (id: number) => {
+  return api()
+    .delete('user/' + id)
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
 };

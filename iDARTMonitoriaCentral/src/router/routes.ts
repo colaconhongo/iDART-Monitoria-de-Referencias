@@ -5,6 +5,8 @@ import IndexPage from 'pages/IndexPage.vue';
 import ErrorNotFound from 'pages/ErrorNotFound.vue';
 import MainLayout from 'layouts/MainLayout.vue';
 import provinceIndex from 'pages/province/index.vue';
+import Settings from 'pages/Settings/Settings.vue';
+import ClinicDetails from '../pages/Clinic/Clinic.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -26,6 +28,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/province',
         component: provinceIndex,
+      },
+      {
+        path: '/settings',
+        component: Settings,
+      },
+      {
+        path: '/clinic:id',
+        component: ClinicDetails,
       },
     ],
   },

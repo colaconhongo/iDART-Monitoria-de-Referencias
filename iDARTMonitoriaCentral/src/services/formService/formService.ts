@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('form?offset=' + offset + '&max=100')
+        .get('form?offset=' + offset + '&limit=100')
         .then((resp) => {
           form.save(resp.data);
           offset = offset + 100;

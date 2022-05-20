@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('sync_temp_episode?offset=' + offset + '&max=100')
+        .get('sync_temp_episode?offset=' + offset + '&limit=100')
         .then((resp) => {
           sync_temp_episode.save(resp.data);
           offset = offset + 100;

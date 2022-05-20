@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('district?offset=' + offset + '&max=100')
+        .get('district?offset=' + offset + '&limit=100')
         .then((resp) => {
           district.save(resp.data);
           offset = offset + 100;
@@ -46,5 +46,11 @@ export default {
   },
   getAllFromStorage() {
     return district.all();
+  },
+  getAllProvinceFromStorage() {
+    return district
+      .query()
+      .where('province', Number(localStorage.getItem('province_id')))
+      .get();
   },
 };

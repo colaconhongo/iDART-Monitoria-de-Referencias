@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('clinic_sector_type?offset=' + offset + '&max=100')
+        .get('clinic_sector_type?offset=' + offset + '&limit=100')
         .then((resp) => {
           clinic_sector_type.save(resp.data);
           offset = offset + 100;

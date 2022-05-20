@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('stock?offset=' + offset + '&max=100')
+        .get('stock?offset=' + offset + '&limit=100')
         .then((resp) => {
           stock.save(resp.data);
           offset = offset + 100;
