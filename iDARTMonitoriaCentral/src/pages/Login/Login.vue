@@ -57,7 +57,10 @@
               </div>
             </q-card-section>
             <q-card-section align="center">
-              <q-form class="q-gutter-md" @submit.prevent="processForm">
+              <q-form
+                @submit.prevent="processForm"
+                class="q-gutter-md"
+              >
                 <div class="row justify-between">
                   <div
                     class="col-5 q-pa-sm q-pl-xl q-ml-xl text-center justify-center"
