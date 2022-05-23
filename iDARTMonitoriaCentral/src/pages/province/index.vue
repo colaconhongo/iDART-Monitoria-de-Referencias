@@ -198,7 +198,7 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 600);
-  getAllProvincia(0);
+  ProvinceService.get(0);
 });
 
 /*
@@ -335,12 +335,6 @@ const editaProvincia = (provincia) => {
   editedIndex.value = 0;
   province.value = Object.assign({}, provincia);
   show_dialog.value = true;
-};
-
-const getAllProvincia = (offset) => {
-  if (offset >= 0) {
-    ProvinceService.get(offset);
-  }
 };
 
 const wrapCsvValue = (val, formatFn) => {

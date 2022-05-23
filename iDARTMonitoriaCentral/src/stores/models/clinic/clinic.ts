@@ -15,16 +15,16 @@ export default class Clinic extends Model {
       facilitytype: this.attr(''),
       notes: this.attr(''),
       telephone: this.attr(''),
-      mainclinic: this.attr(''),
+      mainclinic: this.attr(false),
       province: this.attr(''),
       district: this.attr(''),
       subdistrict: this.attr(''),
-      clinicdetails_id: this.attr(''),
+      clinicdetails_id: this.attr(25),
       // Relationship
 
-      clinicsectors: this.hasMany(ClinicSector, 'clinic'),
-      episodes: this.hasMany(Episode, 'clinicuuid'),
-      stockCenter: this.hasMany(StockCenter, 'clinicuuid'),
+      // clinicsectors: this.hasMany(ClinicSector, 'clinic'),
+      // episodes: this.hasMany(Episode, 'clinicuuid'),
+      // stockCenter: this.hasMany(StockCenter, 'clinicuuid'),
     };
   }
 }

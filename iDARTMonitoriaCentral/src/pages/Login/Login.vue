@@ -116,7 +116,7 @@
                         fill-input
                         hide-selected
                         :options="allProvincias"
-                        option-label="designacao"
+                        option-label="name"
                         option-value="id"
                       >
                         <template v-slot:no-option>
@@ -132,9 +132,12 @@
                   <div
                     class="col-6 text-grey text-caption no-wrap items-center justify-center"
                   >
-                    <div class="row justify-center q-pb-md">
+                    <div class="row justify-center q-pb-md rotateLogo">
                       <q-avatar size="160px">
-                        <q-img src="../../assets/LogoMonitoria.png" />
+                        <q-img
+                          class="bg-white rotatings"
+                          src="../../assets/LogoMonitoria.png"
+                        />
                       </q-avatar>
                     </div>
                     <div class="row justify-center">
@@ -167,9 +170,9 @@
 
 <script setup>
 import { useQuasar } from 'quasar';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import LoginService from '../../services/loginService/LoginService';
+import { login } from '../../services/loginService/LoginService';
 import ProvinceService from 'src/services/provinceService/provinceService';
 
 /*
@@ -191,28 +194,32 @@ const allProvincias = computed(() => {
 });
 /*
    On Page Mounted
-
+*/
 onMounted(() => {
-  LoadJS.QSpinnerGearsShow('grey-4', '', '', '', 'Carregando ...');
-  setTimeout(() => {
-    LoadJS.closeLoading();
-  }, 600);
+  ProvinceService.get(0);
 });
+
 /*
   Methods
 */
 const processForm = () => {
-  console.log({ username: username.value, pass: password.value });
+  console.log({
+    username: username.value,
+    pass: password.value,
+    provincia: provincia.value,
+  });
   submitting.value = true;
-  LoginService.login({
+  login({
     username: username.value,
     pass: password.value,
   }).then((response) => {
     if (response) {
       console.log('Login >>>>>>>>', response); //.access_token);
       localStorage.setItem('user', username.value);
-      localStorage.setItem('id_token', response.data[0].token);
+      localStorage.setItem('token', response.data[0].token);
       localStorage.setItem('refresh_token', response.data[0].token);
+      localStorage.setItem('province_id', provincia.value.id);
+      localStorage.setItem('province_name', provincia.value.name);
 
       router.push({ path: '/' });
     } else {
@@ -251,5 +258,41 @@ const processForm = () => {
 }
 .btn-fixed-width {
   width: 250px;
+}
+@keyframes rotating {
+  from {
+    transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+    -o-transform: rotateY(360deg);
+    -ms-transform: rotateY(360deg);
+    -moz-transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
+  }
+}
+@-webkit-keyframes rotating {
+  from {
+    transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+    -webkit-transform: rotateY(360deg);
+  }
+}
+.rotatings {
+  -webkit-animation: rotating 6s linear alternate-reverse infinite;
+  -moz-animation: rotating 6s linear alternate-reverse infinite;
+  -ms-animation: rotating 6s linear alternate-reverse infinite;
+  -o-animation: rotating 6s linear alternate-reverseinfinite;
+  animation: rotating 6s linear alternate-reverse infinite;
+}
+.rotating:hover {
+  transform: rotate(360deg);
 }
 </style>

@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('linhat?offset=' + offset + '&max=100')
+        .get('linhat?offset=' + offset + '&limit=100')
         .then((resp) => {
           linhat.save(resp.data);
           offset = offset + 100;

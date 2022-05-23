@@ -5,19 +5,22 @@ const instance = axios.create({
 });
 
 // Request interceptor for API calls
-axios.interceptors.request.use(
+instance.interceptors.request.use(
   async (config) => {
     config.headers = {
       Accept: 'application/json',
     };
     if (
-      config.url === '/province' ||
-      config.url === '/district' ||
-      config.url === '/clinic'
+      config.url?.startsWith('province') ||
+      config.url?.startsWith('/district') ||
+      config.url === '/rpc/login'
     ) {
       delete config.headers.Authorization;
     } else if (localStorage.getItem('token') != null) {
-      config.headers['Bearer'] = ['', localStorage.getItem('token')].join(' ');
+      config.headers.Authorization = [
+        'Bearer',
+        localStorage.getItem('token'),
+      ].join(' ');
     } else {
       delete config.headers.Authorization;
     }
@@ -29,14 +32,14 @@ axios.interceptors.request.use(
 );
 
 // Response interceptor for API calls
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     return response;
   },
   async function (error) {
     const originalRequest = error.config;
     const rToken = localStorage.getItem('refresh_token');
-    if (rToken) {
+    if (!rToken) {
       if (
         (error.response.status === 403 || error.response.status === 401) &&
         !originalRequest._retry

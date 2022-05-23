@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('regimeterapeutico?offset=' + offset + '&max=100')
+        .get('regimeterapeutico?offset=' + offset + '&limit=100')
         .then((resp) => {
           regimeterapeutico.save(resp.data);
           offset = offset + 100;

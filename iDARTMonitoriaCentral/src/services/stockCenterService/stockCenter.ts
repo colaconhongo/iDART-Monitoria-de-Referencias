@@ -16,7 +16,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('stockcenter?offset=' + offset + '&max=100')
+        .get('stockcenter?offset=' + offset + '&limit=100')
         .then((resp) => {
           stockcenter.save(resp.data);
           offset = offset + 100;
