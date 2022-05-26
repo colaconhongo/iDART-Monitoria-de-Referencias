@@ -30,4 +30,9 @@ export default class Stock extends Model {
       stocklevels: this.hasMany(StockLevel, 'batch'),
     };
   }
+
+  getBalance() {
+    const balance = 0;
+    return balance;
+  }
 }
