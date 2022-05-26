@@ -8,6 +8,7 @@ import provinceIndex from 'pages/province/index.vue';
 import Settings from 'pages/Settings/Settings.vue';
 import stock from 'pages/Stock/Stock.vue';
 import ClinicDetails from '../pages/Clinic/Clinic.vue';
+import Patients from '../pages/Patients/Patients.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -41,6 +42,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/clinic:id',
         component: ClinicDetails,
+      },
+      {
+        path: '/patients',
+        component: Patients,
       },
     ],
   },
