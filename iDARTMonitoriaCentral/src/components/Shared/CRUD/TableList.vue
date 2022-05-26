@@ -76,6 +76,7 @@
               no-caps
               round
               size="sm"
+              v-if="with_actionDetailButton"
               @click="visualizar(props.row)"
             >
               <q-tooltip
@@ -93,6 +94,7 @@
               no-caps
               round
               size="sm"
+              v-if="with_actionEditButton"
               @click="editar(props.row)"
             >
               <q-tooltip
@@ -110,6 +112,7 @@
               no-caps
               round
               size="sm"
+              v-if="with_actionRemoveButton"
               @click="remover(props.row)"
             >
               <q-tooltip
@@ -160,6 +163,18 @@ const props = defineProps({
     type: Boolean,
   },
   with_actionsButton: {
+    type: Boolean,
+    default: true,
+  },
+  with_actionDetailButton: {
+    type: Boolean,
+    default: true,
+  },
+  with_actionRemoveButton: {
+    type: Boolean,
+    default: true,
+  },
+  with_actionEditButton: {
     type: Boolean,
     default: true,
   },
