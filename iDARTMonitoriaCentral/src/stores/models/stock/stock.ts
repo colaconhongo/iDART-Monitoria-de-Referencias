@@ -10,7 +10,6 @@ export default class Stock extends Model {
     return {
       id: this.attr(null),
       drug: this.attr(''),
-      stockcenter: this.uid(),
       datereceived: this.attr(''),
       batchnumber: this.attr(''),
       expirydate: this.attr(''),
@@ -21,6 +20,7 @@ export default class Stock extends Model {
       hasunitsremaining: this.attr(''),
       unitprice: this.attr(''),
       numeroguia: this.attr(''),
+      stockcenter: this.attr(''),
 
       // Relationship
 

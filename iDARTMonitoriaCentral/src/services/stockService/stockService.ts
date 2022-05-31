@@ -65,4 +65,10 @@ export default {
   getAllFromStorage() {
     return stock.query().withAll().get()
   },
+  getByDrugIdFromStorage(drugId: string) {
+    const list = stock.query().with('mainDrug', (query) => {
+      query.where('id', drugId)
+    }).get()
+    return list
+  },
 };

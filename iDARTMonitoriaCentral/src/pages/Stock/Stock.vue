@@ -8,9 +8,11 @@
   */
   import stockSearch from 'src/components/stock/StockSearch.vue'
   import { useQuasar, QSpinnerBall } from 'quasar';
-  import { computed, onMounted, reactive, ref } from 'vue';
+  import {  onMounted, reactive, ref } from 'vue';
   import stockService from 'src/services/stockService/stockService';
   import drugService from 'src/services/drugService/drugService';
+  import stockCenterService from 'src/services/stockCenterService/stockCenter';
+  import stockLevelService from 'src/services/stockLevelService/stockLevelService';
 /*
 Declarations
 */
@@ -29,30 +31,38 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 600);
-  getAllDrugsFromAPI(0);
-  getAllStockFromAPI(0);
-});
-
-/*
-  Computed
-*/
-const allStock = computed(() => {
-  return stockService.getAllFromStorage();
+    /*getAllDrugFromAPI(0);
+    getAllStockFromAPI(0);
+    getAllStockCenterFromAPI(0);
+    getAllStockLevelFromAPI(0);*/
 });
 
 /*
   Methods
 */
-const getAllStockFromAPI = (offset) => {
-  if (offset >= 0) {
-    stockService.get(offset);
-  }
-};
-const getAllDrugsFromAPI = (offset) => {
-  if (offset >= 0) {
-    drugService.get(offset);
-  }
-};
+const getAllDrugFromAPI = (offset) => {
+    if (offset >= 0) {
+      drugService.get(offset);
+    }
+  };
+
+  const getAllStockFromAPI = (offset) => {
+    if (offset >= 0) {
+      stockService.get(offset);
+    }
+  };
+
+  const getAllStockCenterFromAPI = (offset) => {
+    if (offset >= 0) {
+      stockCenterService.get(offset);
+    }
+  };
+
+  const getAllStockLevelFromAPI = (offset) => {
+    if (offset >= 0) {
+      stockLevelService.get(offset);
+    }
+  };
 </script>
 
 <style>
