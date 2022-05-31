@@ -17,6 +17,8 @@
     "pinia": "^2.0.11",
     "pinia-orm": "^0.9.2",
     "quasar": "^2.6.0",
+    "react-reportbro-designer": "^1.0.4",
+    "reportbro-designer": "^2.1.1",
     "vue": "^3.0.0",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.0"

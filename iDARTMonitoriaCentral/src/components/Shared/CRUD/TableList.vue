@@ -69,23 +69,24 @@
           {{ col.value }}
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>
-          <div class="q-gutter-sm">
+          <div class="q-gutter-sm q-px-md">
+
             <q-btn
-              color="secondary"
-              icon="visibility"
+              color="red"
+              icon="delete_forever"
               no-caps
               round
               size="sm"
-              v-if="with_actionDetailButton"
-              @click="visualizar(props.row)"
+              v-if="with_actionRemoveButton"
+              @click="remover(props.row)"
             >
-              <q-tooltip
+            <q-tooltip
                 content-class="bg-white text-primary shadow-4"
                 :offset="[10, 10]"
                 transition-show="rotate"
                 transition-hide="rotate"
               >
-                Ver Detalhes
+                Remover
               </q-tooltip>
             </q-btn>
             <q-btn
@@ -106,14 +107,17 @@
                 Editar
               </q-tooltip>
             </q-btn>
+
             <q-btn
-              color="red"
-              icon="delete_forever"
+              color="primary"
+              icon-right="east"
+              align="left"
               no-caps
-              round
+              label="Ver"
+              unelevated rounded
               size="sm"
-              v-if="with_actionRemoveButton"
-              @click="remover(props.row)"
+              v-if="with_actionDetailButton"
+              @click="Ver(props.row)"
             >
               <q-tooltip
                 content-class="bg-red text-white shadow-4"
@@ -121,7 +125,7 @@
                 transition-show="rotate"
                 transition-hide="rotate"
               >
-                Remover
+                Ver detalhes
               </q-tooltip>
             </q-btn>
           </div>

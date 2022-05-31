@@ -1,5 +1,5 @@
 import { Model, ModelFields } from 'pinia-orm';
-import ClinicSector from '../clinicSector/ClinicSector';
+import ClinicSector from '../clinicSector/clinicSector';
 import Episode from '../episode/episode';
 import StockCenter from '../stockCenter/stockCenter';
 
