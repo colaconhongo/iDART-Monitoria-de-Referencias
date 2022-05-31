@@ -204,9 +204,6 @@ const wrapCsvValue = (val, formatFn) => {
 
 const exportTable = () => {
   // naive encoding to csv format
-  console.log('Entra');
-  console.log(colunas);
-  console.log(linhas);
   const content = [colunas.map((col) => wrapCsvValue(col.label))]
     .concat(
       linhas.map((row) =>
