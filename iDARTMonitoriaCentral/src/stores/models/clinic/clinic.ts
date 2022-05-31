@@ -9,17 +9,17 @@ export default class Clinic extends Model {
   static fields(): ModelFields {
     return {
       id: this.attr(null),
-      code: this.attr(''),
       uuid: this.uid(),
+      clinicdetails_id: this.attr(25),
+      subdistrict: this.attr(''),
+      code: this.attr(''),
       clinicname: this.attr(''),
       facilitytype: this.attr(''),
-      notes: this.attr(''),
-      telephone: this.attr(''),
-      mainclinic: this.attr(false),
       province: this.attr(''),
       district: this.attr(''),
-      subdistrict: this.attr(''),
-      clinicdetails_id: this.attr(25),
+      telephone: this.attr(''),
+      notes: this.attr(''),
+      mainclinic: this.attr(false),
       // Relationship
 
       // clinicsectors: this.hasMany(ClinicSector, 'clinic'),
