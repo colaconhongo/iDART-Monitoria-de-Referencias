@@ -70,5 +70,5 @@ export default {
       query.where('id', drugId)
     }).get()
     return list
-  },
+  }
 };
