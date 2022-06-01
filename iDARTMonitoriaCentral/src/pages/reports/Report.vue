@@ -26,9 +26,7 @@
 
           </div>
           <div class="col q-mr-sm panel q-pa-sm">
-        <template v-for="comp in components"
-          :key="comp.id"
-         >
+        <template v-for="comp in components" :key="comp.id" >
            <component
               :is="comp.name"
               :id="comp.id"
