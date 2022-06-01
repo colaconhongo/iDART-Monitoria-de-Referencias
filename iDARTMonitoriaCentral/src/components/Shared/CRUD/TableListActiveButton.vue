@@ -71,6 +71,19 @@
         <q-td v-if="with_actionsButton" auto-width>
           <div class="q-gutter-sm q-px-md">
             <q-btn
+              flat
+              round
+              class="q-ml-md"
+              size="md"
+              :color="getColorActive(props.row)"
+              :icon="getIconActive(props.row)"
+              @click.stop="promptToConfirm(props.row)"
+            >
+              <q-tooltip :class="getTooltipClass(props.row)">{{
+                props.row.active ? 'Inactivar' : 'Activar'
+              }}</q-tooltip>
+            </q-btn>
+            <q-btn
               color="red"
               icon="delete_forever"
               no-caps
@@ -116,7 +129,6 @@
               unelevated
               rounded
               size="sm"
-              style="min-width: 78px"
               v-if="with_actionDetailButton"
               @click="visualizar(props.row)"
             >
@@ -200,6 +212,9 @@ const props = defineProps({
   remover: {
     type: Function,
   },
+  promptToConfirm: {
+    type: Function,
+  },
 });
 
 /*
@@ -213,7 +228,27 @@ const props = defineProps({
 /*
   Methods
 */
-
+const getIconActive = (entity) => {
+  if (entity.active) {
+    return 'stop_circle';
+  } else if (!entity.active) {
+    return 'play_circle';
+  }
+};
+const getColorActive = (entity) => {
+  if (entity.active) {
+    return 'red';
+  } else if (!entity.active) {
+    return 'green';
+  }
+};
+const getTooltipClass = (entity) => {
+  if (entity.active) {
+    return 'bg-red-5';
+  } else if (!entity.active) {
+    return 'bg-green-5';
+  }
+};
 const wrapCsvValue = (val, formatFn) => {
   let formatted = formatFn !== undefined ? formatFn(val) : val;
   formatted =

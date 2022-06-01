@@ -47,4 +47,7 @@ export default {
   getAllFromStorage() {
     return clinic_sector_type.all();
   },
+  getClinicSectorTypeByID(id: number) {
+    return clinic_sector_type.query().where('id', id).get();
+  },
 };
