@@ -117,7 +117,7 @@
               unelevated rounded
               size="sm"
               v-if="with_actionDetailButton"
-              @click="Ver(props.row)"
+              @click="visualizar(props.row)"
             >
               <q-tooltip
                 content-class="bg-red text-white shadow-4"
