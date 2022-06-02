@@ -10,7 +10,7 @@ export default {
     return api()
       .post('clinic', params)
       .then((resp) => {
-        console.log(resp);
+        console.log(params);
         clinic.save(resp.data);
         alert(
           'Sucesso!',
@@ -72,10 +72,9 @@ export default {
   },
   patch(id: number, params: string) {
     return api()
-      .patch('clinic/' + id, params)
+      .patch('clinic?id=eq.' + id, params)
       .then((resp) => {
-        console.log(resp);
-        clinic.save(resp.data);
+        clinic.save(JSON.parse(resp.config.data));
         alert(
           'Sucesso!',
           'O Registo foi alterado com sucesso',
@@ -105,7 +104,7 @@ export default {
   },
   delete(id: number) {
     return api()
-      .delete('clinic/' + id)
+      .delete('clinic?id=eq.' + id)
       .then((resp) => {
         console.log(resp);
         clinic.destroy(id);
@@ -159,6 +158,39 @@ export default {
       })
       .orderBy('facilitytype')
       .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllUsByDistrict(district) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype === 'Unidade Sanitária' &&
+          clinics.district === district.name
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllDDPharmByDistrict(district) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype !== 'Unidade Sanitária' &&
+          clinics.district === district.name
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+
+  getPharmByUUid(uuid) {
+    return clinic
+      .query()
+      .where('uuid', uuid)
       .get();
   },
 };

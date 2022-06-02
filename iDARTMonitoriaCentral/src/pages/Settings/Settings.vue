@@ -25,36 +25,20 @@
         >
           <q-tab-panel name="clinic">
             <div class="text-h4 q-mb-md"></div>
-            <clinics> </clinics>
+            <clinics />
           </q-tab-panel>
-          <!--q-tab-panel name="clinic_sector">
+          <q-tab-panel name="clinic_sector">
             <div class="text-h4 q-mb-md"></div>
-            <clinicSectors> </clinicSectors>
-          </!--q-tab-panel>
-          <q-tab-panel name="doctor">
-            <div class="text-h4 q-mb-md"></div>
-            <doctor> </doctor>
+            <clinic_sector />
           </q-tab-panel>
           <q-tab-panel name="drugs">
             <div class="text-h4 q-mb-md"></div>
-            <drug> </drug>
+            <drugs />
           </q-tab-panel>
-          <q-tab-panel name="clinical_service">
+          <q-tab-panel name="regimen">
             <div class="text-h4 q-mb-md"></div>
-            <clinicalServices> </clinicalServices>
+            <regimen />
           </q-tab-panel>
-          <q-tab-panel name="therapeutic_regimen">
-            <div class="text-h4 q-mb-md"></div>
-            <therapeuticRegimen> </therapeuticRegimen>
-          </q-tab-panel>
-          <q-tab-panel name="identifier_type">
-            <div class="text-h4 q-mb-md"></div>
-            <identifierType />
-          </q-tab-panel>
-          <q-tab-panel-- name="interoperability">
-            <div class="text-h4 q-mb-md"></div>
-            <interoperability> </interoperability>
-          </q-tab-panel-->
         </q-tab-panels>
       </template>
     </q-splitter>
@@ -63,15 +47,17 @@
 <script setup>
 import { ref } from 'vue';
 import clinics from '../Clinic/Clinic.vue';
+import clinic_sector from '../ClinicSector/ClinicSector.vue';
+import drugs from '../Drugs/Drugs.vue';
+import regimen from '../Regimen/Regimen.vue';
 
 const selectedTab = ref('clinic');
 const splitterModel = ref(15);
 const tabs = [
-  // { name: 'national_clinic', icon: 'local_convenience_store', label: 'Unidade Sanitaria' },
   { name: 'clinic', icon: 'local_hospital', label: 'Farmácias' },
   { name: 'clinic_sector', icon: 'local_pharmacy', label: 'Sector Clínico' },
   { name: 'drugs', icon: 'medication', label: 'Medicamentos' },
-  { name: 'therapeutic_regimen', icon: 'healing', label: 'Regime Terapêutico' },
+  { name: 'regimen', icon: 'healing', label: 'Regime Terapêutico' },
 ];
 </script>
 <style></style>

@@ -6,8 +6,12 @@ import ErrorNotFound from 'pages/ErrorNotFound.vue';
 import MainLayout from 'layouts/MainLayout.vue';
 import provinceIndex from 'pages/province/index.vue';
 import Settings from 'pages/Settings/Settings.vue';
+import stock from 'pages/Stock/Stock.vue';
+import report from 'pages/reports/Report.vue';
 import ClinicDetails from '../pages/Clinic/Clinic.vue';
+import Dashboard from '../pages/Dashboard/Dashboard.vue';
 import Patients from '../pages/Patients/Patients.vue';
+
 
 const routes: RouteRecordRaw[] = [
   {
@@ -35,13 +39,25 @@ const routes: RouteRecordRaw[] = [
         component: Settings,
       },
       {
+        path: '/stock',
+        component: stock,
+      },
+      {
+        path: '/reports',
+        component: report,
+      },
+      {
         path: '/clinic:id',
         component: ClinicDetails,
       },
       {
+        path: '/dashboard',
+        component: Dashboard,
+      },
+      {
         path: '/patients',
         component: Patients,
-      },
+      }
     ],
   },
   {
