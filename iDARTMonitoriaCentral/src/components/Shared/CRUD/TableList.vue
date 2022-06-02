@@ -69,22 +69,24 @@
           {{ col.value }}
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>
-          <div class="q-gutter-sm">
+          <div class="q-gutter-sm q-px-md">
+
             <q-btn
-              color="secondary"
-              icon="visibility"
+              color="red"
+              icon="delete_forever"
               no-caps
               round
               size="sm"
-              @click="visualizar(props.row)"
+              v-if="with_actionRemoveButton"
+              @click="remover(props.row)"
             >
-              <q-tooltip
+            <q-tooltip
                 content-class="bg-white text-primary shadow-4"
                 :offset="[10, 10]"
                 transition-show="rotate"
                 transition-hide="rotate"
               >
-                Ver Detalhes
+                Remover
               </q-tooltip>
             </q-btn>
             <q-btn
@@ -93,6 +95,7 @@
               no-caps
               round
               size="sm"
+              v-if="with_actionEditButton"
               @click="editar(props.row)"
             >
               <q-tooltip
@@ -104,13 +107,17 @@
                 Editar
               </q-tooltip>
             </q-btn>
+
             <q-btn
-              color="red"
-              icon="delete_forever"
+              color="primary"
+              icon-right="east"
+              align="left"
               no-caps
-              round
+              label="Ver"
+              unelevated rounded
               size="sm"
-              @click="remover(props.row)"
+              v-if="with_actionDetailButton"
+              @click="visualizar(props.row)"
             >
               <q-tooltip
                 content-class="bg-red text-white shadow-4"
@@ -118,7 +125,7 @@
                 transition-show="rotate"
                 transition-hide="rotate"
               >
-                Remover
+                Ver detalhes
               </q-tooltip>
             </q-btn>
           </div>
@@ -163,6 +170,18 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  with_actionDetailButton: {
+    type: Boolean,
+    default: true,
+  },
+  with_actionRemoveButton: {
+    type: Boolean,
+    default: true,
+  },
+  with_actionEditButton: {
+    type: Boolean,
+    default: true,
+  },
   columns: {
     type: Array,
     default: ref([]),
@@ -204,9 +223,6 @@ const wrapCsvValue = (val, formatFn) => {
 
 const exportTable = () => {
   // naive encoding to csv format
-  console.log('Entra');
-  console.log(colunas);
-  console.log(linhas);
   const content = [colunas.map((col) => wrapCsvValue(col.label))]
     .concat(
       linhas.map((row) =>

@@ -1,5 +1,5 @@
 import { Model, ModelFields } from 'pinia-orm';
-import ClinicSector from '../clinicSector/ClinicSector';
+import ClinicSector from '../clinicSector/clinicSector';
 
 export default class ClinicSectorType extends Model {
   static entity = 'clinicsectortypes';

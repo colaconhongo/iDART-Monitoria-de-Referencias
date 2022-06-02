@@ -47,4 +47,7 @@ export default {
   getAllFromStorage() {
     return drug.all();
   },
+  getFromStorage(id: string) {
+    return drug.find(id);
+  },
 };

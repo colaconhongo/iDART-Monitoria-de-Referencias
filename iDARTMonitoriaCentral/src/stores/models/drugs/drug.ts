@@ -1,5 +1,6 @@
 import { Model, ModelFields } from 'pinia-orm';
 import Form from '../form/form';
+import Stock from '../stock/stock';
 
 export default class Drug extends Model {
   static entity = 'drugs';
@@ -18,13 +19,15 @@ export default class Drug extends Model {
       defaulttimes: this.attr(''),
       stockcode: this.attr(''),
       pediatric: this.attr(''),
-      active: this.attr(''),
+      active: this.boolean(true),
       tipodoenca: this.attr(''),
       atccode_id: this.attr(''),
 
       // Relationship
 
       mainForm: this.belongsTo(Form, 'form'),
+      stocks: this.hasMany(Stock, 'drug'),
     };
   }
+
 }
