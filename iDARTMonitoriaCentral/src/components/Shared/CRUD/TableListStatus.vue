@@ -66,7 +66,25 @@
     <template v-slot:body="props">
       <q-tr :props="props">
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
-          {{ col.value }}
+          <div v-if="col.value === 'I' && col.name === 'syncstatus'">
+            <label style="color: green">
+              <q-icon class="las la-check-double"></q-icon>
+              Enviado</label
+            >
+          </div>
+          <div v-else-if="col.value === 'L' && col.name === 'syncstatus'">
+            <label style="color: orange"
+              ><i class="las la-question-circle"></i> Actualizado</label
+            >
+          </div>
+          <div v-else-if="col.value === 'P' && col.name === 'syncstatus'">
+            <label style="color: red"
+              ><i class="las la-exclamation-circle"></i> Pendente</label
+            >
+          </div>
+          <div v-else>
+            {{ col.value }}
+          </div>
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>
           <div class="q-gutter-sm">
@@ -113,7 +131,7 @@
               round
               size="sm"
               v-if="with_actionRemoveButton"
-              :@click="remover(props.row)"
+              @click="remover(props.row)"
             >
               <q-tooltip
                 content-class="bg-red text-white shadow-4"

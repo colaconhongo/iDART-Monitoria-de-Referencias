@@ -4,26 +4,25 @@
       :columns="columns"
       :mode="mode"
       :with_downloadButton="true"
-      :rows="allClinicInformation"
+      :rows="allPrescription"
       :title="props.title"
       :with_actionRemoveButton="false"
       :with_actionEditButton="false"
-      :with_actionDetailButton="true"
-      :visualizar="visualizar"
+      :with_actionDetailButton="false"
     />
-    <clinicInformationModal
+    <prescriptionDetailsModal
       :is="true"
       :show_dialog="show_dialog"
-      :clinicInformation="clinicInformation"
+      :prescription="prescription"
     />
   </q-page>
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import clinicInformationService from 'src/services/clinicInformationService/clinicInformationService';
+import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 import { computed, onMounted, reactive, ref } from 'vue';
-import listClinic from 'src/components/Shared/CRUD/TableList.vue';
-import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
+import listClinic from 'src/components/Shared/CRUD/TableListStatus.vue';
+import prescriptionDetailsModal from 'src/components/prescription/PrescriptionDetailsModal.vue';
 import moment from 'moment';
 
 /*
@@ -41,58 +40,56 @@ Declarations
 */
 const $q = new useQuasar();
 const mode = reactive(ref('list'));
-const clinicInformation = reactive(ref({}));
-
+const prescription = ref({});
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
-
 const columns = [
   {
-    name: 'registerdate',
+    name: 'pickupdate',
     required: true,
-    label: 'Data de Registo',
+    label: 'Data de levantamento',
     align: 'left',
-    field: (row) => moment(row.registerdate).format('DD-MM-YYYY'),
+    field: (row) => moment(row.pickupdate).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'weight',
+    name: 'drugname',
     align: 'left',
-    label: 'Peso (Kg)',
-    field: (row) => row.weight,
+    label: 'Medicamento',
+    field: (row) => row.drugname,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'height',
+    name: 'qtyinhand',
     align: 'left',
-    label: 'Altura (Cm)',
-    field: (row) => row.height,
+    label: 'Quantidade (Frasco)',
+    field: (row) => row.qtyinhand,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'imc',
+    name: 'duration',
     align: 'left',
-    label: 'IMC',
-    field: (row) => row.imc,
+    label: 'Duração (meses)',
+    field: (row) => row.duration,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'systole',
+    name: 'dateexpectedstring',
     align: 'left',
-    label: 'Sistole (mmHg)',
-    field: (row) => row.systole,
+    label: 'Data próximo levantamento',
+    field: (row) => moment(row.dateexpectedstring).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'distort',
+    name: 'syncstatus',
     align: 'left',
-    label: 'Diastole (mmHg)',
-    field: (row) => row.distort,
+    label: 'Estado',
+    field: (row) => row.syncstatus,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -109,33 +106,24 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 600);
-  getAllClinicInformationFromAPI(0);
+  getAllPrescriptionFromAPI(0);
 });
 
 /*
   Computed
 */
 
-const allClinicInformation = computed(() => {
-  return clinicInformationService.getClinicInformationByPatientUuid(
-    '40b17748-05d6-44db-9d44-581f4853c854'
-  );
-  // getClinicInformationByPatientUuid
+const allPrescription = computed(() => {
+  return prescriptionService.getAllFromStorage();
 });
 
 /*
   Methods
 */
 
-const getAllClinicInformationFromAPI = (offset) => {
+const getAllPrescriptionFromAPI = (offset) => {
   if (offset >= 0) {
-    clinicInformationService.get(offset);
+    prescriptionService.get(offset);
   }
-};
-
-const visualizar = (clinicInformationEntity) => {
-  show_dialog.value = true;
-  editedIndex.value = 1;
-  clinicInformation.value = clinicInformationEntity;
 };
 </script>
