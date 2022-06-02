@@ -7,6 +7,7 @@ import MainLayout from 'layouts/MainLayout.vue';
 import provinceIndex from 'pages/province/index.vue';
 import Settings from 'pages/Settings/Settings.vue';
 import ClinicDetails from '../pages/Clinic/Clinic.vue';
+import Dashboard from '../pages/Dashboard/Dashboard.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -36,6 +37,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/clinic:id',
         component: ClinicDetails,
+      },
+      {
+        path: '/dashboard',
+        component: Dashboard,
       },
     ],
   },

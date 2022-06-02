@@ -110,6 +110,10 @@
 import { useQuasar, QSpinnerBall } from 'quasar';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
+import episodeService from 'src/services/episodeService/episodeService';
+import dispenseService from 'src/services/dispenseService/dispenseService';
+import patientService from 'src/services/patientService/patientService';
+import clinicService from 'src/services/clinicService/clinicService';
 import { onMounted } from 'vue';
 
 /*
@@ -132,6 +136,11 @@ onMounted(() => {
   }, 600);
   provinceService.get(0);
   districtService.get(0);
+//  episodeService.get(0);
+  clinicService.get(0);
+//   dispenseService.get(0);
+   // dispenseService.get(0);
+  //  patientService.get(0);
 });
 </script>
 <style scoped>
