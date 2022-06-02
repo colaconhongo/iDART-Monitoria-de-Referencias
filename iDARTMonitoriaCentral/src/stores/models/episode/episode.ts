@@ -8,7 +8,7 @@ export default class Episode extends Model {
     return {
       id: this.attr(null),
       startdate: this.attr(''),
-      stopdate: this.uid(),
+      stopdate: this.attr(''),
       startreason: this.attr(''),
       stopreason: this.attr(''),
       startnotes: this.attr(''),
