@@ -25,7 +25,17 @@
         >
           <q-tab-panel name="clinicInformation">
             <div class="text-h4 q-mb-md"></div>
-            <clinicInformations> </clinicInformations>
+            <clinicInformations />
+          </q-tab-panel>
+
+          <q-tab-panel name="prescription">
+            <div class="text-h4 q-mb-md"></div>
+            <prescriptions />
+          </q-tab-panel>
+
+          <q-tab-panel name="dispense">
+            <div class="text-h4 q-mb-md"></div>
+            <dispenses />
           </q-tab-panel>
         </q-tab-panels>
       </template>
@@ -35,6 +45,8 @@
 <script setup>
 import { ref } from 'vue';
 import clinicInformations from '../ClinicInformation/ClinicInformation.vue';
+import prescriptions from '../ClinicInformation/Prescription.vue';
+import dispenses from '../ClinicInformation/Dispense.vue';
 
 const selectedTab = ref('clinicInformation');
 const splitterModel = ref(15);
@@ -44,8 +56,8 @@ const tabs = [
     icon: 'local_pharmacy',
     label: 'Atenção Farmacéutica',
   },
-  { name: 'prescriptions', icon: 'medication', label: 'Prescrições' },
-  { name: 'package', icon: 'healing', label: 'Dispensas' },
+  { name: 'prescription', icon: 'medication', label: 'Prescrições' },
+  { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
 </script>
 <style></style>

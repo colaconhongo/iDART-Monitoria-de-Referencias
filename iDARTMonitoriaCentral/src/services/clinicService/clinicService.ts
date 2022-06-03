@@ -149,6 +149,32 @@ export default {
   getAllFromStorage() {
     return clinic.all();
   },
+  getAllPharmacyFromDistrict(district: string) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype !== 'Unidade Sanitária' &&
+          clinics.district === district
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllUSFromDistrict(district: string) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype === 'Unidade Sanitária' &&
+          clinics.district === district
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
   getClinicByID(uuid: string) {
     return clinic.query().where('uuid', uuid).get();
   },

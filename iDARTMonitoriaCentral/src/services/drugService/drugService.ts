@@ -55,7 +55,11 @@ export default {
   getAllFromStorage() {
     return drug.all();
   },
+
   getAllGroupByStateClinic() {
     return drug.query().withAll().group;
+  },
+  getFromStorage(id: string) {
+    return drug.find(id);
   },
 };
