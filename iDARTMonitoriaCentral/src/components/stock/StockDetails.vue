@@ -51,7 +51,7 @@
   /*
     emits
   */
- const emits = defineEmits(['goBack'])
+ const emit = defineEmits(['goBack'])
 
 /*
     Mounted Hooks
