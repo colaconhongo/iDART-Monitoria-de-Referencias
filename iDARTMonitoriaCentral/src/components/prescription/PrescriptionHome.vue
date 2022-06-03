@@ -4,26 +4,26 @@
       :columns="columns"
       :mode="mode"
       :with_downloadButton="true"
-      :rows="allClinicInformation"
+      :rows="allPrescription"
       :title="props.title"
       :with_actionRemoveButton="false"
       :with_actionEditButton="false"
       :with_actionDetailButton="true"
       :visualizar="visualizar"
     />
-    <clinicInformationModal
+    <prescriptionDetailsModal
       :is="true"
       :show_dialog="show_dialog"
-      :clinicInformation="clinicInformation"
+      :prescription="prescription"
     />
   </q-page>
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import clinicInformationService from 'src/services/clinicInformationService/clinicInformationService';
+import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 import { computed, onMounted, reactive, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
-import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
+import prescriptionDetailsModal from 'src/components/prescription/PrescriptionDetailsModal.vue';
 import moment from 'moment';
 
 /*
@@ -41,58 +41,57 @@ Declarations
 */
 const $q = new useQuasar();
 const mode = reactive(ref('list'));
-const clinicInformation = reactive(ref({}));
-
+const prescription = ref({});
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
 
 const columns = [
   {
-    name: 'registerdate',
+    name: 'date',
     required: true,
     label: 'Data de Registo',
     align: 'left',
-    field: (row) => moment(row.registerdate).format('DD-MM-YYYY'),
+    field: (row) => moment(row.date).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'weight',
+    name: 'durationsentence',
     align: 'left',
-    label: 'Peso (Kg)',
-    field: (row) => row.weight,
+    label: 'Duração',
+    field: (row) => row.durationsentence,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'height',
+    name: 'regimenome',
     align: 'left',
-    label: 'Altura (Cm)',
-    field: (row) => row.height,
+    label: 'Regime',
+    field: (row) => row.regimenome,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'imc',
+    name: 'linhanome',
     align: 'left',
-    label: 'IMC',
-    field: (row) => row.imc,
+    label: 'Linha',
+    field: (row) => row.linhanome,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'systole',
+    name: 'prescricaoespecial',
     align: 'left',
-    label: 'Sistole (mmHg)',
-    field: (row) => row.systole,
+    label: 'Especial',
+    field: (row) => row.prescricaoespecial,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'distort',
+    name: 'motivocriacaoespecial',
     align: 'left',
-    label: 'Diastole (mmHg)',
-    field: (row) => row.distort,
+    label: 'Motivo',
+    field: (row) => row.motivocriacaoespecial,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -109,33 +108,38 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 600);
-  getAllClinicInformationFromAPI(0);
+  getAllPrescriptionFromAPI(0);
 });
 
 /*
   Computed
 */
 
-const allClinicInformation = computed(() => {
-  return clinicInformationService.getClinicInformationByPatientUuid(
-    '40b17748-05d6-44db-9d44-581f4853c854'
-  );
-  // getClinicInformationByPatientUuid
+const allPrescription = computed(() => {
+  const dispensesAndPrescriptions =
+    prescriptionService.getPrescriptionsByPatientId('04010001/16/0268');
+  let prescriptions = [
+    ...new Map(
+      dispensesAndPrescriptions.map((item) => [item['prescriptionid'], item])
+    ).values(),
+  ];
+  return prescriptions;
 });
 
 /*
   Methods
 */
 
-const getAllClinicInformationFromAPI = (offset) => {
+const getAllPrescriptionFromAPI = (offset) => {
   if (offset >= 0) {
-    clinicInformationService.get(offset);
+    prescriptionService.get(offset);
   }
 };
 
-const visualizar = (clinicInformationEntity) => {
+const visualizar = (prescriptionEntity) => {
   show_dialog.value = true;
   editedIndex.value = 1;
-  clinicInformation.value = clinicInformationEntity;
+  prescription.value = prescriptionEntity;
+  console.log('invocando o modal..', prescription);
 };
 </script>

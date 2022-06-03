@@ -52,7 +52,7 @@ export default class Patient extends Model {
 
       // Relationship
 
-      episodes: this.hasMany(Episode, 'patientuuid'),
+     // episodes: this.hasMany(Episode, 'patientuuid'),
     };
   }
 }

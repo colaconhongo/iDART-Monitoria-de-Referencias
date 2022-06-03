@@ -160,4 +160,37 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+  getAllUsByDistrict(district) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype === 'Unidade Sanitária' &&
+          clinics.district === district.name
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllDDPharmByDistrict(district) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype !== 'Unidade Sanitária' &&
+          clinics.district === district.name
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+
+  getPharmByUUid(uuid) {
+    return clinic
+      .query()
+      .where('uuid', uuid)
+      .get();
+  },
 };
