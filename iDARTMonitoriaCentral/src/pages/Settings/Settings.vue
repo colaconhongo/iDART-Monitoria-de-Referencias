@@ -46,18 +46,20 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import clinics from '../Clinic/Clinic.vue';
 import clinic_sector from '../ClinicSector/ClinicSector.vue';
-import drugs from '../Drugs/Drugs.vue';
+import drugs from '../Drug/Drug.vue';
 import regimen from '../Regimen/Regimen.vue';
 
+const { t } = useI18n();
 const selectedTab = ref('clinic');
 const splitterModel = ref(15);
 const tabs = [
-  { name: 'clinic', icon: 'local_hospital', label: 'Farmácias' },
-  { name: 'clinic_sector', icon: 'local_pharmacy', label: 'Sector Clínico' },
-  { name: 'drugs', icon: 'medication', label: 'Medicamentos' },
-  { name: 'regimen', icon: 'healing', label: 'Regime Terapêutico' },
+  { name: 'clinic', icon: 'local_hospital', label: t('pharmacy') },
+  { name: 'clinic_sector', icon: 'local_pharmacy', label: t('clinicSector') },
+  { name: 'drugs', icon: 'medication', label: t('drug') },
+  { name: 'regimen', icon: 'healing', label: t('regimen') },
 ];
 </script>
 <style></style>

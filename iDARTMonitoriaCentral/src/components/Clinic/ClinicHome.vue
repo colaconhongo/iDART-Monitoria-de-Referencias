@@ -4,6 +4,9 @@
       :columns="columns"
       :mode="mode"
       :with_downloadButton="true"
+      :with_actionDetailButton="true"
+      :with_actionEditButton="true"
+      :with_actionRemoveButton="true"
       :rows="allClinics"
       :title="title"
       :visualizar="viewClinic"
@@ -18,6 +21,8 @@ import clinicService from 'src/services/clinicService/clinicService';
 import { computed, inject, onMounted, reactive, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import { useI18n } from 'vue-i18n';
+import provinceService from 'src/services/provinceService/provinceService';
+import districtService from 'src/services/districtService/districtService';
 
 /*
 Declarations
@@ -109,6 +114,8 @@ const allClinics = computed(() => {
 const getAllClinicFromAPI = (offset) => {
   if (offset >= 0) {
     clinicService.get(offset);
+    provinceService.get(offset);
+    districtService.get(offset);
   }
 };
 </script>

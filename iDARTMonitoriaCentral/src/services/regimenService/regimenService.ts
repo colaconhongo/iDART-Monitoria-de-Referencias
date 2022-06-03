@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Regimen from 'src/stores/models/regimen/regimen';
 import api from '../apiService/apiService';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 const regimeterapeutico = useRepo(Regimen);
 
@@ -28,9 +29,16 @@ export default {
   },
   patch(id: number, params: string) {
     return api()
-      .patch('regimeterapeutico/' + id, params)
+      .patch('regimeterapeutico?regimeid=eq.' + id, params)
       .then((resp) => {
-        regimeterapeutico.save(resp.data);
+        regimeterapeutico.save(JSON.parse(resp.config.data));
+        alert(
+          'Sucesso!',
+          'O Registo foi alterado com sucesso',
+          null,
+          null,
+          null
+        );
       });
   },
   delete(id: number) {
