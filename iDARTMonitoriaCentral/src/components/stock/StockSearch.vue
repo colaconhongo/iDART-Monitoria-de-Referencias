@@ -7,6 +7,7 @@
         :with_downloadButton="false"
         :rows="stockReport"
         :visualizar="viewStock"
+        title="Stock"
       />
     </div>
   </q-page>
