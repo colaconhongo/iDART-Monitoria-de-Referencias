@@ -19,7 +19,11 @@
       :columns="columns"
       :mode="mode"
       :with_downloadButton="false"
+      :with_actionDetailButton="false"
+      :with_actionEditButton="false"
+      :with_actionRemoveButton="false"
       :rows="stockDetails"
+      title="Detalhes do Stock do Medicamento"
     />
   </div>
   </q-page>

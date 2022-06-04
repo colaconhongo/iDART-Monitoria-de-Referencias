@@ -5,9 +5,12 @@
         :columns="columns"
         :mode="mode"
         :with_downloadButton="false"
+        :with_actionDetailButton="true"
+        :with_actionEditButton="false"
+        :with_actionRemoveButton="false"
         :rows="stockReport"
         :visualizar="viewStock"
-        title="Stock"
+        title="Stock da Província"
       />
     </div>
   </q-page>
