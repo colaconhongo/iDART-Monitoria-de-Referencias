@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Drug from 'src/stores/models/drugs/drug';
 import api from '../apiService/apiService';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 const drug = useRepo(Drug);
 
@@ -26,11 +27,18 @@ export default {
         });
     }
   },
-  patch(id: number, params: string) {
+  patch(id: string, params: string) {
     return api()
-      .patch('drug/' + id, params)
+      .patch('drug?id=eq.' + id, params)
       .then((resp) => {
-        drug.save(resp.data);
+        drug.save(JSON.parse(resp.config.data));
+        alert(
+          'Sucesso!',
+          'O Registo foi alterado com sucesso',
+          null,
+          null,
+          null
+        );
       });
   },
   delete(id: number) {
@@ -46,6 +54,10 @@ export default {
   },
   getAllFromStorage() {
     return drug.all();
+  },
+
+  getAllGroupByStateClinic() {
+    return drug.query().withAll().group;
   },
   getFromStorage(id: string) {
     return drug.find(id);
