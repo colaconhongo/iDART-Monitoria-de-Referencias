@@ -1,5 +1,5 @@
 import { useRepo } from 'pinia-orm';
-import ClinicSector from 'src/stores/models/clinicSector/ClinicSector';
+import ClinicSector from 'src/stores/models/clinicSector/clinicSector';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 

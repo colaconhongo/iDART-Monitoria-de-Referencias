@@ -52,11 +52,10 @@ let components = reactive([])
   Methods
   */
  const changeTab = (tabName) => {
-   console.log(tabName)
-        const uidValue = 'report' + uid()
-        const comp = { id: uidValue, name: tabName }
-        components.push(comp)
-      }
+    const uidValue = 'report' + uid()
+    const comp = { id: uidValue, name: tabName }
+    components.push(comp)
+  }
 </script>
 
 <style lang="scss" scoped>
