@@ -125,7 +125,6 @@ const getAllClinicSectorFromAPI = (offset) => {
     for (const clinicUS of clinicService.getAllUS()) {
       clinicSectorList.push(clinicUS.uuid);
     }
-    console.log(clinicSectorList);
     clinicSectorService.getAllFromClinicUuidList(clinicSectorList, offset);
     clinicSectorTypeService.get(offset);
   }
