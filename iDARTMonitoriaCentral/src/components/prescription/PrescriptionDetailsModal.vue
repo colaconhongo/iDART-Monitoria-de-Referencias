@@ -63,6 +63,7 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import { computed, reactive, ref, inject } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
+import moment from 'moment';
 /*
   Props
 */
@@ -96,7 +97,7 @@ const columns = [
     required: true,
     label: 'Data de levantamento',
     align: 'left',
-    field: (row) => row.pickupdate,
+    field: (row) =>  moment(row.pickupdate).format('DD-MM-YYYY') ,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -112,7 +113,7 @@ const columns = [
     name: 'qtyinhand',
     align: 'left',
     label: 'Quantidade (Frasco)',
-    field: (row) => row.qtyinhand,
+    field: (row) => row.qtyinhand.replace(/[{()}]/g, ''),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -128,7 +129,7 @@ const columns = [
     name: 'dateexpectedstring',
     align: 'left',
     label: 'Data próximo levantamento',
-    field: (row) => row.dateexpectedstring,
+    field: (row) =>  moment(row.dateexpectedstring).format('DD-MM-YYYY') ,
     format: (val) => `${val}`,
     sortable: true,
   },

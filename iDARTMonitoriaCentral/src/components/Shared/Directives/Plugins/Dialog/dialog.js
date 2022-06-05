@@ -23,32 +23,13 @@ export const alert = (
     });
 };
 
-export const confirm = (
-  title,
-  message,
-  onOKFirstMethod,
-  onOKSecondMethod,
-  onCancelMethod,
-  onDismissMethod
-) => {
+export const confirm = (title, message) => {
   return Dialog.create({
     title: title,
     message: message,
     cancel: true,
     persistent: true,
-  })
-    .onOk(() => {
-      onOKFirstMethod();
-    })
-    .onOk(() => {
-      onOKSecondMethod();
-    })
-    .onCancel(() => {
-      onCancelMethod();
-    })
-    .onDismiss(() => {
-      onDismissMethod();
-    });
+  });
 };
 
 export const prompt = (

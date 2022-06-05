@@ -5,6 +5,8 @@ import ClinicSectorType from '../clinicSectorType/clinicSectorType';
 export default class ClinicSector extends Model {
   static entity = 'clinicsectors';
 
+  static primaryKey = 'id';
+
   static fields(): ModelFields {
     return {
       id: this.attr(null),
@@ -18,8 +20,8 @@ export default class ClinicSector extends Model {
 
       // Relationship
 
-      province: this.belongsTo(ClinicSectorType, 'clinicsectortype'),
-      mainClinic: this.belongsTo(Clinic, 'clinic'),
+      clinicsectortypee: this.belongsTo(ClinicSectorType, 'clinicsectortype'),
+      //  clinic: this.belongsTo(Clinic, 'clinic'),
     };
   }
 }

@@ -68,18 +68,18 @@
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
           <div v-if="col.value === 'I' && col.name === 'syncstatus'">
             <label style="color: green">
-              <q-icon class="las la-check-double"></q-icon>
+              <q-icon name="cloud_upload"  size ="md"></q-icon>
               Enviado</label
             >
           </div>
           <div v-else-if="col.value === 'L' && col.name === 'syncstatus'">
             <label style="color: orange"
-              ><i class="las la-question-circle"></i> Actualizado</label
+              > <q-icon name="cloud_download"  size ="md"></q-icon> Actualizado</label
             >
           </div>
           <div v-else-if="col.value === 'P' && col.name === 'syncstatus'">
-            <label style="color: red"
-              ><i class="las la-exclamation-circle"></i> Pendente</label
+            <label style="color: orange"
+              ><q-icon name="warning" size ="md"></q-icon> Pendente</label
             >
           </div>
           <div v-else>
