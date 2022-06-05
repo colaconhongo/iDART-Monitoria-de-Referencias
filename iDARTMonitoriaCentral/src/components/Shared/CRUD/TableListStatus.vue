@@ -69,17 +69,18 @@
           <div v-if="col.value === 'I' && col.name === 'syncstatus'">
             <label style="color: green">
               <q-icon name="cloud_upload"  size ="md"></q-icon>
-              Enviado</label
+              </label
             >
+            <!--Enviado-->
           </div>
           <div v-else-if="col.value === 'L' && col.name === 'syncstatus'">
             <label style="color: orange"
-              > <q-icon name="cloud_download"  size ="md"></q-icon> Actualizado</label
+              > <q-icon name="cloud_download"  size ="md"></q-icon> <!--Actualizado--></label
             >
           </div>
           <div v-else-if="col.value === 'P' && col.name === 'syncstatus'">
             <label style="color: orange"
-              ><q-icon name="warning" size ="md"></q-icon> Pendente</label
+              ><q-icon name="warning" size ="md"></q-icon> <!--Pendente-->  </label
             >
           </div>
           <div v-else>
