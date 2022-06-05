@@ -1,11 +1,13 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
     <episodeHome v-model:title="titleList" />
+    <EpisodeEditModal />
   </q-page>
 </template>
 <script setup>
 import { provide, reactive, ref } from 'vue';
 import episodeHome from 'src/components/episode/episodeHome.vue';
+import EpisodeEditModal from 'src/components/episode/EpisodeEditModal.vue';
 
 /*
   Declarations
@@ -33,29 +35,9 @@ const close = () => {
   episode.value = [];
   editedIndex.value = -1;
 };
-// const activeClinicHome = reactive(ref(true));
-
-// onMounted(() => {
-//   $q.loading.show({
-//     message: 'Carregando ...',
-//     spinnerColor: 'grey-4',
-//     spinner: QSpinnerBall,
-//   });
-//   setTimeout(() => {
-//     $q.loading.hide();
-//   }, 600);
-//   alert(patient.uuidopenmrs);
-//   // getPatientEpisodesFromAPI(patient.uuidopenmrs);
-//   getPatientEpisodesFromAPI();
-// });
-
-// const getPatientEpisodesFromAPI = (offset) => {
-//   // episodeService.getById(id);
-//   episodeService.get();
-//   console.log('999999999999999999999999999999999999999');
-// };
 
 provide('editEpisode', editEpisode);
 provide('close', close);
 provide('title', titleAddEdit);
+provide('episode', episode);
 </script>
