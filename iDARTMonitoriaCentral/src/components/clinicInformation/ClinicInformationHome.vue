@@ -76,7 +76,7 @@ const columns = [
     name: 'imc',
     align: 'left',
     label: 'IMC',
-    field: (row) => row.imc,
+    field: (row) => row.imc ===null? '-':row.imc,
     format: (val) => `${val}`,
     sortable: true,
   },

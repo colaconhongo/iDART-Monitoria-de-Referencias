@@ -60,9 +60,10 @@ imports
 
 import { onMounted } from '@vue/runtime-core';
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, inject } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
+import moment from 'moment';
 /*
   Props
 */
@@ -88,13 +89,15 @@ Declarations
 const $q = new useQuasar();
 const mode = reactive(ref('list'));
 const editedIndex = reactive(ref(0));
+let show_dialog = inject('show_dialog');
+
 const columns = [
   {
     name: 'pickupdate',
     required: true,
     label: 'Data de levantamento',
     align: 'left',
-    field: (row) => row.pickupdate,
+    field: (row) =>  moment(row.pickupdate).format('DD-MM-YYYY') ,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -110,7 +113,7 @@ const columns = [
     name: 'qtyinhand',
     align: 'left',
     label: 'Quantidade (Frasco)',
-    field: (row) => row.qtyinhand,
+    field: (row) => row.qtyinhand.replace(/[{()}]/g, ''),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -126,7 +129,7 @@ const columns = [
     name: 'dateexpectedstring',
     align: 'left',
     label: 'Data próximo levantamento',
-    field: (row) => row.dateexpectedstring,
+    field: (row) =>  moment(row.dateexpectedstring).format('DD-MM-YYYY') ,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -139,4 +142,10 @@ const columns = [
 const allPrescription = computed(() => {
   return prescriptionService.getPrescriptionsByPatientId('04010001/16/0268');
 });
+
+
+const close = () => {
+  show_dialog=false;
+  console.log('Fechando o MODAL: ',show_dialog)
+};
 </script>
