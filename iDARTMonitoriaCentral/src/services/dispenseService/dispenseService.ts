@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Dispense from 'src/stores/models/dispense/dispense';
 import api from '../apiService/apiService';
+import moment from 'moment';
 
 const sync_temp_dispense = useRepo(Dispense);
 
@@ -21,7 +22,7 @@ export default {
           sync_temp_dispense.save(resp.data);
           offset = offset + 100;
           if (resp.data.length > 0) {
-            setTimeout(this.get, 2);
+            setTimeout(this.get(offset), 2);
           }
         });
     }
@@ -46,5 +47,54 @@ export default {
   },
   getAllFromStorage() {
     return sync_temp_dispense.all();
+  },
+  getAllDispenseQuarterly() {
+    return sync_temp_dispense
+    .query()
+    .where((dispense) => {
+      return dispense.dispensatrimestral === 1 })
+.get();
+  },
+  getAllDispenseSemestre() {
+    return sync_temp_dispense
+    .query()
+    .where((dispense) => {
+      return dispense.dispensasemestral === 1 })
+.get();
+  },
+  getAllDispenseMensal() {
+    return sync_temp_dispense
+    .query()
+    .where((dispense) => {
+      return dispense.dispensasemestral === 0 && dispense.dispensatrimestral === 0})
+.get();
+  },
+
+  getDispensesByRegimeByYear(year) {
+    const startDate =  moment('01-01-'+year).format('MM-DD-YYYY')
+    console.log(startDate)
+    const endDate = moment('12-31-'+year).format('MM-DD-YYYY')
+    console.log(endDate)
+      return api()
+        .get('sync_temp_dispense?dispensedate=gt.'+startDate+'&dispensedate=lt.'+endDate)
+        .then((resp) => {
+          sync_temp_dispense.save(resp.data);
+        });
+  },
+  
+  getDispensesByRegimeByYearFromLocalStorage (year) {
+  // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
+  const startDate = new Date('01-01-'+year)
+  console.log(startDate)
+//  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
+const endDate = new Date('12-31-'+year)
+  console.log(endDate)
+    const dispenses = sync_temp_dispense
+    .query()
+    .where((dispense) => {
+      return dispense.dispensedate >= startDate && dispense.dispensedate <= endDate })
+      .orderBy('dispensedate','desc')
+.get();
+    return dispenses
   },
 };

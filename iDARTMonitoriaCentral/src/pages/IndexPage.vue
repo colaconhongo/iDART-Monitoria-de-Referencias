@@ -111,7 +111,8 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
-import { computed, onMounted, provide, reactive, ref } from 'vue';
+import clinicService from 'src/services/clinicService/clinicService';
+import { onMounted } from 'vue';
 
 /*
   Declaration

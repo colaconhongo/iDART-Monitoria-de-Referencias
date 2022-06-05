@@ -34,7 +34,7 @@ provide('submitting', submitting);
 
 const close = () => {
   show_dialog.value = false;
-  clinic.value = [];
+  clinicInformation.value = [];
   editedIndex.value = -1;
 };
 </script>

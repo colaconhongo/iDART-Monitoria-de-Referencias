@@ -1,5 +1,13 @@
 <template>
-  <stockSearch v-model:title="titleList" />
+  <div>
+    <stockDetails
+      v-if="!showStockSearch"
+      @goBack="goBack"
+    />
+  <stockSearch
+    v-if="showStockSearch"
+  />
+  </div>
 </template>
 
 <script setup>
@@ -7,17 +15,16 @@
     Imports
   */
   import stockSearch from 'src/components/stock/StockSearch.vue'
+  import stockDetails from 'src/components/stock/StockDetails.vue';
   import { useQuasar, QSpinnerBall } from 'quasar';
-  import {  onMounted, reactive, ref } from 'vue';
-  import stockService from 'src/services/stockService/stockService';
-  import drugService from 'src/services/drugService/drugService';
-  import stockCenterService from 'src/services/stockCenterService/stockCenter';
-  import stockLevelService from 'src/services/stockLevelService/stockLevelService';
+  import {  onMounted, reactive, ref, provide } from 'vue';
 /*
 Declarations
 */
 const $q = new useQuasar();
-const titleList = reactive(ref('Stock'));
+const showStockSearch = reactive(ref(true));
+const stockData = reactive(ref([]));
+let selectRecord = reactive(ref({}));
 
  /*
   Mounted Hooks
@@ -30,39 +37,26 @@ onMounted(() => {
   });
   setTimeout(() => {
     $q.loading.hide();
-  }, 600);
-    /*getAllDrugFromAPI(0);
-    getAllStockFromAPI(0);
-    getAllStockCenterFromAPI(0);
-    getAllStockLevelFromAPI(0);*/
+  }, 800);
 });
 
 /*
   Methods
 */
-const getAllDrugFromAPI = (offset) => {
-    if (offset >= 0) {
-      drugService.get(offset);
-    }
-  };
+const viewStock = (stockInfo) => {
+  selectRecord.value = stockInfo;
+  stockData.value = stockInfo;
+  showStockSearch.value = false;
+  console.log(selectRecord)
+};
 
-  const getAllStockFromAPI = (offset) => {
-    if (offset >= 0) {
-      stockService.get(offset);
-    }
-  };
+const goBack = () => {
+  showStockSearch.value = true;
+}
 
-  const getAllStockCenterFromAPI = (offset) => {
-    if (offset >= 0) {
-      stockCenterService.get(offset);
-    }
-  };
+provide('viewStock', viewStock);
+provide('selectRecord', selectRecord);
 
-  const getAllStockLevelFromAPI = (offset) => {
-    if (offset >= 0) {
-      stockLevelService.get(offset);
-    }
-  };
 </script>
 
 <style>
