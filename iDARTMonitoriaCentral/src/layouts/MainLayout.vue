@@ -39,6 +39,13 @@
               icon="person_search"
               label="Pacientes"
             />
+            <!--<q-route-tab
+              exact
+              :to="'/patients'"
+              name="patients"
+              icon="person_search"
+              label="PacientDetails"
+            />-->
             <q-route-tab
               exact
               :to="'/stock'"
