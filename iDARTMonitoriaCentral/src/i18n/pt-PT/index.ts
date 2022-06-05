@@ -4,6 +4,7 @@
 export default {
   // Pharmacy Entity
   pharmacy: 'Farmácia',
+  facility: 'Unidade Santária',
   code: 'Código',
   uuid: 'UUID',
   clinicname: 'Nome da Farmácia',

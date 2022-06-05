@@ -80,7 +80,7 @@
             class="text-bold"
             style="font-family: 'Arial Rounded MT Bold'; font-size: 20px"
           >
-            Relatórios
+            Relatório
           </div></q-btn
         >
       </div>
@@ -108,16 +108,16 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
+import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
-import { onMounted } from 'vue';
+import { computed, onMounted, provide, reactive, ref } from 'vue';
 
 /*
   Declaration
 */
 
 const $q = useQuasar();
-
 /*
   Mounted Hooks
 */
@@ -132,6 +132,7 @@ onMounted(() => {
   }, 600);
   provinceService.get(0);
   districtService.get(0);
+  clinicService.get(0);
 });
 </script>
 <style scoped>
