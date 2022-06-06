@@ -28,11 +28,12 @@
 <script setup>
 import VueApexCharts from 'vue3-apexcharts';
 import randomcolor from 'randomcolor';
-import { computed, onMounted, ref, onBeforeMount, reactive , watch , toRefs } from 'vue';
+import { computed, onMounted, ref, onBeforeMount, reactive , watch , inject } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import ClinicService from 'src/services/clinicService/clinicService';
 import DispenseService from 'src/services/dispenseService/dispenseService';
  import moment from 'moment';
+ import DashboardUtils from '../../use/DashboardUtils';
  const monthsX = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEC']
 const weeksX = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5']
 const toDateStr = str => new Date(str.replace(/^(\d+)\/(\d+)\/(\d+)$/, '$2/$1/$3'))
@@ -156,10 +157,11 @@ const props = defineProps({
   }
 });
 console.log(props)
+const yearAnnualPeriod = inject('yearAnnualPeriod')
+const district = inject('district')
+const clinic = inject('clinic')
+const pharmacy = inject('pharmacy')
 
-
-// const loaded = ref(props.loaded)
-// const { loaded } = toRefs(props)
 
 watch(props.loaded, (newCount) => {
   console.log(props.loaded)
@@ -169,7 +171,7 @@ watch(props.loaded, (newCount) => {
       const  dispenseSemestral = [];
      const  dispenseTrimestral = [];
      const  dispenseMensal =  [];
-     const allDispenses = DispenseService.getDispensesByRegimeByYearFromLocalStorage(2021);
+     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
        let resultDispenses1 = groupedMap(allDispenses , 'patientid')
        const mapIter = resultDispenses1.values()
      console.log(mapIter)
@@ -219,6 +221,7 @@ watch(props.loaded, (newCount) => {
       var monthsPresent = []
    const map = list.reduce((a, b) => {
   const m = toDateStr(b.dispensedate).getMonth()
+  // const m = DashboardUtils.getStatisticMonthByDate(b.dispensedate)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a
