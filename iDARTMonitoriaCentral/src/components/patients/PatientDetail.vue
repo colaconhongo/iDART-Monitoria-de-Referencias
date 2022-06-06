@@ -15,7 +15,7 @@
             {{ patient.firstnames + ' ' + patient.lastname }}
           </p>
           <small
-            >NID: <span>{{ patient.uuidopenmrs }}</span></small
+            >NID: <span>{{ patient.patientid }}</span></small
           >
         </div>
         <div class="row">

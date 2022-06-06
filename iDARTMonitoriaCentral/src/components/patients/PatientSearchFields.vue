@@ -1,8 +1,29 @@
 <template>
   <div class="row">
-    <div class="col-sm-3"><p>AAAA</p></div>
-    <div class="col-sm-3"><p>BBBB</p></div>
-    <div class="col-sm-3"><p>CCCC</p></div>
-    <div class="col-sm-3"><p>DDDD</p></div>
+    <TextField
+      label="No do Identificador"
+      class="col q-ml-md"
+      ref="id"
+      v-model="patient.id"
+    />
+    <TextField label="Nome" class="col q-ml-md" ref="id" v-model="patient.id" />
+    <TextField
+      label="Sobre Nome"
+      class="col q-ml-md"
+      ref="id"
+      v-model="patient.id"
+    />
+    <TextField
+      label="Apelido"
+      class="col q-ml-md"
+      ref="id"
+      v-model="patient.id"
+    />
   </div>
 </template>
+<script setup>
+import { computed, inject, ref } from 'vue';
+import TextField from '../Shared/Input/TextField.vue';
+
+const patient = inject('patient');
+</script>

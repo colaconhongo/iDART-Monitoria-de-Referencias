@@ -18,10 +18,22 @@
               <div class="q-mt-lg">
                 <div class="row q-mt-md">
                   <TextField
-                    label="Contacto"
+                    label="Data de inicio"
                     class="col q-ml-md"
                     ref="startdate"
                     v-model="episode.startdate"
+                  />
+                  <SelectField
+                    label="Notas de Inicio"
+                    class="col q-ml-md"
+                    v-model="episode.startnotes"
+                    :options="start_notes"
+                  />
+                  <SelectField
+                    label="Notas de Inicio"
+                    class="col q-ml-md"
+                    v-model="episode.startnotes"
+                    :options="start_notes"
                   />
                 </div>
               </div>
@@ -53,6 +65,7 @@
 import { computed, inject, ref } from 'vue';
 import DateField from '../Shared/Input/DateField.vue';
 import TextField from '../Shared/Input/TextField.vue';
+import SelectField from '../Shared/Input/SelectField.vue';
 import districtService from 'src/services/districtService/districtService';
 
 /*
@@ -72,6 +85,8 @@ const props = defineProps({
 /*
   Provides
   */
+const start_notes = ref(['Referido para', 'Referido De']);
+const end_notes = ref(['Referido para mesma US', 'Faltoso', '']);
 
 const title = inject('title');
 const show_dialog = inject('show_dialog');
