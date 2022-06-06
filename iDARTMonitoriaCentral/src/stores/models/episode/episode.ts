@@ -15,13 +15,13 @@ export default class Episode extends Model {
       stopnotes: this.attr(''),
       patientuuid: this.attr(''),
       syncstatus: this.attr(''),
-      usuuid: this.attr(''),
-      clinicuuid: this.attr(''),
+      us: this.attr(''),
+      clinic: this.attr(''),
 
       // Relationship
 
       //patient: this.belongsTo(Patient, 'patientuuid'),
-      clinic: this.belongsTo(Clinic, 'clinicuuid'),
+      //  clinic: this.belongsTo(Clinic, 'clinic'),
     };
   }
 }

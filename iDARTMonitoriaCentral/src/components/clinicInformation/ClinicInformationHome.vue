@@ -23,8 +23,8 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import clinicInformationService from 'src/services/clinicInformationService/clinicInformationService';
 import { computed, onMounted, reactive, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
-
 import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
+import moment from 'moment';
 
 /*
 Props
@@ -41,7 +41,7 @@ Declarations
 */
 const $q = new useQuasar();
 const mode = reactive(ref('list'));
-const clinicInformation = ref({});
+const clinicInformation = reactive(ref({}));
 
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
@@ -52,7 +52,7 @@ const columns = [
     required: true,
     label: 'Data de Registo',
     align: 'left',
-    field: (row) => row.registerdate,
+    field: (row) => moment(row.registerdate).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -76,7 +76,7 @@ const columns = [
     name: 'imc',
     align: 'left',
     label: 'IMC',
-    field: (row) => row.imc,
+    field: (row) => row.imc ===null? '-':row.imc,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -134,12 +134,8 @@ const getAllClinicInformationFromAPI = (offset) => {
 };
 
 const visualizar = (clinicInformationEntity) => {
-  // titleAddEdit.value = 'Adicionar Farmácia';
-  // clinic.value = reactive(clinicService.newInstanceEntity());
-  //activeEditDialog.value = true;
   show_dialog.value = true;
   editedIndex.value = 1;
   clinicInformation.value = clinicInformationEntity;
-  console.log('invocando o modal..', clinicInformation);
 };
 </script>

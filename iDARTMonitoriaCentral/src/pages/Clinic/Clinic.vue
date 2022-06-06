@@ -27,13 +27,16 @@ import ClinicDetailsVue from 'src/components/Clinic/ClinicDetails.vue';
 import CreateEditClinic from 'src/components/Clinic/ClinicCreateEditModal.vue';
 import { provide, reactive, ref } from 'vue';
 import clinicService from 'src/services/clinicService/clinicService';
+import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
+import { useI18n } from 'vue-i18n';
 
 /*
 Declarations
 */
-const titleList = reactive(ref('Farmácia'));
-const titleAddEdit = reactive(ref('Farmácia'));
-const titleDetails = reactive(ref('Detalhes da Farmácia'));
+const { t } = useI18n();
+const titleList = reactive(ref(t('pharmacy')));
+const titleAddEdit = reactive(ref(t('pharmacy')));
+const titleDetails = reactive(ref(t('pharmacy')));
 const show_dialog = reactive(ref(false));
 const details_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
@@ -47,7 +50,7 @@ const editedIndex = reactive(ref(0));
   Methods
 */
 const createClinic = () => {
-  titleAddEdit.value = 'Adicionar Farmácia';
+  titleAddEdit.value = t('add').concat(' ').concat(t('pharmacy'));
   clinic.value = reactive(clinicService.newInstanceEntity());
   activeEditDialog.value = true;
   show_dialog.value = true;
@@ -68,6 +71,7 @@ const createOrUpdate = () => {
       });
   } else {
     delete clinic.value['id'];
+    clinic.value.province = localStorage.getItem('province_name');
     clinicService
       .post(clinic.value)
       .then(() => {
@@ -81,6 +85,19 @@ const createOrUpdate = () => {
 };
 
 const deleteClinic = (clinicRow) => {
+  confirm(t('confirmation'), t('confirmationMessage'))
+    .onOk(() => {
+      deleteService(clinicRow);
+    })
+    .onCancel(() => {
+      close();
+    })
+    .onDismiss(() => {
+      close();
+    });
+};
+
+const deleteService = (clinicRow) => {
   clinicService
     .delete(clinicRow.id)
     .then(() => {
@@ -93,7 +110,7 @@ const deleteClinic = (clinicRow) => {
 };
 
 const editClinic = (clinicRow) => {
-  titleAddEdit.value = 'Actualizar Farmácia';
+  titleAddEdit.value = t('edit').concat(' ').concat(t('pharmacy'));
   clinic.value = clinicRow;
   activeEditDialog.value = true;
   show_dialog.value = true;
@@ -101,6 +118,7 @@ const editClinic = (clinicRow) => {
 };
 
 const viewClinic = (clinicRow) => {
+  titleDetails.value = t('view').concat(' ').concat(t('pharmacy'));
   clinic.value = clinicRow;
   activeDetails.value = true;
   details_dialog.value = true;

@@ -14,10 +14,15 @@ export function useUtils(){
       groupedArray = result
     }
 
+    const ageCalculator = (dateOfBirth) => {
+      console.log(dateOfBirth)
+    }
+
     return {
       groupedArray,
       groupBy,
       groupedMap
+      ageCalculator
     }
 
 

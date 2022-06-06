@@ -4,6 +4,8 @@ import ClinicSector from '../clinicSector/clinicSector';
 export default class ClinicSectorType extends Model {
   static entity = 'clinicsectortypes';
 
+  static primaryKey = 'id';
+
   static fields(): ModelFields {
     return {
       id: this.attr(null),

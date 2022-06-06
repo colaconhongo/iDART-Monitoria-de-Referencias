@@ -17,7 +17,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('sync_temp_episode?offset=' + offset + '&limit=100')
+        .get('patient_episodes_vw?offset=' + offset + '&limit=100')
         .then((resp) => {
           sync_temp_episode.save(resp.data);
           offset = offset + 100;
@@ -27,15 +27,27 @@ export default {
         });
     }
   },
+
+  getById(nid) {
+    return api()
+      .get('patient_episodes_vw?idpatient=eq.' + nid)
+      .then((resp) => {
+        console.log('EPISODE: ' + resp.data);
+        sync_temp_episode.save(resp.data as Episode);
+        if (resp.data.length > 0) {
+          //setTimeout(this.get(offset), 2);
+        }
+      });
+  },
   getWithLimit(offset: number, limit: number) {
     if (offset >= 0) {
       return api()
-        .get('sync_temp_episode?offset=' + offset + '&limit=' + limit +'')
+        .get('sync_temp_episode?offset=' + offset + '&limit=' + limit + '')
         .then((resp) => {
           sync_temp_episode.save(resp.data);
           offset = offset + limit;
           if (resp.data.length > 0) {
-            setTimeout(this.getWithLimit(offset,limit), 2);
+            setTimeout(this.getWithLimit(offset, limit), 2);
           }
         });
     }
@@ -59,28 +71,29 @@ export default {
     return sync_temp_episode.getModel().$newInstance();
   },
   getAllFromStorage() {
-    console.log(sync_temp_episode.all())
+    console.log(sync_temp_episode.all());
     return sync_temp_episode.all();
   },
   getAllStartEpisode() {
     return sync_temp_episode
-    .query()
-    .where((episode) => {
-      return episode.stopreason === null &&
-      episode.stopdate === null })
-.orderBy('startdate', 'desc')
-.get();
+      .query()
+      .where((episode) => {
+        return episode.stopreason === null && episode.stopdate === null;
+      })
+      .orderBy('startdate', 'desc')
+      .get();
   },
   getAllEndingEpisode() {
     return sync_temp_episode
-    .query()
-    .where((episode) => {
-      console.log(episode)
-      return episode.startreason === null })
-.orderBy('startdate', 'desc')
-.get();
+      .query()
+      .where((episode) => {
+        console.log(episode);
+        return episode.startreason === null;
+      })
+      .orderBy('startdate', 'desc')
+      .get();
   },
-  
+
   getEpisodesByYear(year) {
     const yearBefore = year -1;
     const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
@@ -94,8 +107,8 @@ export default {
         });
   },
 
-  getEpisodesByYearFromLocalStorage (year) {
-    // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
+  getEpisodesByYearFromLocalStorage(year) {
+     // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
   const startDate = new Date('01-01-'+year)
   console.log(startDate)
 //  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
@@ -111,7 +124,7 @@ const endDate = new Date('12-31-'+year)
 
 
   getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year, district, clinic,pharmacy) {
-    const yearBefore = year -1;
+   const yearBefore = year -1;
     const startDate = new Date('12-21-'+yearBefore)
     console.log(startDate)
     const endDate = new Date('12-20-'+year)

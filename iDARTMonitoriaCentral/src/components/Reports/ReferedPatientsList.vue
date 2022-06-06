@@ -1,29 +1,28 @@
 <template>
 <div ref="filterDrugStoreSection">
-  <ListHeader
+  <Bar
     :addVisible="false"
     :mainContainer="true"
     :closeVisible="true"
     @closeSection="closeSection"
-    bgColor="bg-orange-5"> Lista de Pacientes Referidos para outras Farmácias
-  </ListHeader>
+    bgColor="bg-orange-5"> {{title}}
+  </Bar>
   <div class="param-container">
     <q-item>
         <q-item-section  class="col" >
-
+          <FiltersInput />
         </q-item-section>
     </q-item>
-    <q-dialog persistent v-model="alert.visible">
-    <Dialog :type="alert.type" @closeDialog="closeDialog">
-      <template v-slot:title> Informação</template>
-      <template v-slot:msg> {{alert.msg}} </template>
-    </Dialog>
-  </q-dialog>
   </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue'
+import Bar from 'src/components/Shared/Bar.vue'
+
+const title = ref('Lista de Pacientes Referidos para Outras Farmácias')
 
 </script>
 

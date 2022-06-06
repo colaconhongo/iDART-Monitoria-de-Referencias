@@ -70,7 +70,6 @@
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>
           <div class="q-gutter-sm q-px-md">
-
             <q-btn
               color="red"
               icon="delete_forever"
@@ -80,7 +79,7 @@
               v-if="with_actionRemoveButton"
               @click="remover(props.row)"
             >
-            <q-tooltip
+              <q-tooltip
                 content-class="bg-white text-primary shadow-4"
                 :offset="[10, 10]"
                 transition-show="rotate"
@@ -114,8 +113,10 @@
               align="left"
               no-caps
               label="Ver"
-              unelevated rounded
+              unelevated
+              rounded
               size="sm"
+              style="min-width: 78px"
               v-if="with_actionDetailButton"
               @click="visualizar(props.row)"
             >

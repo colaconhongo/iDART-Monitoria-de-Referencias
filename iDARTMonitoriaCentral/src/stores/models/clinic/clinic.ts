@@ -22,7 +22,7 @@ export default class Clinic extends Model {
       mainclinic: this.attr(false),
       // Relationship
 
-      // clinicsectors: this.hasMany(ClinicSector, 'clinic'),
+      //   clinicsectors: this.hasMany(ClinicSector, 'clinic'),
       // episodes: this.hasMany(Episode, 'clinicuuid'),
       // stockCenter: this.hasMany(StockCenter, 'clinicuuid'),
     };

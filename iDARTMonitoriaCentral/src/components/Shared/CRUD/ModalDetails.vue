@@ -11,6 +11,7 @@
             icon="close"
             class="float-right"
             color="grey-8"
+            @click="close"
             v-close-popup
           ></q-btn>
         </div>
@@ -69,10 +70,15 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+/*
+  Declaration
+*/
+const { t } = useI18n();
 /*
   Props
   */
-const { t } = useI18n();
+
 const props = defineProps({
   title: {
     type: String,
@@ -113,10 +119,10 @@ const allRows = computed(() => {
   */
 
 const removeAttributes = (objectEntity, excludeAttributes) => {
+  let localobjectEntity = Object.assign({}, objectEntity);
   excludeAttributes.forEach((attibute) => {
-    delete objectEntity[attibute];
+    delete localobjectEntity[attibute];
   });
-
-  return objectEntity;
+  return localobjectEntity;
 };
 </script>

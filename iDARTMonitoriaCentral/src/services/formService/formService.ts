@@ -47,4 +47,10 @@ export default {
   getAllFromStorage() {
     return form.all();
   },
+  getFormByID(id: number) {
+    return form.query().where('id', id).get();
+  },
+  getFormByName(drugname: string) {
+    return form.query().where('form', drugname).get();
+  },
 };

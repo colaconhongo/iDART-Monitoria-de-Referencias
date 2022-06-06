@@ -8,11 +8,11 @@ export default class Regimen extends Model {
   static fields(): ModelFields {
     return {
       regimeid: this.attr(null),
+      codigoregime: this.attr(''),
       regimeesquema: this.attr(''),
       active: this.uid(),
       regimenomeespecificado: this.attr(''),
       regimeesquemaidart: this.attr(''),
-      codigoregime: this.attr(''),
 
       // Relationship
 

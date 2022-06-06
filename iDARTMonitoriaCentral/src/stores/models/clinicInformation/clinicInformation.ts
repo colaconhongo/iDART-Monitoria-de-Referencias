@@ -29,7 +29,7 @@ export default class ClinicInformation extends Model {
       dayswithoutmedicine: this.attr(false),
       latemotives: this.attr(false),
       adversereactionmedicine: this.attr(false),
-      adversereaction: this.attr(false),
+      adversereaction: this.attr(''),
       isreferedtousram: this.attr(false),
       ispregnant: this.attr(false),
       hashadmenstruationlasttwoweeks: this.attr(false),
