@@ -16,6 +16,9 @@ export function useUtils(){
 
     return {
       groupedArray,
-      groupBy
+      groupBy,
+      groupedMap
     }
+
+
 }

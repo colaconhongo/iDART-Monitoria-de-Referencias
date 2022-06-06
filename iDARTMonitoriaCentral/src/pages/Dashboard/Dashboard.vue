@@ -12,6 +12,7 @@
                         fill-input
                         hide-selected
                         :options="allProvincias"
+                        disable
                         option-label="name"
                         option-value="id"
                         filled
@@ -36,11 +37,12 @@
                         tack-label
                         class="col q-ml-xl"
                         v-model="clinic"
+                        :disable="true"
                         use-input
                         fill-input
                         hide-selected
-                        :options="districtsByProvince"
-                        option-label="name"
+                        :options="clinicsByDistrict"
+                        option-label="clinicname"
                         option-value="id"
                         filled
                       />
@@ -53,8 +55,8 @@
                         use-input
                         fill-input
                         hide-selected
-                        :options="districtsByProvince"
-                        option-label="name"
+                        :options="DDPharmByDistrict"
+                        option-label="clinicname"
                         option-value="id"
                         filled
                       />
@@ -72,6 +74,9 @@
                         filled
                       />
 </div>
+<br>
+   <q-bar dense dark class="bg-primary">
+            </q-bar>
  <div class="q-pa-md row items-start q-gutter-md justify-center">
   <q-card class="my-card" flat bordered>
       <q-item>
@@ -84,7 +89,7 @@
         </q-item-section>
       </q-item>
       <q-card-section horizontal>
-        <q-separator vertical />
+        <q-separator />
         <q-card-section class="col-4">
          {{total.totalNumbers}}
         </q-card-section>
@@ -102,7 +107,7 @@
       </q-item>
       <q-card-section horizontal>
 
-        <q-separator vertical />
+        <q-separator  />
 
         <q-card-section class="col-4">
          {{total.totalBackNumbers}}
@@ -135,7 +140,9 @@
 </div>
 <q-separator/>
    <chartReferralByPharmacy v-model:loaded="loaded" />
+    <q-separator/>
  <chartDispenseByDrug v-model:loaded="loaded" />
+ <q-separator/>
   <chartBarReffered v-model:loaded="loaded" />
  <q-separator/>
    <lineChart v-model:loaded="loaded" />
@@ -143,7 +150,7 @@
 </div>
 </template>
 <script setup>
-import { useQuasar, QSpinnerBall } from 'quasar';
+import { useQuasar, QSpinnerBall, LocalStorage } from 'quasar';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
@@ -159,10 +166,10 @@ import chartReferralByPharmacy from '../../components/Dashboard/BarReportReffere
 import chartDispenseByDrug from '../../components/Dashboard/BarReportDispenseByDrug.vue'
 import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.vue'
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue'
-const provincia = ref([]);
-const district = ref([]);
-const clinic = ref([]);
-const pharmacy = ref([]);
+const provincia = ref(ProvinceService.getFirstProvinceByNameFromStorage());
+let district = ref();
+let clinic = ref();
+let pharmacy = ref();
 const apexchart = VueApexCharts;
   let yearAnnualPeriod=ref(2022);
     let annualFilter = ref([]);
@@ -206,6 +213,53 @@ watch(yearAnnualPeriod, () => {
         })
 });
 
+watch(district, () => {
+  console.log(district)
+   console.log(district)
+   clinic = ref(null)
+     console.log(clinic)
+    $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+  console.log(yearAnnualPeriod)
+
+    loaded.loaded = ref(true);
+      $q.loading.hide()
+     
+});
+
+watch(clinic, () => {
+  console.log(clinic)
+   console.log(clinic)
+    $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+  console.log(clinic)
+
+    loaded.loaded = ref(true);
+      $q.loading.hide()
+     
+});
+
+watch(pharmacy, () => {
+  console.log(pharmacy)
+   console.log(pharmacy)
+    $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+  console.log(pharmacy)
+
+    loaded.loaded = ref(true);
+      $q.loading.hide()
+     
+});
+
 onMounted(() => {
   // EpisodeService.get(0);
    $q.loading.show({
@@ -233,6 +287,19 @@ const districtsByProvince = computed(() => {
   return DistrictService.getAllProvinceFromStorage();
 });
 
+const clinicsByDistrict = computed(() => {
+   // console.log(DistrictService.getAllProvinceFromStorage())
+   if(district.value !== undefined) {
+ return ClinicService.getAllUsByDistrict(district.value);
+   } 
+});
+
+const DDPharmByDistrict = computed(() => {
+    if(district.value !== undefined) {
+  return ClinicService.getAllDDPharmByDistrict(district.value);
+    }
+});
+
 const yearsToShow = ref(
   [2017,2018,2019,2020,2021,2022]);
 
@@ -246,6 +313,9 @@ let total = reactive({
 
 provide('total', total);
 provide('yearAnnualPeriod', yearAnnualPeriod);
+provide('district', district);
+provide('clinic', clinic);
+provide('pharmacy', pharmacy);
 /*
    On Page Mounted
 */
@@ -258,4 +328,9 @@ provide('yearAnnualPeriod', yearAnnualPeriod);
 .background {
     background-color:$grey-2;
   }
+.my-card {
+    border-radius: 20px;
+    background-color: white;
+  }
+
 </style>

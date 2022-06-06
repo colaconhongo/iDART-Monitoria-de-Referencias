@@ -1,7 +1,7 @@
 <template>
-<div style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)">
+<div style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)" class="panel">
  <apexchart
-      width="100%"
+      width="95%"
       height="600px"
       type="bar"
       :options="chartOptionsReferredByPharmacy"
@@ -13,9 +13,10 @@
 <script setup>
 import VueApexCharts from 'vue3-apexcharts';
 import randomcolor from 'randomcolor';
-import { computed, onMounted, ref, onBeforeMount, reactive , watch , toRefs } from 'vue';
+import { computed, onMounted, ref, onBeforeMount, reactive , watch , inject } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import ClinicService from 'src/services/clinicService/clinicService';
+ import DashboardUtils from '../../use/DashboardUtils';
  import moment from 'moment';
  const monthsX = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEC']
 const weeksX = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5']
@@ -36,6 +37,13 @@ const chartOptionsReferredByPharmacy = {
           easing: 'easeinout',
           speed: 1000
         },
+         title: {
+          text: 'Total de Referidos Por Farmacia',
+          align: 'center',
+          style: {
+            color: '#000000'
+          }
+          },
          plotOptions: {
               bar: {
                 borderRadius: 10,
@@ -61,16 +69,17 @@ const props = defineProps({
     type: Object,
   }
 });
+const yearAnnualPeriod = inject('yearAnnualPeriod')
 console.log(props)
+const district = inject('district')
+const clinic = inject('clinic')
+const pharmacy = inject('pharmacy')
 
-
-// const loaded = ref(props.loaded)
-// const { loaded } = toRefs(props)
 
 watch(props.loaded, () => {
   console.log(props.loaded)
    if(props.loaded) {
-     let patients = patientService.getPatientsByYearFromLocalStorage(2021);
+     let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
     let resultPatientsByClinicUuid = groupedMap(patients , 'clinicuuid')
        let resultPatientsByPatientId = groupedMap(patients , 'patientid')
          const patientsToCount = []
@@ -114,7 +123,8 @@ watch(props.loaded, () => {
       var monthsPresent = []
    const map = list.reduce((a, b) => {
      if(b.prescriptiondate !== null){ 
-  const m = toDateStr(b.prescriptiondate).getMonth()
+ // const m = toDateStr(b.prescriptiondate).getMonth()
+ const m = DashboardUtils.getStatisticMonthByDate(b.prescriptiondate)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a
@@ -136,3 +146,10 @@ const groupedMap  = (items, key) => items.reduce(
     new Map()
 );
 </script>
+<style lang="scss" scoped>
+
+.panel {
+    border-radius: 15px;
+    background-color: white;
+  }
+</style>

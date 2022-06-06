@@ -1,21 +1,24 @@
 <template>
+<div style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)" class="panel">
 <apexchart
-       width="100%"
+       width="95%"
        height="600px"
       type="bar"
       :options="chartOptionsDispenseByDrug"
       :series="series3.series3"
     ></apexchart>
+    </div>
 </template>
 
 <script setup>
 import VueApexCharts from 'vue3-apexcharts';
 import randomcolor from 'randomcolor';
-import { computed, onMounted, ref, onBeforeMount, reactive , watch , toRefs } from 'vue';
+import { computed, onMounted, ref, onBeforeMount, reactive , watch , inject } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import ClinicService from 'src/services/clinicService/clinicService';
 import DispenseService from 'src/services/dispenseService/dispenseService';
  import moment from 'moment';
+ import DashboardUtils from '../../use/DashboardUtils';
  const monthsX = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEC']
 const weeksX = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5']
 const toDateStr = str => new Date(str.replace(/^(\d+)\/(\d+)\/(\d+)$/, '$2/$1/$3'))
@@ -35,6 +38,13 @@ const chartOptionsDispenseByDrug = {
           easing: 'easeinout',
           speed: 1000
         },
+         title: {
+          text: 'Total de Dispensas Por Medicamento',
+          align: 'center',
+          style: {
+            color: '#000000'
+          }
+          },
          plotOptions: {
               bar: {
                 borderRadius: 10
@@ -44,6 +54,9 @@ const chartOptionsDispenseByDrug = {
           enabled: false,
           position : top
         },
+         legend: {
+    show: true
+  }
       };
 
 let series3 = reactive({
@@ -61,23 +74,24 @@ const props = defineProps({
   }
 });
 console.log(props)
-
-
-// const loaded = ref(props.loaded)
-// const { loaded } = toRefs(props)
+const yearAnnualPeriod = inject('yearAnnualPeriod')
+const district = inject('district')
+const clinic = inject('clinic')
+const pharmacy = inject('pharmacy')
 
 watch(props.loaded, () => {
   console.log(props.loaded)
    if(props.loaded) {
-     const allDispenses = DispenseService.getDispensesByRegimeByYearFromLocalStorage(2021);
+     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
       let resultDrugs = groupedMap(allDispenses , 'drugname')
       // dispense by drug
         const keysByDrug = Array.from(resultDrugs.keys())
       series3.series3 = []
+      chartOptionsDispenseByDrug.colors = []
        keysByDrug.forEach( (key) => {
          const keys = organizeDispensesByMonth(resultDrugs.get(key))
          const regimeType = []
-            if (keys !== undefined) {
+            if (keys != undefined) {
        const mapIter = keys.values()
        for (const item of mapIter) {
          regimeType.push(item.data)
@@ -102,7 +116,10 @@ watch(props.loaded, () => {
   {
       var monthsPresent = []
    const map = list.reduce((a, b) => {
-  const m = toDateStr(b.dispensedate).getMonth()
+ // const m = returnReturnStatisticMonth(b.dispensedate)
+ // const m = toDateStr(b.dispensedate).getMonth()
+  const m = DashboardUtils.getStatisticMonthByDate(b.dispensedate)
+  console.log(m)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a
@@ -123,4 +140,13 @@ const groupedMap  = (items, key) => items.reduce(
     (entryMap, e) => entryMap.set(e[key], [...entryMap.get(e[key])||[], e]),
     new Map()
 );
+
 </script>
+<style lang="scss" scoped>
+
+.panel {
+  border: 0.5px solid $grey-13;
+    border-radius: 15px;
+    background-color: white;
+  }
+</style>

@@ -1,7 +1,7 @@
 <template>
-<div style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)">
+<div style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)" class="panel">
  <apexchart
-      width="100%"
+      width="95%"
        height="600px"
       type="bar"
       :options="chartOptions"
@@ -16,6 +16,7 @@ import { reactive , watch , inject } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import EpisodeService from 'src/services/episodeService/episodeService';
  import moment from 'moment';
+  import DashboardUtils from '../../use/DashboardUtils';
  const monthsX = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEC']
 const weeksX = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5']
 const toDateStr = str => new Date(str.replace(/^(\d+)\/(\d+)\/(\d+)$/, '$2/$1/$3'))
@@ -30,6 +31,9 @@ const props = defineProps({
 
 const total = inject('total')
 const yearAnnualPeriod = inject('yearAnnualPeriod')
+const district = inject('district')
+const clinic = inject('clinic')
+const pharmacy = inject('pharmacy')
 
 const chartOptions = {
         chart: {
@@ -44,6 +48,13 @@ const chartOptions = {
           easing: 'easeinout',
           speed: 1000
         },
+         title: {
+          text: 'Pacientes Referidos vs Pacientes que voltaram a US',
+          align: 'center',
+          style: {
+            color: '#000000'
+          }
+          },
          plotOptions: {
               bar: {
                 borderRadius: 10
@@ -64,7 +75,7 @@ const  patientsToCount =  [];
        const  patientFemale =  [];
   const endEpisodes = EpisodeService.getEpisodesByYearFromLocalStorage(yearAnnualPeriod.value);
    const endEpisodeMonthly = organizeEpisodesByMonth(endEpisodes);
-    const patients = patientService.getPatientsByYearFromLocalStorage(yearAnnualPeriod.value);
+    const patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value, district,clinic,pharmacy);
     console.log(patients)
      console.log(endEpisodeMonthly)
       let resultPatients1 = groupedMap(patients , 'patientid');
@@ -122,7 +133,8 @@ const  patientsToCount =  [];
       var monthsPresent = []
    const map = list.reduce((a, b) => {
      if(b.prescriptiondate !== null){ 
-  const m = toDateStr(b.prescriptiondate).getMonth()
+  // const m = toDateStr(b.prescriptiondate).getMonth()
+  const m = DashboardUtils.getStatisticMonthByDate(b.prescriptiondate)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a
@@ -143,7 +155,8 @@ const  patientsToCount =  [];
   {
       var monthsPresent = []
    const map = list.reduce((a, b) => {
-  const m = toDateStr(b.stopdate).getMonth()
+  // const m = toDateStr(b.stopdate).getMonth()
+   const m = DashboardUtils.getStatisticMonthByDate(b.stopdate)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a
@@ -166,3 +179,11 @@ const groupedMap  = (items, key) => items.reduce(
 );
 
 </script>
+<style lang="scss" scoped>
+
+.panel {
+  border: 1px solid $grey-13;
+    border-radius: 15px;
+    background-color: white;
+  }
+</style>
