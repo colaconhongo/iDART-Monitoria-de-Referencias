@@ -108,7 +108,6 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
 import { onMounted } from 'vue';

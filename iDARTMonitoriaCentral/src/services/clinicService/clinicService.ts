@@ -201,4 +201,7 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+  getPharmByUUid(uuid) {
+    return clinic.query().where('uuid', uuid).get();
+  },
 };
