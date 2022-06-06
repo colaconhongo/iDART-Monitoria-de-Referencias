@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-pa-sm q-pt-sm">
+  <div class="row q-pa-sm q-pt-md">
     <SelectField
       :label="provinceLabel"
       class="col q-ml-md"
