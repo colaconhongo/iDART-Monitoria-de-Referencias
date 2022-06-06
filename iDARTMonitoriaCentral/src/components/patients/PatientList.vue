@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <!--<PatientSearchFields />-->
+    <PatientSearchFields />
     <listPatient
       :columns="columns"
       :mode="mode"
