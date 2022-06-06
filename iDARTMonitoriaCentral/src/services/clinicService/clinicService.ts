@@ -10,8 +10,11 @@ export default {
     return api()
       .post('clinic', params)
       .then((resp) => {
-        console.log(resp);
-        clinic.save(resp.data);
+        const clinicData = JSON.parse(resp.config.data);
+        const restLocation = String(resp.headers.location);
+        const restId = restLocation.substring(restLocation.indexOf('.') + 1);
+        clinicData.id = Number(restId);
+        clinic.save(clinicData);
         alert(
           'Sucesso!',
           'O Registo foi efectuado com sucesso',
@@ -72,10 +75,9 @@ export default {
   },
   patch(id: number, params: string) {
     return api()
-      .patch('clinic/' + id, params)
+      .patch('clinic?id=eq.' + id, params)
       .then((resp) => {
-        console.log(resp);
-        clinic.save(resp.data);
+        clinic.save(JSON.parse(resp.config.data));
         alert(
           'Sucesso!',
           'O Registo foi alterado com sucesso',
@@ -105,9 +107,8 @@ export default {
   },
   delete(id: number) {
     return api()
-      .delete('clinic/' + id)
+      .delete('clinic?id=eq.' + id)
       .then((resp) => {
-        console.log(resp);
         clinic.destroy(id);
         alert(
           'Sucesso!',
@@ -148,6 +149,35 @@ export default {
   getAllFromStorage() {
     return clinic.all();
   },
+  getAllPharmacyFromDistrict(district: string) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype !== 'Unidade Sanitária' &&
+          clinics.district === district
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllUSFromDistrict(district: string) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.facilitytype === 'Unidade Sanitária' &&
+          clinics.district === district
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getClinicByID(uuid: string) {
+    return clinic.query().where('uuid', uuid).get();
+  },
   getAllDDPharm() {
     return clinic
       .query()
@@ -156,6 +186,16 @@ export default {
           clinics.facilitytype !== 'Unidade Sanitária' &&
           clinics.province === localStorage.getItem('province_name')
         );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  getAllUS() {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return clinics.facilitytype === 'Unidade Sanitária';
       })
       .orderBy('facilitytype')
       .orderBy('clinicname', 'desc')

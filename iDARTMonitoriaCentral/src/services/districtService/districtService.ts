@@ -26,6 +26,19 @@ export default {
         });
     }
   },
+  getByProvinceId(offset: number) {
+    if (offset >= 0) {
+      return api()
+        .get('district?offset=' + offset + '&limit=100')
+        .then((resp) => {
+          district.save(resp.data);
+          offset = offset + 100;
+          if (resp.data.length > 0) {
+            setTimeout(this.get, 2);
+          }
+        });
+    }
+  },
   patch(id: number, params: string) {
     return api()
       .patch('district/' + id, params)
@@ -48,6 +61,7 @@ export default {
     return district.all();
   },
   getAllProvinceFromStorage() {
+    console.log(Number(localStorage.getItem('province_id')))
     return district
       .query()
       .where('province', Number(localStorage.getItem('province_id')))

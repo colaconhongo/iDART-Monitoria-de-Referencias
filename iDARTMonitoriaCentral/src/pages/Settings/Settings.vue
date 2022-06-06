@@ -1,4 +1,5 @@
 <template>
+  <Filter :is="true" />
   <div class="q-pa-md q-pt-xl">
     <q-splitter v-model="splitterModel">
       <template v-slot:before>
@@ -25,53 +26,85 @@
         >
           <q-tab-panel name="clinic">
             <div class="text-h4 q-mb-md"></div>
-            <clinics> </clinics>
+            <clinics />
           </q-tab-panel>
-          <!--q-tab-panel name="clinic_sector">
+          <q-tab-panel name="clinic_sector">
             <div class="text-h4 q-mb-md"></div>
-            <clinicSectors> </clinicSectors>
-          </!--q-tab-panel>
-          <q-tab-panel name="doctor">
-            <div class="text-h4 q-mb-md"></div>
-            <doctor> </doctor>
+            <clinic_sector />
           </q-tab-panel>
           <q-tab-panel name="drugs">
             <div class="text-h4 q-mb-md"></div>
-            <drug> </drug>
+            <drugs />
           </q-tab-panel>
-          <q-tab-panel name="clinical_service">
+          <q-tab-panel name="regimen">
             <div class="text-h4 q-mb-md"></div>
-            <clinicalServices> </clinicalServices>
+            <regimen />
           </q-tab-panel>
-          <q-tab-panel name="therapeutic_regimen">
-            <div class="text-h4 q-mb-md"></div>
-            <therapeuticRegimen> </therapeuticRegimen>
-          </q-tab-panel>
-          <q-tab-panel name="identifier_type">
-            <div class="text-h4 q-mb-md"></div>
-            <identifierType />
-          </q-tab-panel>
-          <q-tab-panel-- name="interoperability">
-            <div class="text-h4 q-mb-md"></div>
-            <interoperability> </interoperability>
-          </q-tab-panel-->
         </q-tab-panels>
       </template>
     </q-splitter>
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { computed, provide, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import clinics from '../Clinic/Clinic.vue';
+import clinic_sector from '../ClinicSector/ClinicSector.vue';
+import drugs from '../Drug/Drug.vue';
+import regimen from '../Regimen/Regimen.vue';
+import Filter from 'src/components/Filter/Filter.vue';
+import provinceService from 'src/services/provinceService/provinceService';
+import clinicService from 'src/services/clinicService/clinicService';
+import districtService from 'src/services/districtService/districtService';
 
+/*
+  Declaraftion
+*/
+const { t } = useI18n();
 const selectedTab = ref('clinic');
 const splitterModel = ref(15);
+
+const province = reactive(
+  ref(provinceService.getFirstProvinceByNameFromStorage())
+);
+const district = reactive(ref([]));
+const facility = reactive(ref([]));
+const pharmacy = reactive(ref([]));
+
+/*
+  Computed
+*/
+const allProvincias = computed(() => {
+  return provinceService.getAllFromStorage();
+});
+
+const alldistrictsFromProvince = computed(() => {
+  return districtService.getAllProvinceFromStorage();
+});
+
+const allFacilityFromDistrict = computed(() => {
+  return clinicService.getAllUSFromDistrict(district.value.name);
+});
+
+const allPhamacyFromFacility = computed(() => {
+  return clinicService.getAllPharmacyFromDistrict(district.value.name);
+});
+
+provide('allProvincias', allProvincias);
+provide('alldistrictsFromProvince', alldistrictsFromProvince);
+provide('allFacilityFromDistrict', allFacilityFromDistrict);
+provide('allPhamacyFromFacility', allPhamacyFromFacility);
+
+provide('province', province);
+provide('district', district);
+provide('facility', facility);
+provide('pharmacy', pharmacy);
+
 const tabs = [
-  // { name: 'national_clinic', icon: 'local_convenience_store', label: 'Unidade Sanitaria' },
-  { name: 'clinic', icon: 'local_hospital', label: 'Farmácias' },
-  { name: 'clinic_sector', icon: 'local_pharmacy', label: 'Sector Clínico' },
-  { name: 'drugs', icon: 'medication', label: 'Medicamentos' },
-  { name: 'therapeutic_regimen', icon: 'healing', label: 'Regime Terapêutico' },
+  { name: 'clinic', icon: 'local_hospital', label: t('pharmacy') },
+  { name: 'clinic_sector', icon: 'local_pharmacy', label: t('clinicSector') },
+  { name: 'drugs', icon: 'medication', label: t('drug') },
+  { name: 'regimen', icon: 'healing', label: t('regimen') },
 ];
 </script>
 <style></style>

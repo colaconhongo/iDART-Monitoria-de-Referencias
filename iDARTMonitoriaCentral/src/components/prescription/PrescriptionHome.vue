@@ -84,7 +84,7 @@ const columns = [
     name: 'prescricaoespecial',
     align: 'left',
     label: 'Especial',
-    field: (row) => row.prescricaoespecial,
+    field: (row) => row.prescricaoespecial ==='F'? 'Não':'Sim',
     format: (val) => `${val}`,
     sortable: true,
   },

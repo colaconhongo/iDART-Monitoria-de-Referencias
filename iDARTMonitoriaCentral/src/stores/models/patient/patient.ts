@@ -51,8 +51,7 @@ export default class Patient extends Model {
       estadopaciente: this.attr(''),
 
       // Relationship
-
-      episodes: this.hasMany(Episode, 'patientuuid'),
+      // episodes: this.hasMany(Episode, 'patientuuid'),
     };
   }
 }

@@ -4,37 +4,41 @@
       :columns="columns"
       :mode="mode"
       :with_downloadButton="true"
+      :with_actionDetailButton="true"
+      :with_actionEditButton="true"
+      :with_actionRemoveButton="true"
       :rows="allClinics"
-      :title="props.title"
+      :title="title"
+      :visualizar="viewClinic"
+      :editar="editClinic"
+      :remover="deleteClinic"
     />
   </q-page>
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import clinicService from 'src/services/clinicService/clinicService';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, reactive, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
-
-/*
-Props
-*/
-
-const props = defineProps({
-  title: {
-    type: String,
-  },
-});
+import { useI18n } from 'vue-i18n';
+import provinceService from 'src/services/provinceService/provinceService';
+import districtService from 'src/services/districtService/districtService';
 
 /*
 Declarations
 */
 const $q = new useQuasar();
+const { t } = useI18n();
 const mode = reactive(ref('list'));
+const viewClinic = inject('viewClinic');
+const editClinic = inject('editClinic');
+const deleteClinic = inject('deleteClinic');
+const title = inject('titleList');
 const columns = [
   {
     name: 'code',
     required: true,
-    label: 'Código',
+    label: t('code'),
     align: 'left',
     field: (row) => row.code,
     format: (val) => `${val}`,
@@ -43,7 +47,7 @@ const columns = [
   {
     name: 'clinicname',
     align: 'left',
-    label: 'Nome',
+    label: t('clinicname'),
     field: (row) => row.clinicname,
     format: (val) => `${val}`,
     sortable: true,
@@ -51,7 +55,7 @@ const columns = [
   {
     name: 'facilitytype',
     align: 'left',
-    label: 'Tipo de Farmácia',
+    label: t('facilitytype'),
     field: (row) => row.facilitytype,
     format: (val) => `${val}`,
     sortable: true,
@@ -59,7 +63,7 @@ const columns = [
   {
     name: 'province',
     align: 'left',
-    label: 'Provínvia',
+    label: t('province'),
     field: (row) => row.province,
     format: (val) => `${val}`,
     sortable: true,
@@ -67,7 +71,7 @@ const columns = [
   {
     name: 'district',
     align: 'left',
-    label: 'Distrito',
+    label: t('district'),
     field: (row) => row.district,
     format: (val) => `${val}`,
     sortable: true,
@@ -75,7 +79,7 @@ const columns = [
   {
     name: 'telephone',
     align: 'left',
-    label: 'Telefone',
+    label: t('telephone'),
     field: (row) => row.telephone,
     format: (val) => `${val}`,
     sortable: true,
@@ -110,6 +114,8 @@ const allClinics = computed(() => {
 const getAllClinicFromAPI = (offset) => {
   if (offset >= 0) {
     clinicService.get(offset);
+    provinceService.get(offset);
+    districtService.get(offset);
   }
 };
 </script>
