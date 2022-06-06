@@ -19,7 +19,7 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import episodeService from 'src/services/episodeService/episodeService';
 import { inject, computed, onMounted, reactive, ref } from 'vue';
 import listEpisode from 'src/components/Shared/CRUD/TableList.vue';
-import CreateEditEpisode from 'src/components/episode/EpisodeCreateEditModal.vue';
+//import CreateEditEpisode from 'src/components/episode/EpisodeCreateEditModal.vue';
 
 /*
 Declarations
