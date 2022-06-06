@@ -63,11 +63,11 @@ import { computed, inject, onMounted, reactive, ref } from 'vue';
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';
-/*
-import clinicInformations from '../ClinicInformation/ClinicInformation.vue';
-import prescriptions from '../ClinicInformation/Prescription.vue';
-import dispenses from '../ClinicInformation/Dispense.vue';
-*/
+
+import clinicInformations from 'src/pages/ClinicInformation/ClinicInformation.vue';
+import prescriptions from 'src/pages/ClinicInformation/Prescription.vue';
+import dispenses from 'src/pages/ClinicInformation/Dispense.vue';
+
 
 const selectedTab = ref('episodios');
 const splitterModel = ref(15);
