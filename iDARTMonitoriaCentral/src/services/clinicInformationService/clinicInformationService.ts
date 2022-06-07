@@ -48,13 +48,9 @@ export default {
   getAllFromStorage() {
     return sync_temp_clinic_information.all();
   },
-
-  getClinicInformationByPatientUuid(patientuuid: string) {
-    return sync_temp_clinic_information
-      .query()
-      .where((clinicInformations) => {
-        return clinicInformations.patientuuid !== patientuuid;
-      })
-      .get();
+  getClinicInformationByPatientUuid(patientUuid) {
+    const list =  sync_temp_clinic_information.query().where('patientuuid', patientUuid).orderBy('registerdate', 'desc').
+    get();
+    return list;
   },
 };

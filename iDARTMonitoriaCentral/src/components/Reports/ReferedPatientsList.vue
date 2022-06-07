@@ -38,7 +38,11 @@ const generateReport = (params) => {
     '01-01-2020',
     '02-01-2020'
   );
-  // reportService.getReferedPatientsReport(0)
+};
+
+const filterDrugStoreSection = ref(null);
+const closeSection = () => {
+  filterDrugStoreSection.value.remove();
 };
 </script>
 

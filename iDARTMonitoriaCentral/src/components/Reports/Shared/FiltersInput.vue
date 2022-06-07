@@ -1,50 +1,33 @@
 <template>
              <div class="row">
               <div class="col row q-pt-md">
-
                     <q-select
                       class="col q-mr-md"
-                      v-if="isProvincialLevel"
-                      dense outlined
-                      :options="districts"
-                      ref="district"
-                      option-value="id"
-                      option-label="description"
-                      label="Distrito" />
-
-                    <q-select
-                      class="col q-mr-md"
-                      dense outlined
-                      :disable="isClinicLevel"
-                      :options="clinics"
-                      ref="clinic"
-                      option-value="id"
-                      option-label="clinicName"
-                      label="Farmácia" />
-
-                    <q-select
-                      class="col q-mr-md"
+                      style="max-width: 300px"
                       dense outlined
                       :options="periodTypeList"
                       ref="period"
                       option-value="code"
                       option-label="description"
-                      @update:model-value="val => onPeriodoChange(val)"
+                      v-model="params.periodType"
                       :rules="[ val => ( val != null) || ' Por favor indique o período']"
                       lazy-rules
                       label="Período *" />
 
-                     <div  class="row q-mb-md" >
+                     <div
+                      class="row col q-mb-md"
+                      v-if="isSpecificSearch" >
                         <q-input
                           dense
                           outlined
                           :disable="false"
                           class="col q-mr-md"
+                          v-model="params.startDate"
                           label="Data Início">
                           <template v-slot:append>
                               <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                  <q-date mask="DD-MM-YYYY">
+                                  <q-date mask="DD-MM-YYYY" v-model="params.startDate">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
                                   </div>
@@ -58,12 +41,14 @@
                           outlined
                           :disable="false"
                           class="col q-mr-md"
+                          v-model="params.enddate"
                           label="Data Fim">
                           <template v-slot:append>
                               <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                                   <q-date
-                                  mask="DD-MM-YYYY"
+                                    mask="DD-MM-YYYY"
+                                    v-model="params.enddate"
                                    :options="blockDataFutura">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
@@ -75,20 +60,13 @@
                         </q-input>
                     </div>
 
-                    <MonthlyPeriod
-                      @setSelectedMonth="setSelectedPeriod"
-                      @setSelectedYearMonth="setSelectedYear"/>
+                    <MonthlyPeriod class="col" v-if="isMonthlSearch" />
 
-                    <QuarterlyPeriod
-                      @setSelectedQuarter="setSelectedPeriod"
-                      @setSelectedYearQuarter="setSelectedYear" />
+                    <QuarterlyPeriod class="col" v-if="isSTrimestralSearch" />
 
-                    <SemesterPeriod
-                      @setSelectedSemester="setSelectedPeriod"
-                      @setSelectedSemesterYear="setSelectedYear"  />
+                    <SemesterPeriod class="col" v-if="isSemestralSearch"  />
 
-                    <AnnualPeriod
-                      @setSelectedYearAnnual="setSelectedYear" />
+                    <AnnualPeriod v-if="isAnnualSearch" />
 
               </div>
 
@@ -111,34 +89,117 @@
   /*
   Imports
   */
- import { ref } from 'vue';
+ import { ref, reactive, provide, computed, inject } from 'vue';
+ import MonthlyPeriod from 'src/components/Reports/Shared/MonthlyPeriod.vue'
+ import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue'
+ import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
+ import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
+ import moment from 'moment'
   /*
   Declaration
   */
-  let params = ref({
+ const district = inject('district');
+ const facility = inject('facility');
+ const pharmacy = inject('pharmacy');
+
+ const periodTypeList = ref([
+                            { id: 1, description: 'Especifico', code: 'SPECIFIC' },
+                            { id: 2, description: 'Mensal', code: 'MONTH' },
+                            { id: 3, description: 'Trimestral', code: 'QUARTER' },
+                            { id: 4, description: 'Semestral', code: 'SEMESTER' },
+                            { id: 5, description: 'Anual', code: 'ANNUAL' }
+                          ]);
+
+  let params = reactive(ref({
                       id: null,
                       provinceId: null,
                       districtId: null,
                       clinicId: null,
-                      clinic: null,
+                      facility: facility.value,
+                      clinic: pharmacy.value,
                       province: null,
-                      district: null,
-                      endDateParam: null,
-                      startDateParam: null,
+                      district: district.value,
+                      endDate: null,
+                      startDate: null,
                       year: new Date().getFullYear(),
                       period: null,
                       periodTypeView: null,
+                      periodType: null,
                       fileType: null
-                    })
+                    }))
+  /*
+  Computed
+  */
+ const isSpecificSearch = computed(() => {
+    if (params.value.periodType === null) return false
+    return params.value.periodType.code === 'SPECIFIC'
+  });
+
+  const isMonthlSearch = computed(() => {
+    if (params.value.periodType === null) return false
+    return params.value.periodType.code === 'MONTH'
+  });
+
+  const isSTrimestralSearch = computed(() => {
+    if (params.value.periodType === null) return false
+    return params.value.periodType.code === 'QUARTER'
+  });
+
+  const isSemestralSearch = computed(() => {
+    if (params.value.periodType === null) return false
+    return params.value.periodType.code === 'SEMESTER'
+  });
+
+  const isAnnualSearch = computed(() => {
+    if (params.value.periodType === null) return false
+    return params.value.periodType.code === 'ANNUAL'
+  });
   /*
   Methods
   */
  const generateReport = (fileType) => {
    params.value.fileType = fileType
+   determineDateInterval()
    emit('generateReport', params)
  }
 
+ const determineDateInterval = () => {
+   if (isMonthlSearch.value) {
+     params.value.endDate = moment(params.value.year +'-'+ params.value.period.id +'-'+ 20, 'YYYY-MM-DD')
+     params.value.startDate = Object.assign({}, params.value.endDate)
+     params.value.startDate = moment(params.value.startDate).subtract(30, 'days');
+     params.value.startDate = moment(params.value.startDate).set('date', 21);
+   } else if (isSTrimestralSearch.value) {
+     if (params.value.period.id === 1) {
+       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-03-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 2) {
+       params.value.startdate = moment(params.value.year +'-03-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 3) {
+       params.value.startdate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-09-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 4) {
+       params.value.startdate = moment(params.value.year +'-09-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+     }
+   } else if (isSemestralSearch.value) {
+     if (params.value.period.id === 1) {
+       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 2) {
+       params.value.startdate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+     }
+   } else if (isAnnualSearch.value) {
+       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+   }
+ }
+
  const emit = defineEmits(['generateReport'])
+
+ provide('params', params)
 </script>
 
 <style>
