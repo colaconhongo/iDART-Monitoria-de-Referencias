@@ -33,6 +33,11 @@ const generateReport = (params) => {
   reportService.getReferedPatientsReport(0)
 }
 
+const filterDrugStoreSection = ref(null)
+const closeSection = () => {
+  filterDrugStoreSection.value.remove()
+}
+
 </script>
 
 <style lang="scss" scoped>

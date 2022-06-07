@@ -21,7 +21,7 @@ export function useUtils(){
     return {
       groupedArray,
       groupBy,
-      groupedMap
+      groupedMap,
       ageCalculator
     }
 
