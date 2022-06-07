@@ -64,6 +64,8 @@ import { computed, reactive, ref, inject } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 import moment from 'moment';
+
+const patient = inject('patient')
 /*
   Props
 */
@@ -80,6 +82,9 @@ const props = defineProps({
   title: {
     type: String,
     default: 'Dispensas',
+  },
+   patient: {
+    type: Object,
   },
 });
 
@@ -140,7 +145,7 @@ const columns = [
 */
 
 const allPrescription = computed(() => {
-  return prescriptionService.getPrescriptionsByPatientId('04010001/16/0268');
+  return prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
 });
 
 

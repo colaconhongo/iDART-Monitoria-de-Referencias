@@ -15,6 +15,7 @@
       :is="true"
       :show_dialog="show_dialog"
       :clinicInformation="clinicInformation"
+      :patient="patient"
     />
   </q-page>
 </template>
@@ -26,6 +27,7 @@ import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
 import moment from 'moment';
 
+const patient = inject('patient')
 /*
 Props
 */
@@ -45,7 +47,7 @@ const clinicInformation = reactive(ref({}));
 
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
-const patient = inject('patient')
+
 
 const columns = [
   {
@@ -118,11 +120,10 @@ onMounted(() => {
 */
 
 const allClinicInformation = computed(() => {
-  return clinicInformationService.getClinicInformationByPatientUuid(
-   '40b17748-05d6-44db-9d44-581f4853c854'
+  return clinicInformationService.getClinicInformationByPatientUuid(patient.value.uuidopenmrs
   );
   // getClinicInformationByPatientUuid
-  //
+  //'40b17748-05d6-44db-9d44-581f4853c854'
   // patient.uuidopenmrs
 });
 

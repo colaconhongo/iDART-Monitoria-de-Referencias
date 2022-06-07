@@ -34,7 +34,7 @@ export default class ClinicInformation extends Model {
       ispregnant: this.attr(false),
       hashadmenstruationlasttwoweeks: this.attr(false),
       starttreatmentdate: this.attr(false),
-      patientuuid: this.uid(),
+      patientuuid: this.attr(''),
       syncstatus: this.attr(false),
     };
   }
