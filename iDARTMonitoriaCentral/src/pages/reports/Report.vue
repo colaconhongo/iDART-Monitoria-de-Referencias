@@ -20,7 +20,7 @@
       </div>
       <div class="col q-mr-sm panel q-pa-sm">
         <template v-for="comp in components" :key="comp.id">
-          <component :is="ReferedPatientsList" class="q-mb-sm" />
+          <component :is="reportComps[comp.name]" class="q-mb-sm" />
         </template>
       </div>
     </div>
@@ -34,10 +34,23 @@
 import ListReportMenu from 'src/components/Reports/Menu/ListReportMenu.vue';
 import ReferedPatientsList from 'src/components/Reports/ReferedPatientsList.vue';
 import { uid } from 'quasar';
-import { reactive } from 'vue';
+import { reactive, ref, provide, computed } from 'vue';
 import Filter from 'src/components/Filter/Filter.vue';
+import provinceService from 'src/services/provinceService/provinceService';
+import clinicService from 'src/services/clinicService/clinicService';
+import districtService from 'src/services/districtService/districtService';
 
 let components = reactive([]);
+const province = reactive(
+  ref(provinceService.getFirstProvinceByNameFromStorage())
+);
+const reportComps = {
+  ReferedPatientsList
+}
+const district = reactive(ref([]));
+const facility = reactive(ref([]));
+const pharmacy = reactive(ref([]));
+
 /*
   Methods
   */
@@ -46,6 +59,35 @@ const changeTab = (tabName) => {
   const comp = { id: uidValue, name: tabName };
   components.push(comp);
 };
+
+/*
+  Computed
+*/
+const allProvincias = computed(() => {
+  return provinceService.getAllFromStorage();
+});
+
+const alldistrictsFromProvince = computed(() => {
+  return districtService.getAllProvinceFromStorage();
+});
+
+const allFacilityFromDistrict = computed(() => {
+  return clinicService.getAllUSFromDistrict(district.value.name);
+});
+
+const allPhamacyFromFacility = computed(() => {
+  return clinicService.getAllPharmacyFromDistrict(district.value.name);
+});
+
+provide('allProvincias', allProvincias);
+provide('alldistrictsFromProvince', alldistrictsFromProvince);
+provide('allFacilityFromDistrict', allFacilityFromDistrict);
+provide('allPhamacyFromFacility', allPhamacyFromFacility);
+
+provide('province', province);
+provide('district', district);
+provide('facility', facility);
+provide('pharmacy', pharmacy);
 </script>
 
 <style lang="scss" scoped>
