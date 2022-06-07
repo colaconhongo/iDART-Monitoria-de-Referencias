@@ -1,23 +1,20 @@
 <template>
-  <div>
-    <stockDetails
-      v-if="!showStockSearch"
-      @goBack="goBack"
-    />
-  <stockSearch
-    v-if="showStockSearch"
-  />
+  <Filter :is="true" />
+  <div class="q-pa-md q-pt-sm">
+    <stockDetails v-if="!showStockSearch" @goBack="goBack" />
+    <stockSearch v-if="showStockSearch" />
   </div>
 </template>
 
 <script setup>
-  /*
+/*
     Imports
   */
-  import stockSearch from 'src/components/stock/StockSearch.vue'
-  import stockDetails from 'src/components/stock/StockDetails.vue';
-  import { useQuasar, QSpinnerBall } from 'quasar';
-  import {  onMounted, reactive, ref, provide } from 'vue';
+import stockSearch from 'src/components/stock/StockSearch.vue';
+import stockDetails from 'src/components/stock/StockDetails.vue';
+import { useQuasar, QSpinnerBall } from 'quasar';
+import { onMounted, reactive, ref, provide } from 'vue';
+import Filter from 'src/components/Filter/Filter.vue';
 /*
 Declarations
 */
@@ -26,7 +23,7 @@ const showStockSearch = reactive(ref(true));
 const stockData = reactive(ref([]));
 let selectRecord = reactive(ref({}));
 
- /*
+/*
   Mounted Hooks
 */
 onMounted(() => {
@@ -47,18 +44,15 @@ const viewStock = (stockInfo) => {
   selectRecord.value = stockInfo;
   stockData.value = stockInfo;
   showStockSearch.value = false;
-  console.log(selectRecord)
+  console.log(selectRecord);
 };
 
 const goBack = () => {
   showStockSearch.value = true;
-}
+};
 
 provide('viewStock', viewStock);
 provide('selectRecord', selectRecord);
-
 </script>
 
-<style>
-
-</style>
+<style></style>

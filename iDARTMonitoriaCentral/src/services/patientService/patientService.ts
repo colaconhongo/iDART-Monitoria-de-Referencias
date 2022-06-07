@@ -1,8 +1,10 @@
+import dist, { useRepo } from 'pinia-orm';
 import Episode from 'src/stores/models/episode/episode';
-import { useRepo } from 'pinia-orm';
 import Patient from 'src/stores/models/patient/patient';
 import api from '../apiService/apiService';
 import moment from 'moment';
+import ClinicService from 'src/services/clinicService/clinicService';
+import clinicSectorService from '../clinicSectorService/clinicSectorService';
 
 const sync_temp_patients = useRepo(Patient);
 const sync_temp_episode = useRepo(Episode);
@@ -98,41 +100,46 @@ export default {
   },
 
   getPatientsByYear(year) {
-    const startDate = moment('01-01-' + year).format('MM-DD-YYYY');
-    console.log(startDate);
-    const endDate = moment('12-31-' + year).format('MM-DD-YYYY');
-    console.log(endDate);
-    return api()
-      .get(
-        'sync_temp_patients?prescriptiondate=gt.' +
-          startDate +
-          '&prescriptiondate=lt.' +
-          endDate
-      )
-      .then((resp) => {
-        sync_temp_patients.save(resp.data);
-      });
+  const yearBefore = year -1;
+    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
+    console.log(startDate)
+    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
+      return api()
+        .get('sync_temp_patients?prescriptiondate=gt.'+startDate+'&prescriptiondate=lt.'+endDate)
+        .then((resp) => {
+          sync_temp_patients.save(resp.data);
+        });
   },
 
-  getPatientsByYearFromLocalStorage(year) {
-    // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
-    const startDate = new Date('01-01-' + year);
-    console.log(startDate);
-    //  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
-    const endDate = new Date('12-31-' + year);
-    console.log(endDate);
-    const patients = sync_temp_patients
-      .query()
-      .where((patient) => {
-        return (
-          patient.prescriptiondate !== null &&
-          new Date(patient.prescriptiondate) >= startDate &&
-          new Date(patient.prescriptiondate) <= endDate
-        );
-      })
-      .orderBy('prescriptionenddate', 'desc')
-      .get();
-    console.log(patients);
-    return patients;
-  },
+  getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year, district, clinic,pharmacy) {
+    const yearBefore = year -1;
+    const startDate = new Date('12-21-'+yearBefore)
+    console.log(startDate)
+  const endDate = new Date('12-20-'+year)
+    console.log(endDate)
+
+     let clinics = [] ;
+
+     if (pharmacy.value !== undefined) {
+      clinics.push(pharmacy.value.uuid)
+     } 
+     else if (clinic.value !== undefined) {
+      clinics.push(clinic.value.uuid)
+     }
+     else if (district.value !== undefined) {
+      clinics = ClinicService.getAllByDistrict(district.value)
+       clinics = clinics.map(clinic => clinic.uuid);
+       console.log(clinics)
+     }
+     const patients = sync_temp_patients
+     .query()
+     .where((patient) => {
+       return patient.prescriptiondate !== null &&
+       new Date(patient.prescriptiondate)>= startDate && new Date(patient.prescriptiondate) <= endDate &&
+         (clinics.length > 0 ? clinics.includes(patient.clinicuuid) : patient.prescriptiondate)})
+       .orderBy('prescriptiondate','desc')
+ .get();
+    console.log(patients)
+     return patients
+   },
 };
