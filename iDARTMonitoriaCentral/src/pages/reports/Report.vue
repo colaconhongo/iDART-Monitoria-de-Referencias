@@ -1,6 +1,6 @@
 <template>
-  <Filter :is="true" />
   <div class="q-pa-md q-pt-sm">
+  <Filter :is="true" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">
         <q-bar dark class="bg-primary text-white">
@@ -20,7 +20,6 @@
       </div>
       <div class="col q-mr-sm panel q-pa-sm">
         <template v-for="comp in components" :key="comp.id">
-          <pre>{{ comp.name }}</pre>
           <component :is="ReferedPatientsList" class="q-mb-sm" />
         </template>
       </div>
