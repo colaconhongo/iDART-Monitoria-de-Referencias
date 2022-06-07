@@ -49,12 +49,9 @@ export default {
     return sync_temp_dispense.all();
   },
 
-  getPrescriptionsByPatientId(patientid: string) {
-    return sync_temp_dispense
-      .query()
-      .where((prescriptions) => {
-        return prescriptions.patientid === patientid;
-      })
-      .get();
+  getPrescriptionsByPatientId(patientid) {
+    const list =  sync_temp_dispense.query().where('patientid', patientid).orderBy('pickupdate','desc').
+    get();
+    return list;
   },
 };

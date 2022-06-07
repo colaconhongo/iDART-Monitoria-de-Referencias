@@ -28,16 +28,10 @@
 <script setup>
 import VueApexCharts from 'vue3-apexcharts';
 import randomcolor from 'randomcolor';
-import { computed, onMounted, ref, onBeforeMount, reactive , watch , inject } from 'vue';
-import patientService from 'src/services/patientService/patientService';
-import ClinicService from 'src/services/clinicService/clinicService';
+import { reactive , watch , inject } from 'vue';
 import DispenseService from 'src/services/dispenseService/dispenseService';
- import moment from 'moment';
  import DashboardUtils from '../../use/DashboardUtils';
  const monthsX = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEC']
-const weeksX = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5']
-const toDateStr = str => new Date(str.replace(/^(\d+)\/(\d+)\/(\d+)$/, '$2/$1/$3'))
-const monthsEng = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 const apexchart = VueApexCharts;
 
  const chartOptionsRegimeType = { // ApexCharts options
@@ -157,7 +151,7 @@ const props = defineProps({
   }
 });
 console.log(props)
-const yearAnnualPeriod = inject('yearAnnualPeriod')
+const yearAnnualPeriod = inject('year')
 const district = inject('district')
 const clinic = inject('clinic')
 const pharmacy = inject('pharmacy')
@@ -191,9 +185,9 @@ watch(props.loaded, (newCount) => {
        const keys = Array.from(result.keys())
        series2.series2 = []
        keys.forEach( (key) => {
-         const keys = organizeDispensesByMonth(result.get(key))
+         const keys = DashboardUtils.organizeDispensesByMonth(result.get(key))
          const regimeType = []
-            if (keys !== undefined) {
+            if (keys != undefined) {
        const mapIter = keys.values()
        for (const item of mapIter) {
          regimeType.push(item.data)
@@ -216,32 +210,11 @@ watch(props.loaded, (newCount) => {
  
 });
 
-   const organizeDispensesByMonth = (list) =>
-  {
-      var monthsPresent = []
-   const map = list.reduce((a, b) => {
-  const m = toDateStr(b.dispensedate).getMonth()
-  // const m = DashboardUtils.getStatisticMonthByDate(b.dispensedate)
-  a[m] = (a[m] || 0) + 1
-  monthsPresent.push(monthsEng[+m])
-     return a
-}, {})
-   let result = Object.entries(map).map(([key, data]) => ({ data, key: monthsEng[+key] }))
-   var monthsNot = monthsEng.filter(item => !monthsPresent.includes(item))
-   for (const item of monthsNot) {
-     result.push(({ data: 0, key: item }))
-   }
-  result = result.sort(function (a, b) {
-  // sort based on the value in the monthNames object
-  return +moment(a.key, 'MMM') - moment(b.key, 'MMM')
-})
-  return result
-  }
-
 const groupedMap  = (items, key) => items.reduce(
     (entryMap, e) => entryMap.set(e[key], [...entryMap.get(e[key])||[], e]),
     new Map()
 );
+
 </script>
 <style lang="scss" scoped>
 

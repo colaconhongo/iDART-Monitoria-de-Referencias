@@ -51,4 +51,7 @@ export default {
   add: 'Add',
   edit: 'Update',
   view: 'Details',
+
+  //
+  year : 'Year'
 };
