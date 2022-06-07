@@ -52,4 +52,7 @@ export default {
   add: 'Adicionar',
   edit: 'Actualizar',
   view: 'Detalhes',
+
+   //
+   year : 'Ano'
 };

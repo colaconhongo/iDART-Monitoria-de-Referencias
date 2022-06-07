@@ -111,24 +111,6 @@ export default {
         });
   },
 
-  getPatientsByYearFromLocalStorage(year) {
-   // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
-   const startDate = new Date('01-01-'+year)
-    console.log(startDate)
-  //  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
-  const endDate = new Date('12-31-'+year)
-    console.log(endDate)
-    const patients = sync_temp_patients
-    .query()
-    .where((patient) => {
-      return patient.prescriptiondate !== null &&
-      new Date(patient.prescriptiondate)>= startDate && new Date(patient.prescriptiondate) <= endDate })
-      .orderBy('prescriptiondate','desc')
-.get();
-   console.log(patients)
-    return patients
-  },
-
   getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year, district, clinic,pharmacy) {
     const yearBefore = year -1;
     const startDate = new Date('12-21-'+yearBefore)
