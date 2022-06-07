@@ -5,10 +5,11 @@ import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog'
 
 export default {
   // Axios API call
-  get(offset: number) {
+  getReferedPatientsReport(offset: number) {
       return api()
-        .get('patient_last_dispense_vw?offset=' + offset + '&limit=100')
+        .get('refered_patients_vw?offset=' + offset + '&limit=100')
         .then((resp) => {
+          console.log(resp.data)
           return resp.data
         });
   },

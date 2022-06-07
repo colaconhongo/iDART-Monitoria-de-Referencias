@@ -90,34 +90,15 @@
                     <AnnualPeriod
                       @setSelectedYearAnnual="setSelectedYear" />
 
-                    <div class="">
-                      <q-btn class="gt-xs"
-                        :color="!processingTerminated ? 'green-6' : 'grey-6'"
-                        :disable="processingTerminated"
-                        dense
-                        rounded
-                        icon="chevron_right"
-                        @click.stop="processReport()"
-                      >
-                        <q-tooltip class="bg-primary">Processar o Relatório</q-tooltip>
-                      </q-btn>
-                    </div>
-                    <div class="q-mr-md q-pt-xs items-center" style="width: 250px;">
-                      <q-linear-progress class="col q-mx-md" size="25px" stripe rounded :value="this.progress" color="red">
-                        <div class="absolute-full flex flex-center">
-                            <q-badge color="white" text-color="accent" :label="progressLabel1" />
-                        </div>
-                      </q-linear-progress>
-                    </div>
               </div>
 
               <div class="row q-ml-md">
                 <div class="col">
-                  <q-btn :color="processingTerminated ? 'green-6' : 'grey-6'" class="row gt-xs" flat dense icon="article" :disable="!processingTerminated" @click.stop="generateReport('XLS')">
+                  <q-btn class="row gt-xs" flat dense icon="article"  @click.stop="generateReport('XLS')">
                     <q-tooltip class="bg-primary">Imprimir Excel</q-tooltip>
                     .Xls
                 </q-btn>
-                <q-btn :color="processingTerminated ? 'green-6' : 'grey-6'" class="gt-xs" flat dense  @click.stop="generateReport('PDF')" :disable="!processingTerminated" icon="article" title=".pdf">
+                <q-btn class="gt-xs" flat dense  @click.stop="generateReport('PDF')" icon="article" title=".pdf">
                   <q-tooltip class="bg-primary">Imprimmir Pdf</q-tooltip>
                   .Pdf
                   </q-btn>
@@ -127,7 +108,37 @@
 </template>
 
 <script setup>
+  /*
+  Imports
+  */
+ import { ref } from 'vue';
+  /*
+  Declaration
+  */
+  let params = ref({
+                      id: null,
+                      provinceId: null,
+                      districtId: null,
+                      clinicId: null,
+                      clinic: null,
+                      province: null,
+                      district: null,
+                      endDateParam: null,
+                      startDateParam: null,
+                      year: new Date().getFullYear(),
+                      period: null,
+                      periodTypeView: null,
+                      fileType: null
+                    })
+  /*
+  Methods
+  */
+ const generateReport = (fileType) => {
+   params.value.fileType = fileType
+   emit('generateReport', params)
+ }
 
+ const emit = defineEmits(['generateReport'])
 </script>
 
 <style>
