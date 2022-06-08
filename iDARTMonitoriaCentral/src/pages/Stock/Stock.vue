@@ -12,12 +12,12 @@
   */
 import stockSearch from 'src/components/stock/StockSearch.vue';
 import stockDetails from 'src/components/stock/StockDetails.vue';
-import { useQuasar, QSpinnerBall } from 'quasar';
-import { onMounted, reactive, ref, provide, computed } from 'vue';
+import { useQuasar, QSpinnerBall, SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
+import { onMounted, reactive, ref, provide, computed, onActivated, onDeactivated } from 'vue';
 /*
 Declarations
 */
@@ -31,6 +31,28 @@ const pharmacy = reactive(ref([]));
 const province = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
+
+
+/*
+  Computed
+*/
+const allProvincias = computed(() => {
+  return ProvinceService.getAllFromStorage();
+});
+
+const districtsByProvince = computed(() => {
+  return DistrictService.getAllProvinceFromStorage();
+});
+
+
+const DDPharmByDistrict = computed(() => {
+    if(district.value != null || district.value != undefined) {
+      return clinicService.getAllPharmacyFromDistrict(district.value.name);
+    }
+    return []
+});
+
+
 /*
   Mounted Hooks
 */
@@ -62,33 +84,41 @@ const goBack = () => {
 /*
   Computed
 */
-const allProvincias = computed(() => {
-  return provinceService.getAllFromStorage();
-});
-
-const alldistrictsFromProvince = computed(() => {
-  return districtService.getAllProvinceFromStorage();
-});
 
 const allFacilityFromDistrict = computed(() => {
   return clinicService.getAllUSFromDistrict(district.value.name);
 });
 
-const allPhamacyFromFacility = computed(() => {
-  return clinicService.getAllPharmacyFromDistrict(district.value.name);
+
+onActivated(() => {
+    if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district')
+  }
+    if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy')
+  }
+ console.log(district)
 });
 
-provide('allProvincias', allProvincias);
-provide('alldistrictsFromProvince', alldistrictsFromProvince);
-provide('allFacilityFromDistrict', allFacilityFromDistrict);
-provide('allPhamacyFromFacility', allPhamacyFromFacility);
+onDeactivated(() => {
+  console.log(district)
+  console.log(pharmacy)
+   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
+  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
 
-provide('province', province);
-provide('district', district);
-provide('facility', facility);
-provide('pharmacy', pharmacy);
+});
+
+provide('allFacilityFromDistrict', allFacilityFromDistrict);
+
 provide('viewStock', viewStock);
 provide('selectRecord', selectRecord);
+provide('pharmacy', pharmacy);
+provide('allProvincias', allProvincias);
+provide('province', provincia);
+provide('district', district);
+provide('pharmacy', pharmacy);
+provide('alldistrictsFromProvince', districtsByProvince);
+provide('allPhamacyFromFacility', DDPharmByDistrict);
 </script>
 
 <style></style>

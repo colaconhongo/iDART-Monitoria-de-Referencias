@@ -19,8 +19,8 @@
 </div>
 </template>
 <script setup>
-import { useQuasar, QSpinnerBall, LocalStorage } from 'quasar';
-import { computed, onMounted, ref, reactive , provide , watch } from 'vue';
+import { useQuasar, QSpinnerBall, LocalStorage, SessionStorage } from 'quasar';
+import { computed, onMounted, ref, reactive , provide , watch, onUnmounted, onActivated,onDeactivated } from 'vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
@@ -78,6 +78,7 @@ watch(district, () => {
   console.log(district)
    console.log(district)
    clinic = ref(null)
+    pharmacy = ref(null)
      console.log(clinic)
     $q.loading.show({
     message: 'Carregando ...',
@@ -85,7 +86,7 @@ watch(district, () => {
     spinner: QSpinnerBall,
   });
   console.log(year)
-   LocalStorage.set('district', district.value)
+  // SessionStorage.set('district', district.value)
     loaded.loaded = ref(true);
       $q.loading.hide()
      
@@ -120,7 +121,7 @@ const districtsByProvince = computed(() => {
 
 
 const DDPharmByDistrict = computed(() => {
-    if(district.value !== undefined) {
+    if(district.value != null || district.value != undefined) {
   return ClinicService.getAllPharmacyFromDistrict(district.value.name);
     }
 });
@@ -134,6 +135,8 @@ let total = reactive({
   totalMaleNumbers:0,
   totalFemaleNumbers:0
 })
+
+
 
 provide('total', total);
 provide('district', district);
@@ -162,11 +165,32 @@ onMounted(() => {
     loaded.loaded = ref(true);
       console.log(LocalStorage.getItem('district'))
    //   district = DistrictService.getDistrictFromStorage(LocalStorage.getItem('district').id)
+  //  if (SessionStorage.getItem('district') !== null) {
+  //  district = SessionStorage.getItem('district')
+ // }
  console.log(district)
       $q.loading.hide()
        })
        })
         })
+});
+ 
+onActivated(() => {
+    if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district')
+  }
+    if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy')
+  }
+ console.log(district)
+});
+
+onDeactivated(() => {
+  console.log(district)
+  console.log(pharmacy)
+   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
+  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
+
 });
 
 </script>
