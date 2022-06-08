@@ -79,6 +79,24 @@ const allPhamacyFromFacility = computed(() => {
   return clinicService.getAllPharmacyFromDistrict(district.value.name);
 });
 
+onActivated(() => {
+    if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district')
+  }
+    if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy')
+  }
+ console.log(district)
+});
+
+onDeactivated(() => {
+  console.log(district)
+  console.log(pharmacy)
+   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
+  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
+
+});
+
 provide('allProvincias', allProvincias);
 provide('alldistrictsFromProvince', alldistrictsFromProvince);
 provide('allFacilityFromDistrict', allFacilityFromDistrict);
