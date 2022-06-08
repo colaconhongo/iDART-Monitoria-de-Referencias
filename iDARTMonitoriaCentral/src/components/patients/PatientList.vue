@@ -17,10 +17,10 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, reactive, ref,provide } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
-// import PatientSearchFields from 'src/pages/patients/PatientSearchFields.vue';
+ import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
 
 /*
@@ -33,6 +33,8 @@ const mode = reactive(ref('list'));
 const viewPatient = inject('viewPatient');
 const title = inject('titleList');
 const activePatientList = inject('activePatientList');
+const district = inject('district')
+const pharmacy = inject('pharmacy')
 
 const columns = [
   {
@@ -98,8 +100,10 @@ onMounted(() => {
   Computed
 */
 const allPatients = computed(() => {
-  return patientService.getAllFromStorage();
+  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(district,pharmacy);
 });
+
+
 
 /*
   Methods
@@ -110,4 +114,6 @@ const getAllPatientsFromAPI = (offset) => {
     patientService.get(offset);
   }
 };
+
+provide('allPatients',allPatients);
 </script>

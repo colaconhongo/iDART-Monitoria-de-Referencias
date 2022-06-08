@@ -5,6 +5,9 @@ import api from '../apiService/apiService';
 import moment from 'moment';
 import ClinicService from 'src/services/clinicService/clinicService';
 import clinicSectorService from '../clinicSectorService/clinicSectorService';
+import District from 'src/stores/models/district/district';
+import Clinic from 'src/stores/models/clinic/clinic';
+import { off } from 'process';
 
 const sync_temp_patients = useRepo(Patient);
 const sync_temp_episode = useRepo(Episode);
@@ -137,6 +140,31 @@ export default {
        .orderBy('prescriptiondate','desc')
  .get();
     console.log(patients)
+     return patients
+   },
+
+   getPatientsByDistrictAndPharmacyFromLocalStorage(district :District ,pharmacy :Clinic) {
+     let clinics = [] ;
+/*
+     if (pharmacy.value != null || pharmacy.value != undefined) {
+      clinics.push(pharmacy.value.uuid)
+     } 
+     else if (district.value != null || district.value != undefined) {
+      clinics = ClinicService.getAllByDistrict(district.value)
+       clinics = clinics.map(clinic => clinic.uuid);
+       console.log(clinics)
+     } else {
+       clinics = ClinicService.getAllDDPharm()
+     }
+     */
+     clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district, pharmacy)
+     clinics = clinics.map(clinic => clinic.uuid);
+     const patients = sync_temp_patients
+     .query()
+     .where((patient) => {
+       return clinics.includes(patient.clinicuuid)})
+       .orderBy('prescriptiondate','desc')
+ .get();
      return patients
    },
 };
