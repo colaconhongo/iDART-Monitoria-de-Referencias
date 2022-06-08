@@ -153,7 +153,6 @@ const props = defineProps({
 console.log(props)
 const yearAnnualPeriod = inject('year')
 const district = inject('district')
-const clinic = inject('clinic')
 const pharmacy = inject('pharmacy')
 
 
@@ -165,7 +164,7 @@ watch(props.loaded, (newCount) => {
       const  dispenseSemestral = [];
      const  dispenseTrimestral = [];
      const  dispenseMensal =  [];
-     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
+     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,pharmacy);
        let resultDispenses1 = groupedMap(allDispenses , 'patientid')
        const mapIter = resultDispenses1.values()
        for (const item of mapIter) {

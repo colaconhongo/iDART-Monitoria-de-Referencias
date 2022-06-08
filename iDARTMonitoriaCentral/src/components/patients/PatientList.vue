@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
+  <PatientSearchFields></PatientSearchFields>
     <listPatient
       :columns="columns"
       :mode="mode"
@@ -22,19 +23,20 @@ import listPatient from 'src/components/Shared/CRUD/TableList.vue';
  import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
 import { useUtils } from 'src/use/useUtils';
-
+import Patient from 'src/stores/models/patient/patient';
 /*
 Declarations
 */
 
+const currPatient = reactive(new Patient());
 const $q = new useQuasar();
 const { t } = useI18n();
 const mode = reactive(ref('list'));
 const viewPatient = inject('viewPatient');
 const title = inject('titleList');
 const activePatientList = inject('activePatientList');
-const district = inject('district')
-const pharmacy = inject('pharmacy')
+const district = inject('district');
+const pharmacy = inject('pharmacy');
 const isSearch = reactive(ref(true));
 
 const { ageCalculator } = useUtils();
@@ -109,7 +111,7 @@ onMounted(() => {
   Computed
 */
 const allPatients = computed(() => {
-  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(district,pharmacy);
+  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(district,pharmacy,currPatient);
 });
 
 
@@ -125,4 +127,5 @@ const getAllPatientsFromAPI = (offset) => {
 };
 
 provide('allPatients',allPatients);
+provide('currPatient',currPatient);
 </script>
