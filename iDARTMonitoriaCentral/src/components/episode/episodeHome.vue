@@ -17,8 +17,9 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import episodeService from 'src/services/episodeService/episodeService';
-import { inject, computed, onMounted, reactive, ref } from 'vue';
+import { provide, inject, computed, onMounted, reactive, ref } from 'vue';
 import listEpisode from 'src/components/Shared/CRUD/TableList.vue';
+import moment from 'moment';
 //import CreateEditEpisode from 'src/components/episode/EpisodeCreateEditModal.vue';
 
 /*
@@ -28,6 +29,7 @@ const $q = new useQuasar();
 const mode = reactive(ref('list'));
 const patient = inject('patient');
 const editEpisode = inject('editEpisode');
+const title = inject('titleEpisode');
 
 const columns = [
   {
@@ -35,26 +37,26 @@ const columns = [
     required: true,
     label: 'Data de Epsódio',
     align: 'left',
-    field: (row) => row.startdate,
+    field: (row) => moment(row.startdate).format('DD-MM-YYYY'),
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'startreason',
+    align: 'left',
+    label: 'Motivo',
+    field: (row) => row.startreason,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
     name: 'startnotes',
     align: 'left',
-    label: 'Motivo',
+    label: 'Nota',
     field: (row) => row.startnotes,
     format: (val) => `${val}`,
     sortable: true,
   },
-  // {
-  //   name: 'startnotes',
-  //   align: 'left',
-  //   label: 'Nota',
-  //   field: (row) => row.startnotes,
-  //   format: (val) => `${val}`,
-  //   sortable: true,
-  // },
   {
     name: 'us',
     align: 'left',
@@ -68,6 +70,15 @@ const columns = [
     align: 'left',
     label: 'Framácia de Referência',
     field: (row) => row.clinic,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'syncstatus',
+    align: 'left',
+    label: 'Estado',
+    field: (row) =>
+      row.syncstatus == 'S' || row.syncstatus == 'U' ? 'Enviado' : 'Pendente',
     format: (val) => `${val}`,
     sortable: true,
   },

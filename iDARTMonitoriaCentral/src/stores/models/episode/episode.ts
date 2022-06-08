@@ -1,5 +1,4 @@
 import { Model, ModelFields } from 'pinia-orm';
-import Clinic from '../clinic/clinic';
 
 export default class Episode extends Model {
   static entity = 'episodes';
@@ -17,6 +16,8 @@ export default class Episode extends Model {
       syncstatus: this.attr(''),
       us: this.attr(''),
       clinic: this.attr(''),
+      usuuid: this.attr(''),
+      clinicuuid: this.attr(''),
 
       // Relationship
 

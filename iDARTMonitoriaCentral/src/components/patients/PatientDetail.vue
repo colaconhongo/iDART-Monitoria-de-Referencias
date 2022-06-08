@@ -2,49 +2,45 @@
   <div class="patient-detail">
     <q-card class="my-card" style="text-align: center">
       <q-card-section>
-        <q-avatar
-          rounded
-          size="100px"
-          font-size="82px"
+        <q-icon
+          class="profile"
+          :name="patient.sex == 'F' ? 'female' : 'male'"
+          size="120px"
           color="primary"
-          text-color="white"
-          icon="person"
-        ></q-avatar>
+        />
         <div>
-          <p style="margin-bottom: 0%">
-            {{ patient.firstnames + ' ' + patient.lastname }}
-          </p>
-          <small
-            >NID: <span>{{ patient.patientid }}</span></small
-          >
+          <div class="patient-details">
+            <p style="margin-bottom: 0%">
+              {{ patient.firstnames + ' ' + patient.lastname }}
+            </p>
+          </div>
+          <div class="patient-details">
+            NID: <span>{{ patient.patientid }}</span>
+          </div>
         </div>
         <div class="row">
           <div class="col-sm-4">
-            <div>
+            <div class="patient-details">
               <span> <q-icon name="perm_identity" color="blue-8" /></span>
             </div>
-            <div>
-              <span
-                ><small>{{ patient.sex }}</small></span
-              >
+            <div class="patient-details">
+              <span>{{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }}</span>
             </div>
           </div>
           <div class="col-sm-4">
-            <div>
+            <div class="patient-details">
               <span> <q-icon name="calendar_today" color="blue-8" /></span>
             </div>
-            <div>
-              <span><small>64 anos</small></span>
+            <div class="patient-details">
+              <span> {{ ageCalculator(patient.dateofbirth) }} anos </span>
             </div>
           </div>
           <div class="col-sm-4">
-            <div>
+            <div class="patient-details">
               <span> <q-icon name="phone" color="blue-8" /></span>
             </div>
             <div>
-              <span
-                ><small>{{ patient.cellphone }}</small></span
-              >
+              <span>{{ patient.cellphone }}</span>
             </div>
           </div>
         </div>
@@ -62,7 +58,9 @@
           Data da Referência
         </div>
         <div class="dados-referencia" style="text-align: left">
-          <span>{{ patient.datainiciotarv }}</span>
+          <span>{{
+            moment(patient.prescriptiondate).format('DD-MM-YYYY')
+          }}</span>
         </div>
         <div style="text-align: left">Framácia de Referência</div>
         <div class="dados-referencia" style="text-align: left">
@@ -74,7 +72,7 @@
         </div>
         <div style="text-align: left">Data Início TARV</div>
         <div class="dados-referencia" style="text-align: left">
-          <span>Data Início TARV</span>
+          <span>{{ moment(patient.datainiciotarv).format('DD-MM-YYYY') }}</span>
         </div>
         <q-separator color="blue-8"></q-separator>
         <div
@@ -87,10 +85,45 @@
             margin-bottom: 5px;
             padding: 8px;
           "
+          v-if="patient.syncstatus == 'S'"
         >
           <span>
             <q-icon name="done_all" color="green" />
             <small style="font-size: small"> Enviado</small></span
+          >
+        </div>
+        <div
+          style="
+            background-color: rgb(255 240 231);
+            color: #ff9d0d;
+            text-align: center;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 8px;
+          "
+          v-if="patient.syncstatus == 'U'"
+        >
+          <span>
+            <q-icon name="update" color="#ff9d0d" />
+            <small style="font-size: small"> Actualizado</small></span
+          >
+        </div>
+        <div
+          style="
+            background-color: #f5cbc8;
+            color: #fb1808;
+            text-align: center;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 8px;
+          "
+          v-if="patient.syncstatus == 'P'"
+        >
+          <span>
+            <q-icon name="pending_actions" color="#fb1808" />
+            <small style="font-size: small"> Pendente</small></span
           >
         </div>
       </q-card-section>
@@ -100,6 +133,10 @@
 
 <script setup>
 import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { useUtils } from 'src/use/useUtils';
+import moment from 'moment';
+
+const { ageCalculator } = useUtils();
 const patient = inject('patient');
 </script>
 
@@ -119,5 +156,8 @@ const patient = inject('patient');
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 8px;
+}
+.patient-details {
+  margin: 8px;
 }
 </style>

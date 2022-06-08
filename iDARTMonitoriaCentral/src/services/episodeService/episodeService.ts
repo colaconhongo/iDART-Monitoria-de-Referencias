@@ -95,35 +95,61 @@ export default {
   },
 
   getEpisodesByYear(year) {
-    const startDate = moment('01-01-' + year).format('MM-DD-YYYY');
-    console.log(startDate);
-    const endDate = moment('12-31-' + year).format('MM-DD-YYYY');
-    console.log(endDate);
-    return api()
-      .get(
-        'sync_temp_episode?stopdate=gt.' + startDate + '&stopdate=lt.' + endDate
-      )
-      .then((resp) => {
-        sync_temp_episode.save(resp.data);
-      });
+    const yearBefore = year -1;
+    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
+    console.log(startDate)
+    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
+    console.log(endDate)
+      return api()
+        .get('sync_temp_episode?stopdate=gt.'+startDate+'&stopdate=lt.'+endDate)
+        .then((resp) => {
+          sync_temp_episode.save(resp.data);
+        });
   },
 
   getEpisodesByYearFromLocalStorage(year) {
-    // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
-    const startDate = new Date('01-01-' + year);
-    console.log(startDate);
-    //  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
-    const endDate = new Date('12-31-' + year);
+     // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
+  const startDate = new Date('01-01-'+year)
+  console.log(startDate)
+//  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
+const endDate = new Date('12-31-'+year)
     const episodes = sync_temp_episode
-      .query()
-      .where((sync_temp_episode) => {
-        return (
-          sync_temp_episode.stopdate >= startDate &&
-          sync_temp_episode.stopdate <= endDate
-        );
-      })
-      .orderBy('stopdate', 'desc')
-      .get();
-    return episodes;
+    .query()
+    .where((sync_temp_episode) => {
+      return new Date(sync_temp_episode.stopdate) >= startDate && new Date(sync_temp_episode.stopdate) <= endDate })
+      .orderBy('stopdate','desc')
+.get();
+    return episodes
+  },
+
+
+  getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year, district, clinic,pharmacy) {
+   const yearBefore = year -1;
+    const startDate = new Date('12-21-'+yearBefore)
+    console.log(startDate)
+    const endDate = new Date('12-20-'+year)
+    console.log(endDate)
+
+let clinics = [] ;
+
+if (pharmacy.value !== undefined) {
+ clinics.push(pharmacy.value.uuid)
+} 
+else if (clinic.value !== undefined) {
+ clinics.push(clinic.value.uuid)
+}
+else if (district.value !== undefined) {
+ clinics = ClinicService.getAllByDistrict(district.value)
+  clinics = clinics.map(clinic => clinic.uuid);
+  console.log(clinics)
+}
+    const episodes = sync_temp_episode
+    .query()
+    .where((sync_temp_episode) => {
+      return new Date(sync_temp_episode.stopdate) >= startDate && new Date(sync_temp_episode.stopdate) <= endDate &&
+      (clinics.length > 0 ? clinics.includes(sync_temp_episode.clinicuuid) : sync_temp_episode.stopdate) })
+      .orderBy('stopdate','desc')
+.get();
+    return episodes
   },
 };
