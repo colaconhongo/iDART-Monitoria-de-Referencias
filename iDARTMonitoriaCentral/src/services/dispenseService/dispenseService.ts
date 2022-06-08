@@ -3,6 +3,8 @@ import Dispense from 'src/stores/models/dispense/dispense';
 import patientService from 'src/services/patientService/patientService';
 import api from '../apiService/apiService';
 import moment from 'moment';
+import District from 'src/stores/models/district/district';
+import Clinic from 'src/stores/models/clinic/clinic';
 
 const sync_temp_dispense = useRepo(Dispense);
 
@@ -71,7 +73,7 @@ export default {
 .get();
   },
 
-  getDispensesByRegimeByYear(year) {
+  getDispensesByRegimeByYear(year:number) {
     const yearBefore = year -1;
     const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
     console.log(startDate)
@@ -84,30 +86,15 @@ export default {
         });
   },
   
-  getDispensesByRegimeByYearFromLocalStorage (year) {
-  // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
-  const startDate = new Date('01-01-'+year)
-  console.log(startDate)
-//  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
-const endDate = new Date('12-31-'+year)
-  console.log(endDate)
-    const dispenses = sync_temp_dispense
-    .query()
-    .where((dispense) => {
-      return new Date(dispense.dispensedate) >= startDate && new Date(dispense.dispensedate) <= endDate })
-      .orderBy('dispensedate','desc')
-.get();
-    return dispenses
-  },
 
-  getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year, district, clinic,pharmacy) {
+  getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year:number, district:District,pharmacy:Clinic) {
     const yearBefore = year -1;
     const startDate = new Date('12-21-'+yearBefore)
     console.log(startDate)
   const endDate = new Date('12-20-'+year)
     console.log(endDate)
 
-    let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year , district , clinic, pharmacy);
+    let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year , district , pharmacy);
     patients = patients.map(patient => patient.uuidopenmrs);
     console.log(patients)
       const dispenses = sync_temp_dispense
