@@ -13,6 +13,7 @@
     />
     <prescriptionDetailsModal
       :is="true"
+      :show_dialog="show_dialog"
       :prescription="prescription"
       :patient="patient"
     />
@@ -21,7 +22,7 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
-import { computed, onMounted, provide, reactive, inject,ref} from 'vue';
+import { computed, onMounted, provide, reactive, inject, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionDetailsModal from 'src/components/prescription/PrescriptionDetailsModal.vue';
 import moment from 'moment';
@@ -43,8 +44,6 @@ const $q = new useQuasar();
 const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
-
-provide('show_dialog',show_dialog );
 const editedIndex = reactive(ref(0));
 const patient = inject('patient');
 
@@ -86,7 +85,7 @@ const columns = [
     name: 'prescricaoespecial',
     align: 'left',
     label: 'Especial',
-    field: (row) => row.prescricaoespecial === 'F'? 'Não':'Sim',
+    field: (row) => (row.prescricaoespecial === 'F' ? 'Não' : 'Sim'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -121,8 +120,8 @@ onMounted(() => {
 const allPrescription = computed(() => {
   const dispensesAndPrescriptions =
     prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
-    //'04010001/16/0268
-    //
+  //'04010001/16/0268
+  //
 
   let prescriptions = [
     ...new Map(
@@ -146,5 +145,6 @@ const visualizar = (prescriptionEntity) => {
   show_dialog.value = true;
   editedIndex.value = 1;
   prescription.value = prescriptionEntity;
+  console.log('invocando o modal..', prescription);
 };
 </script>

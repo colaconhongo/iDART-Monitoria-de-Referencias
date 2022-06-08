@@ -19,7 +19,7 @@
       option-value="id"
       filled
       clearable
-       @clear="clearDistrict()"
+      @clear="clearDistrict()"
     />
     <SelectField
       :label="pharmacyLabel"
@@ -30,25 +30,25 @@
       option-value="id"
       filled
       clearable
-       @clear="clearPharmacy()"
+      @clear="clearPharmacy()"
     />
-    <div v-if="isDashboard"  class="col q-ml-md">
-    <SelectField
-      :label="yearLabel"
-      v-model="year"
-      :options="yearsToShow"
-      option-label="name"
-      option-value="name"
-      filled
-    />
+    <div v-if="isDashboard" class="col q-ml-md">
+      <SelectField
+        :label="yearLabel"
+        v-model="year"
+        :options="yearsToShow"
+        option-label="name"
+        option-value="name"
+        filled
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, onMounted, ref,onActivated, computed } from 'vue';
+import { inject, onMounted, ref, onActivated, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { LocalStorage,SessionStorage } from 'quasar'
+import { LocalStorage, SessionStorage } from 'quasar';
 import SelectField from '../Shared/Input/SelectField.vue';
 import DistrictService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -59,8 +59,7 @@ const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const facilityLabel = ref(t('facility'));
 const pharmacyLabel = ref(t('pharmacy'));
-const yearLabel =  ref(t('year'));
-
+const yearLabel = ref(t('year'));
 
 const props = defineProps(['isDashboard']);
 
@@ -76,8 +75,7 @@ const yearsToShow = inject('yearsToShow');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');
- const allPhamacyFromFacility = inject('allPhamacyFromFacility');
-
+const allPhamacyFromFacility = inject('allPhamacyFromFacility');
 
 onMounted(() => {
   console.log(allProvincias);
@@ -107,13 +105,12 @@ onActivated(() => {
 */
 
 const clearDistrict = () => {
-   SessionStorage.remove('district')
-}
+  SessionStorage.remove('district');
+};
 
 const clearPharmacy = () => {
-   SessionStorage.remove('pharmacy')
-}
-
+  SessionStorage.remove('pharmacy');
+};
 </script>
 
 <style></style>

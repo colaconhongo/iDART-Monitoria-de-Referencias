@@ -23,6 +23,7 @@ const show_dialog = reactive(ref(false));
 const episode = reactive(ref([]));
 const activeEditDialog = reactive(ref(false));
 const titleAddEdit = reactive(ref('Epsódio'));
+const titleEpisodeList = reactive(ref('Epsódios'));
 const activeEpisodeHome = reactive(ref(true));
 const submitting = reactive(ref(false));
 
@@ -34,17 +35,36 @@ const editEpisode = (episodeRow) => {
 };
 
 const update = () => {
-  submitting.value = true;
+  if (episode.value.stopdate == null) {
+    submitting.value = true;
+    console.log('VIVA: ', episode.value.id);
 
-  episodeService
-    .patch(episode.value.id, episode.value)
-    .then(() => {
-      submitting.value = false;
-      close();
-    })
-    .catch(() => {
-      submitting.value = false;
-    });
+    episodeService
+      .patch(episode.value.id, episode.value)
+      .then(() => {
+        submitting.value = false;
+        close();
+      })
+      .catch(() => {
+        submitting.value = false;
+      });
+  } else {
+    alert('Episodio de fim');
+  }
+
+  // submitting.value = true;
+  // console.log('VIVA: ', episode.value);
+  // close();
+
+  // // episodeService
+  // //   .patch(episode.value.id, episode.value)
+  // //   .then(() => {
+  // //     submitting.value = false;
+  // //     close();
+  // //   })
+  // //   .catch(() => {
+  // //     submitting.value = false;
+  // //   });
 };
 
 const close = () => {
@@ -55,7 +75,8 @@ const close = () => {
 
 provide('editEpisode', editEpisode);
 provide('close', close);
-provide('title', titleAddEdit);
+provide('titleEdit', titleAddEdit);
+provide('titleEpisode', titleEpisodeList);
 provide('episode', episode);
 provide('show_dialog', show_dialog);
 provide('submitting', submitting);

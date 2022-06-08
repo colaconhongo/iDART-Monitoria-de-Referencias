@@ -80,13 +80,6 @@
                           <tbComponent :clinicInformation="clinicInformation" />
 
                           <q-stepper-navigation>
-                             <q-btn
-                              flat
-                              @click="step = 1"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
-                            />
                             <q-btn
                               @click="
                                 () => {
@@ -97,7 +90,13 @@
                               color="primary"
                               label="Próximo"
                             />
-
+                            <q-btn
+                              flat
+                              @click="step = 1"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
                           </q-stepper-navigation>
                         </q-step>
 
@@ -164,13 +163,6 @@
                           </q-markup-table>
 
                           <q-stepper-navigation>
-                              <q-btn
-                              flat
-                              @click="step = 2"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
-                            />
                             <q-btn
                               @click="
                                 () => {
@@ -181,7 +173,13 @@
                               color="primary"
                               label="Próximo"
                             />
-
+                            <q-btn
+                              flat
+                              @click="step = 2"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
                           </q-stepper-navigation>
                         </q-step>
 
@@ -198,13 +196,6 @@
                           />
 
                           <q-stepper-navigation>
-                              <q-btn
-                              flat
-                              @click="step = 3"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
-                            />
                             <q-btn
                               @click="
                                 () => {
@@ -215,7 +206,13 @@
                               color="primary"
                               label="Próximo"
                             />
-
+                            <q-btn
+                              flat
+                              @click="step = 3"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
                           </q-stepper-navigation>
                         </q-step>
 
@@ -230,20 +227,19 @@
                           />
 
                           <q-stepper-navigation>
-                              <q-btn
-                              flat
-                              @click="step = 4"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
-                            />
                             <q-btn
                               v-close-popup
                               color="primary"
                               @click="close"
                               label="Terminar"
                             />
-
+                            <q-btn
+                              flat
+                              @click="step = 4"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
                           </q-stepper-navigation>
                         </q-step>
                       </q-stepper>

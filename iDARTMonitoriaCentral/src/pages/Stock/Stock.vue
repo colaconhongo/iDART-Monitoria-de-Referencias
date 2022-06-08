@@ -1,6 +1,5 @@
 <template>
-  <Filter :is="true" />
-  <div class="q-pa-md q-pt-sm">
+  <div>
     <stockDetails v-if="!showStockSearch" @goBack="goBack" />
     <stockSearch v-if="showStockSearch" />
   </div>
@@ -13,10 +12,18 @@
 import stockSearch from 'src/components/stock/StockSearch.vue';
 import stockDetails from 'src/components/stock/StockDetails.vue';
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { onMounted, reactive, ref, provide, computed, onActivated, onDeactivated } from 'vue';
-import {  SessionStorage } from 'quasar';
+import {
+  onMounted,
+  reactive,
+  ref,
+  provide,
+  computed,
+  onActivated,
+  onDeactivated,
+} from 'vue';
+import { SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
- import ProvinceService from 'src/services/provinceService/provinceService';
+import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
 /*
@@ -30,7 +37,6 @@ const provincia = reactive(ProvinceService.getFirstProvinceByNameFromStorage());
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 
-
 /*
   Computed
 */
@@ -39,17 +45,15 @@ const allProvincias = computed(() => {
 });
 
 const districtsByProvince = computed(() => {
-    console.log(DistrictService.getAllProvinceFromStorage())
+  console.log(DistrictService.getAllProvinceFromStorage());
   return DistrictService.getAllProvinceFromStorage();
 });
 
-
 const DDPharmByDistrict = computed(() => {
-    if(district.value != null || district.value != undefined) {
-  return ClinicService.getAllPharmacyFromDistrict(district.value.name);
-    }
+  if (district.value != null || district.value != undefined) {
+    return ClinicService.getAllPharmacyFromDistrict(district.value.name);
+  }
 });
-
 
 /*
   Mounted Hooks
@@ -83,21 +87,22 @@ const goBack = () => {
   Activated && deActivated
 */
 onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
+  if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district');
   }
-    if (SessionStorage.getItem('pharmacy') !== null) {
-    pharmacy.value = SessionStorage.getItem('pharmacy')
+  if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy');
   }
- console.log(district)
+  console.log(district);
 });
 
 onDeactivated(() => {
-  console.log(district)
-  console.log(pharmacy)
-   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
-  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
-
+  console.log(district);
+  console.log(pharmacy);
+  if (district.value != null || district.value != undefined)
+    SessionStorage.set('district', district.value);
+  if (pharmacy.value != null || pharmacy.value != undefined)
+    SessionStorage.set('pharmacy', pharmacy.value);
 });
 
 provide('viewStock', viewStock);

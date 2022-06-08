@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <PatientSearchFields />
     <listPatient
       :columns="columns"
       :mode="mode"
@@ -20,8 +19,8 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import { computed, inject, onMounted, reactive, ref } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
-// import PatientSearchFields from 'src/pages/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
+import { useUtils } from 'src/use/useUtils';
 
 /*
 Declarations
@@ -33,23 +32,32 @@ const mode = reactive(ref('list'));
 const viewPatient = inject('viewPatient');
 const title = inject('titleList');
 const activePatientList = inject('activePatientList');
+const isSearch = reactive(ref(true));
+
+const { ageCalculator } = useUtils();
 
 const columns = [
   {
-    name: 'uuidopenmrs',
+    name: 'patientid',
     required: true,
     label: t('NID'),
     align: 'left',
-    field: (row) => row.uuidopenmrs,
+    field: (row) => row.patientid,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
     name: 'firstnames',
     align: 'left',
-    label: t('Nome do Paciente'),
+    label: t('Nome do Paciente | Idade'),
     field: (row) =>
-      row.firstnames + ' ' + row.lastname + '\r' + row.dateofbirth,
+      row.firstnames +
+      ' ' +
+      row.lastname +
+      ' | ' +
+      ageCalculator(row.dateofbirth) +
+      ' anos',
+    // row.firstnames + ' ' + row.lastname + '\r' + row.dateofbirth,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -57,7 +65,7 @@ const columns = [
     name: 'sex',
     align: 'left',
     label: t('Sexo'),
-    field: (row) => row.sex,
+    field: (row) => (row.sex === 'F' ? 'Feminino' : 'Masculino'),
     format: (val) => `${val}`,
     sortable: true,
   },
