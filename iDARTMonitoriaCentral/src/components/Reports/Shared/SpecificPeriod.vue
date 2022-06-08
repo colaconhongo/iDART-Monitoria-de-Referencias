@@ -7,13 +7,12 @@
                         outlined
                         :disable="false"
                         class="col q-mr-md"
-                        v-model="startDate"
-                        @input="$emit('update:startDate', $event.target.value)"
+                        v-model="params.startDate"
                         label="Data Início">
                         <template v-slot:append>
                             <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                <q-date v-model="startDate"  mask="DD-MM-YYYY" @input="updateDate($event)">
+                                <q-date v-model="params.startDate"  mask="DD-MM-YYYY" >
                                 <div class="row items-center justify-end">
                                     <q-btn v-close-popup label="Close" color="primary" flat />
                                 </div>
@@ -23,27 +22,34 @@
                         </template>
                     </q-input>
                     <q-input
-                            dense
-                            outlined
-                            :disable="false"
-                            class="col q-mr-md"
-                            v-model="thruDate"
-                            label="Data Fim">
-                            <template v-slot:append>
-                                <q-icon name="event" class="cursor-pointer">
-                                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                    <q-date v-model="thruDate" mask="DD-MM-YYYY" @input="$emit('update:thruDate', $event.target.value)">
-                                    <div class="row items-center justify-end">
-                                        <q-btn v-close-popup label="Close" color="primary" flat />
-                                    </div>
-                                    </q-date>
-                                </q-popup-proxy>
-                                </q-icon>
-                            </template>
-                        </q-input>
+                        dense
+                        outlined
+                        :disable="false"
+                        class="col q-mr-md"
+                        v-model="params.endDate"
+                        label="Data Fim">
+                        <template v-slot:append>
+                            <q-icon name="event" class="cursor-pointer">
+                            <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                                <q-date v-model="params.endDate" mask="DD-MM-YYYY">
+                                <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                </div>
+                                </q-date>
+                            </q-popup-proxy>
+                            </q-icon>
+                        </template>
+                    </q-input>
        </div>
   </template>
+<script setup>
+  /*
+  Imports
+  */
+ import { inject } from 'vue';
 
+const params = inject('params');
+</script>
 <script>
     import { ref } from 'vue'
     import { date } from 'quasar'

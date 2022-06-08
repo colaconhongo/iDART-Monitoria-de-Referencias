@@ -67,4 +67,7 @@ export default {
       .where('province', Number(localStorage.getItem('province_id')))
       .get();
   },
+  getDistrictFromStorage(id :number) {
+   return district.query().whereId(id).first()
+  }
 };

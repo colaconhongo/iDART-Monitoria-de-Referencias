@@ -8,19 +8,15 @@
     >
       <q-card style="width: 1500px; max-width: 90vw">
         <q-card-section>
-          <div class="text-h7 text-left">
+          <div class="text-h7 text-left  ">
             <span
               ><q-img src="/icons/patient.jpeg" height="20px" width="20px"
             /></span>
-            <span> Jhon Doo</span> | <span> Masculino</span> |
-            <span> 23 anos de idade</span>
+            <span class="q-ml-md"> {{props.patient.firstnames +' '+props.patient.lastname}}</span> | <span> {{props.patient.sex ==='F'? 'Feminino':'Masculino' }}</span> |
+            <span> {{ Math.abs(moment.duration(new Date(props.patient.dateofbirth) - new Date()).years())}}</span>
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="text-h5 text-center">Atenção Farmacéutica</div>
-        </q-card-section>
-
         <q-separator />
         <q-card-section class="scroll" style="max-height: 80vh">
           <q-form class="q-gutter-md">
@@ -274,7 +270,7 @@ imports
 */
 
 //import { onMounted, computed } from '@vue/runtime-core';
-import { reactive, ref, watch, onMounted, computed } from 'vue';
+import { reactive, ref, watch, onMounted, computed , inject} from 'vue';
 import tbComponent from 'src/components/clinicInformation/tbComponent.vue';
 import monitoringComponent from 'src/components/clinicInformation/MonitoringComponent.vue';
 import adverseReactionComponent from 'src/components/clinicInformation/AdverseReactionComponent.vue';
@@ -294,16 +290,23 @@ const props = defineProps({
   clinicInformation: {
     type: Object,
   },
+   patient: {
+    type: Object,
+  },
 });
 
 /*
 Declarations
 */
-
 const step = reactive(ref(1));
 
-/*
-  Methods
+
+/*onst calculateAge = (birthday) => {
+    const startDate = new Date();
+    const endDate = new Date(birthday);
+    return Math.abs(moment.duration(endDate - startDate).years());
+}
+console.log(calculateAge('1999-11-23'))
 */
 
 let clinicInformation = reactive(props.clinicInformation);
@@ -362,8 +365,6 @@ watch(
 
     clinicInformation.adversereactionmedicine =
       props.clinicInformation.adversereactionmedicine.toString();
-
-    console.log(clinicInformation.istreatmenttpi);
   }
 );
 </script>

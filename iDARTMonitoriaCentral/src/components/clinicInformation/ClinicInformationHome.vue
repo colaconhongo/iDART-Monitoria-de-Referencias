@@ -15,6 +15,7 @@
       :is="true"
       :show_dialog="show_dialog"
       :clinicInformation="clinicInformation"
+      :patient="patient"
     />
   </q-page>
 </template>
@@ -26,6 +27,7 @@ import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
 import moment from 'moment';
 
+const patient = inject('patient');
 /*
 Props
 */
@@ -118,9 +120,11 @@ onMounted(() => {
 
 const allClinicInformation = computed(() => {
   return clinicInformationService.getClinicInformationByPatientUuid(
-    '40b17748-05d6-44db-9d44-581f4853c854'
+    patient.value.uuidopenmrs
   );
   // getClinicInformationByPatientUuid
+  //'40b17748-05d6-44db-9d44-581f4853c854'
+  // patient.uuidopenmrs
 });
 
 /*

@@ -101,6 +101,7 @@ const columns = [
 // });
 
 onMounted(() => {
+
   $q.loading.show({
     message: 'Carregando ...',
     spinnerColor: 'grey-4',

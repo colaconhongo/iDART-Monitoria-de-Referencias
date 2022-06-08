@@ -15,13 +15,14 @@
       :is="true"
       :show_dialog="show_dialog"
       :prescription="prescription"
+      :patient="patient"
     />
   </q-page>
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, provide, reactive, inject, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionDetailsModal from 'src/components/prescription/PrescriptionDetailsModal.vue';
 import moment from 'moment';
@@ -44,6 +45,7 @@ const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
+const patient = inject('patient');
 
 const columns = [
   {
@@ -83,7 +85,7 @@ const columns = [
     name: 'prescricaoespecial',
     align: 'left',
     label: 'Especial',
-    field: (row) => row.prescricaoespecial,
+    field: (row) => (row.prescricaoespecial === 'F' ? 'Não' : 'Sim'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -117,7 +119,10 @@ onMounted(() => {
 
 const allPrescription = computed(() => {
   const dispensesAndPrescriptions =
-    prescriptionService.getPrescriptionsByPatientId('04010001/16/0268');
+    prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
+  //'04010001/16/0268
+  //
+
   let prescriptions = [
     ...new Map(
       dispensesAndPrescriptions.map((item) => [item['prescriptionid'], item])
