@@ -66,7 +66,6 @@ const props = defineProps({
   }
 });
 const yearAnnualPeriod = inject('year')
-console.log(props)
 const district = inject('district')
 const clinic = inject('clinic')
 const pharmacy = inject('pharmacy')
@@ -85,7 +84,6 @@ watch(props.loaded, () => {
       series4.series4 = []
        keysByPharm.forEach( (key) => {
          const pharm = ClinicService.getPharmByUUid(key)
-         console.log(pharm)
          const keys = DashboardUtils.organizeRefferedPatientsByMonth(resultPatientsByClinicUuid.get(key))
          const regimeType = []
          if(pharm.length !== 0) { 
@@ -97,10 +95,8 @@ watch(props.loaded, () => {
          }
           
                    const color = randomcolor();// a hex code for an attractive color
-                   console.log(color)
                  //  item.style = 'background-color:' + color + ';' + 'color: ##ffffff'
          chartOptionsReferredByPharmacy.colors.push(color)
-         console.log(keysByPharm)
           //series4.series4 = []
          series4.series4.push(
             {

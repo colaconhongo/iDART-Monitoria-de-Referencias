@@ -93,7 +93,6 @@ watch(props.loaded, () => {
          }
           
                    const color = randomcolor();// a hex code for an attractive color
-                   console.log(color)
                  //  item.style = 'background-color:' + color + ';' + 'color: ##ffffff'
          chartOptionsDispenseByDrug.colors.push(color)
          series3.series3.push(

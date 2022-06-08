@@ -18,11 +18,12 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import clinicService from 'src/services/clinicService/clinicService';
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, reactive, ref, watch } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import { useI18n } from 'vue-i18n';
 import provinceService from 'src/services/provinceService/provinceService';
 import districtService from 'src/services/districtService/districtService';
+import District from 'src/stores/models/district/district';
 
 /*
 Declarations
@@ -34,6 +35,9 @@ const viewClinic = inject('viewClinic');
 const editClinic = inject('editClinic');
 const deleteClinic = inject('deleteClinic');
 const title = inject('titleList');
+const district = inject('district')
+const clinic = inject('clinic')
+const pharmacy = inject('pharmacy')
 const columns = [
   {
     name: 'code',
@@ -103,8 +107,9 @@ onMounted(() => {
 /*
   Computed
 */
+
 const allClinics = computed(() => {
-  return clinicService.getAllDDPharm();
+  return clinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district, pharmacy);
 });
 
 /*

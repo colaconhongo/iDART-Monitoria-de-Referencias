@@ -168,10 +168,8 @@ watch(props.loaded, (newCount) => {
      const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
        let resultDispenses1 = groupedMap(allDispenses , 'patientid')
        const mapIter = resultDispenses1.values()
-     console.log(mapIter)
        for (const item of mapIter) {
            const firstItem = item[0]
-           // console.log(firstItem)
            dispenseToRegime.push(firstItem)
            if(firstItem.dispensatrimestral === 1) dispenseTrimestral.push(firstItem)
             if(firstItem.dispensasemestral === 1) dispenseSemestral.push(firstItem)
@@ -195,7 +193,6 @@ watch(props.loaded, (newCount) => {
          }
           
                    const color = randomcolor();// a hex code for an attractive color
-                   console.log(color)
                  //  item.style = 'background-color:' + color + ';' + 'color: ##ffffff'
          chartOptionsRegimeType.colors.push(color)
          series2.series2.push(

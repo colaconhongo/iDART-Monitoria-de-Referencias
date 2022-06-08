@@ -120,13 +120,10 @@ export default {
 
      let clinics = [] ;
 
-     if (pharmacy.value !== undefined) {
+     if (pharmacy.value != null || pharmacy.value != undefined) {
       clinics.push(pharmacy.value.uuid)
      } 
-     else if (clinic.value !== undefined) {
-      clinics.push(clinic.value.uuid)
-     }
-     else if (district.value !== undefined) {
+     else if (district.value != null || district.value != undefined) {
       clinics = ClinicService.getAllByDistrict(district.value)
        clinics = clinics.map(clinic => clinic.uuid);
        console.log(clinics)
