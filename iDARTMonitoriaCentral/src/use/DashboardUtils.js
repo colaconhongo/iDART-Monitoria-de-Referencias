@@ -8,7 +8,7 @@ export default {
         const dayOfMonth =  toDateStr(date).getDate()
        // console.log(dayOfMonth)
            const month =  toDateStr(date).getMonth() +1
-                console.log(month)
+          
            
            if(((dayOfMonth >= 21 && month === 12)  || (dayOfMonth <= 20 && month === 1))) statisticMonth = 1;
            if(((dayOfMonth >= 21 && month === 1)  || (dayOfMonth <= 20 && month === 2))) statisticMonth = 2;
@@ -22,7 +22,6 @@ export default {
            if(((dayOfMonth >= 21 && month === 9)  || (dayOfMonth <= 20 && month === 10))) statisticMonth =10;
            if(((dayOfMonth >= 21 && month === 10)  || (dayOfMonth <= 20 && month === 11))) statisticMonth = 11;
            if(((dayOfMonth >= 21 && month === 11)  || (dayOfMonth <= 20 && month === 12))) statisticMonth = 12;
-           console.log('dia'+dayOfMonth+'mes'+month+'mesEsta'+statisticMonth)
           return statisticMonth - 1;
  //  }
 },
@@ -34,7 +33,6 @@ export default {
  // const m = returnReturnStatisticMonth(b.dispensedate)
  // const m = toDateStr(b.dispensedate).getMonth()
   const m = this.getStatisticMonthByDate(b.dispensedate)
-  console.log(m)
   a[m] = (a[m] || 0) + 1
   monthsPresent.push(monthsEng[+m])
      return a

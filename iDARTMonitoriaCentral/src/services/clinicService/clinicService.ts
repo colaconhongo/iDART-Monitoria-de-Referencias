@@ -2,6 +2,8 @@ import { useRepo } from 'pinia-orm';
 import Clinic from 'src/stores/models/clinic/clinic';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import District from 'src/stores/models/district/district';
+import { timeStamp } from 'console';
 
 const clinic = useRepo(Clinic);
 
@@ -219,4 +221,19 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+
+  getDDPharmByDistrictAndPharmFromLocalStorage(district:District,pharmacy:Clinic) {
+     let clinics = [] ;
+
+     if (pharmacy.value != null || pharmacy.value != undefined) {
+      clinics.push(pharmacy.value)
+     } 
+     else if (district.value != null || district.value != undefined) {
+      clinics = this.getAllPharmacyFromDistrict(district.value.name)
+       console.log(clinics)
+     } else {
+      clinics = this.getAllDDPharm();
+     }
+     return clinics
+   },
 };

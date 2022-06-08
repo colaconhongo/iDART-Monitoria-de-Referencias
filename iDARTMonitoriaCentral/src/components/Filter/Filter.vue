@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-pa-sm q-pt-md">
+  <div class="row q-pa-ml q-pt-md">
     <SelectField
       :label="provinceLabel"
       class="col q-ml-md"
@@ -18,16 +18,8 @@
       option-label="name"
       option-value="id"
       filled
-    />
-    <SelectField
-      :label="facilityLabel"
-      class="col q-ml-md"
-      v-model="facility"
-      :disable="isDashboard"
-      :options="allFacilityFromDistrict"
-      option-label="clinicname"
-      option-value="id"
-      filled
+      clearable
+       @clear="clearDistrict()"
     />
     <SelectField
       :label="pharmacyLabel"
@@ -37,6 +29,8 @@
       option-label="clinicname"
       option-value="id"
       filled
+      clearable
+       @clear="clearPharmacy()"
     />
     <div v-if="isDashboard"  class="col q-ml-md">
     <SelectField
@@ -52,11 +46,12 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { inject, onMounted, ref,onActivated, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { LocalStorage } from 'quasar'
+import { LocalStorage,SessionStorage } from 'quasar'
 import SelectField from '../Shared/Input/SelectField.vue';
 import DistrictService from 'src/services/districtService/districtService';
+import clinicService from 'src/services/clinicService/clinicService';
 
 const { t } = useI18n();
 
@@ -73,7 +68,7 @@ const props = defineProps(['isDashboard']);
   Inject
 */
 const province = inject('province');
-let district = inject('district');
+const district = inject('district');
 const facility = inject('facility');
 const pharmacy = inject('pharmacy');
 const year = inject('year');
@@ -81,20 +76,44 @@ const yearsToShow = inject('yearsToShow');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');
-const allFacilityFromDistrict = inject('allFacilityFromDistrict');
-const allPhamacyFromFacility = inject('allPhamacyFromFacility');
+ const allPhamacyFromFacility = inject('allPhamacyFromFacility');
 
 
 onMounted(() => {
   console.log(allProvincias);
   console.log(province);
   console.log(alldistrictsFromProvince);
-  // console.log('Filter district ', district);
-   // console.log(LocalStorage.getItem('district'))
-    //  district = DistrictService.getDistrictFromStorage(LocalStorage.getItem('district').id)
-// console.log(district)
- 
 });
+
+/*
+const allFacilityFromDistrict = computed(() => {
+   if(district.value !== undefined) {
+  return clinicService.getAllUSFromDistrict(district.value.name);
+   }
+});
+
+const allPhamacyFromFacility = computed(() => {
+   if(district.value !== undefined) {
+  return clinicService.getAllPharmacyFromDistrict(district.value.name);
+   }
+});
+
+onActivated(() => {
+    if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district')
+  }
+  console.log(district)
+});
+*/
+
+const clearDistrict = () => {
+   SessionStorage.remove('district')
+}
+
+const clearPharmacy = () => {
+   SessionStorage.remove('pharmacy')
+}
+
 </script>
 
 <style></style>

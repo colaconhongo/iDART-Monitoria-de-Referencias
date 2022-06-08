@@ -72,8 +72,6 @@ const  patientsToCount =  [];
   const endEpisodes = EpisodeService.getEpisodesByYearFromLocalStorage(yearAnnualPeriod.value);
    const endEpisodeMonthly = DashboardUtils.organizeEpisodesByMonth(endEpisodes);
     const patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value, district,clinic,pharmacy);
-    console.log(patients)
-     console.log(endEpisodeMonthly)
       let resultPatients1 = groupedMap(patients , 'patientid');
         const mapIter1 = resultPatients1.values()
             for (const item of mapIter1) {
