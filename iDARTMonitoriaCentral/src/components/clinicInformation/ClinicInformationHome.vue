@@ -22,7 +22,7 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import clinicInformationService from 'src/services/clinicInformationService/clinicInformationService';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, inject, provide } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import clinicInformationModal from 'src/components/clinicInformation/ClinicInformationDetailsModal.vue';
 import moment from 'moment';
@@ -48,6 +48,7 @@ const clinicInformation = reactive(ref({}));
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
 
+provide('show_dialog', show_dialog);
 const columns = [
   {
     name: 'registerdate',
@@ -78,7 +79,7 @@ const columns = [
     name: 'imc',
     align: 'left',
     label: 'IMC',
-    field: (row) => row.imc,
+    field: (row) => (row.imc === null ? '-' : row.imc),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -125,6 +126,7 @@ const allClinicInformation = computed(() => {
   // getClinicInformationByPatientUuid
   //'40b17748-05d6-44db-9d44-581f4853c854'
   // patient.uuidopenmrs
+  //0104011401/2019/00524
 });
 
 /*
