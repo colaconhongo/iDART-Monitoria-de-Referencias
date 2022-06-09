@@ -21,14 +21,7 @@
 -->
 
 <template>
-  <q-input
-    id="date-edit-episode"
-    dense
-    outlined
-    :value="date"
-    class="col"
-    readonly
-  >
+  <q-input id="date-edit-episode" outlined :value="date" class="col" readonly>
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer" :value="props.date">
         <q-popup-proxy
