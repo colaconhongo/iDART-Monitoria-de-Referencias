@@ -33,8 +33,8 @@
   */
 import ListReportMenu from 'src/components/Reports/Menu/ListReportMenu.vue';
 import ReferedPatientsList from 'src/components/Reports/ReferedPatientsList.vue';
-import { uid } from 'quasar';
-import { reactive, ref, provide, computed } from 'vue';
+import { uid,SessionStorage } from 'quasar';
+import { reactive, ref, provide, computed,onActivated,onDeactivated } from 'vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';

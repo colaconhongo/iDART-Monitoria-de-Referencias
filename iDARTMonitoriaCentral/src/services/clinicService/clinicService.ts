@@ -193,6 +193,24 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+
+  getAllByDistrict(district) {
+    return clinic
+      .query()
+      .where((clinics) => {
+        return (
+          clinics.district === district.name
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+  },
+  
+  getPharmByUUid(uuid) {
+    return clinic.query().where('uuid', uuid).get();
+  },
+  
   getAllUS() {
     return clinic
       .query()

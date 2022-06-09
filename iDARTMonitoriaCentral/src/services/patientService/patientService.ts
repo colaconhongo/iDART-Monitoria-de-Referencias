@@ -5,6 +5,9 @@ import api from '../apiService/apiService';
 import moment from 'moment';
 import ClinicService from 'src/services/clinicService/clinicService';
 import clinicSectorService from '../clinicSectorService/clinicSectorService';
+import District from 'src/stores/models/district/district';
+import Clinic from 'src/stores/models/clinic/clinic';
+import { off } from 'process';
 
 const sync_temp_patients = useRepo(Patient);
 const sync_temp_episode = useRepo(Episode);
@@ -117,10 +120,9 @@ export default {
   },
 
   getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    year,
-    district,
-    clinic,
-    pharmacy
+    year: number,
+    district: District,
+    pharmacy: Clinic
   ) {
     const yearBefore = year - 1;
     const startDate = new Date('12-21-' + yearBefore);
@@ -130,13 +132,11 @@ export default {
 
     let clinics = [];
 
-    if (pharmacy.value != null || pharmacy.value != undefined) {
-      clinics.push(pharmacy.value.uuid);
-    } else if (district.value != null || district.value != undefined) {
-      clinics = ClinicService.getAllByDistrict(district.value);
-      clinics = clinics.map((clinic) => clinic.uuid);
-      console.log(clinics);
-    }
+    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+      district,
+      pharmacy
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
     const patients = sync_temp_patients
       .query()
       .where((patient) => {
@@ -144,14 +144,63 @@ export default {
           patient.prescriptiondate !== null &&
           new Date(patient.prescriptiondate) >= startDate &&
           new Date(patient.prescriptiondate) <= endDate &&
-          (clinics.length > 0
-            ? clinics.includes(patient.clinicuuid)
-            : patient.prescriptiondate)
+          clinics.includes(patient.clinicuuid)
         );
       })
       .orderBy('prescriptiondate', 'desc')
       .get();
     console.log(patients);
     return patients;
+  },
+
+  getPatientsByDistrictAndPharmacyFromLocalStorage(
+    district: District,
+    pharmacy: Clinic,
+    currPatient: Patient
+  ) {
+    let clinics = [];
+    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+      district,
+      pharmacy
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
+    let patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return clinics.includes(patient.clinicuuid);
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+
+    if (
+      currPatient.patientid.length > 0 ||
+      currPatient.firstnames.length > 0 ||
+      currPatient.lastname.length > 0
+    ) {
+      patients = patients.filter((patient) => {
+        return this.filterPatient(patient, currPatient);
+      });
+    }
+    return patients;
+  },
+
+  filterPatient(patient: Patient, currPatient: Patient) {
+    return (
+      this.stringContains(patient.patientid, currPatient.patientid) ||
+      this.stringContains(patient.firstnames, currPatient.firstnames) ||
+      this.stringContains(patient.lastname, currPatient.lastname)
+    );
+  },
+
+  stringContains(stringToCheck: string, stringText: string) {
+    if (
+      stringToCheck === '' ||
+      stringToCheck === null ||
+      stringToCheck === undefined
+    )
+      return false;
+    if (stringText === '' || stringText === null || stringText === undefined)
+      return false;
+    return stringToCheck.toLowerCase().includes(stringText.toLowerCase());
   },
 };

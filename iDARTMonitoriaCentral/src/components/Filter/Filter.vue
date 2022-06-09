@@ -9,6 +9,7 @@
       option-label="name"
       option-value="id"
       filled
+      dense
     />
     <SelectField
       :label="districtLabel"
@@ -18,8 +19,9 @@
       option-label="name"
       option-value="id"
       filled
+      dense
       clearable
-      @clear="clearDistrict()"
+       @clear="clearDistrict()"
     />
     <SelectField
       :label="pharmacyLabel"
@@ -30,25 +32,27 @@
       option-value="id"
       filled
       clearable
-      @clear="clearPharmacy()"
+      dense
+       @clear="clearPharmacy()"
     />
-    <div v-if="isDashboard" class="col q-ml-md">
-      <SelectField
-        :label="yearLabel"
-        v-model="year"
-        :options="yearsToShow"
-        option-label="name"
-        option-value="name"
-        filled
-      />
+    <div v-if="isDashboard"  class="col q-ml-md">
+    <SelectField
+      :label="yearLabel"
+      v-model="year"
+      :options="yearsToShow"
+      option-label="name"
+      option-value="name"
+      filled
+      dense
+    />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, onMounted, ref, onActivated, computed } from 'vue';
+import { inject, onMounted, ref, } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { LocalStorage, SessionStorage } from 'quasar';
+import { SessionStorage } from 'quasar'
 import SelectField from '../Shared/Input/SelectField.vue';
 import DistrictService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -59,7 +63,8 @@ const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const facilityLabel = ref(t('facility'));
 const pharmacyLabel = ref(t('pharmacy'));
-const yearLabel = ref(t('year'));
+const yearLabel =  ref(t('year'));
+
 
 const props = defineProps(['isDashboard']);
 
@@ -75,7 +80,8 @@ const yearsToShow = inject('yearsToShow');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');
-const allPhamacyFromFacility = inject('allPhamacyFromFacility');
+ const allPhamacyFromFacility = inject('allPhamacyFromFacility');
+
 
 onMounted(() => {
   console.log(allProvincias);
@@ -83,34 +89,14 @@ onMounted(() => {
   console.log(alldistrictsFromProvince);
 });
 
-/*
-const allFacilityFromDistrict = computed(() => {
-   if(district.value !== undefined) {
-  return clinicService.getAllUSFromDistrict(district.value.name);
-   }
-});
-
-const allPhamacyFromFacility = computed(() => {
-   if(district.value !== undefined) {
-  return clinicService.getAllPharmacyFromDistrict(district.value.name);
-   }
-});
-
-onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
-  }
-  console.log(district)
-});
-*/
-
 const clearDistrict = () => {
-  SessionStorage.remove('district');
-};
+   SessionStorage.remove('district')
+}
 
 const clearPharmacy = () => {
-  SessionStorage.remove('pharmacy');
-};
+   SessionStorage.remove('pharmacy')
+}
+
 </script>
 
 <style></style>
