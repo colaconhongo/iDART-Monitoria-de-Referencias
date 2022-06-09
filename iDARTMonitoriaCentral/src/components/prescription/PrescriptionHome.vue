@@ -13,7 +13,6 @@
     />
     <prescriptionDetailsModal
       :is="true"
-      :show_dialog="show_dialog"
       :prescription="prescription"
       :patient="patient"
     />
@@ -44,6 +43,8 @@ const $q = new useQuasar();
 const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
+
+provide('show_dialog', show_dialog);
 const editedIndex = reactive(ref(0));
 const patient = inject('patient');
 
@@ -119,7 +120,7 @@ onMounted(() => {
 
 const allPrescription = computed(() => {
   const dispensesAndPrescriptions =
-    prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
+    prescriptionService.getPrescriptionsByPatientId('patient.value.patientid');
   //'04010001/16/0268
   //
 
@@ -145,6 +146,5 @@ const visualizar = (prescriptionEntity) => {
   show_dialog.value = true;
   editedIndex.value = 1;
   prescription.value = prescriptionEntity;
-  console.log('invocando o modal..', prescription);
 };
 </script>

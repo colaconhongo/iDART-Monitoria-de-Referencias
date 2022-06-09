@@ -8,12 +8,23 @@
     >
       <q-card style="width: 1500px; max-width: 90vw">
         <q-card-section>
-          <div class="text-h7 text-left  ">
+          <div class="text-h7 text-left">
             <span
               ><q-img src="/icons/patient.jpeg" height="20px" width="20px"
             /></span>
-            <span class="q-ml-md"> {{props.patient.firstnames +' '+props.patient.lastname}}</span> | <span> {{props.patient.sex ==='F'? 'Feminino':'Masculino' }}</span> |
-            <span> {{ Math.abs(moment.duration(new Date(props.patient.dateofbirth) - new Date()).years())}}</span>
+            <span class="q-ml-md">
+              {{
+                props.patient.firstnames + ' ' + props.patient.lastname
+              }}</span
+            >
+            |
+            <span>
+              {{ props.patient.sex === 'F' ? 'Feminino' : 'Masculino' }}</span
+            >
+            |
+            <span>
+              {{ Math.abs(ageCalculator(props.patient.dateofbirth)) }}</span
+            >
           </div>
         </q-card-section>
         <q-separator />
@@ -81,6 +92,13 @@
 
                           <q-stepper-navigation>
                             <q-btn
+                              flat
+                              @click="step = 1"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
+                            <q-btn
                               @click="
                                 () => {
                                   done2 = true;
@@ -89,13 +107,6 @@
                               "
                               color="primary"
                               label="Próximo"
-                            />
-                            <q-btn
-                              flat
-                              @click="step = 1"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
                             />
                           </q-stepper-navigation>
                         </q-step>
@@ -164,6 +175,13 @@
 
                           <q-stepper-navigation>
                             <q-btn
+                              flat
+                              @click="step = 2"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
+                            <q-btn
                               @click="
                                 () => {
                                   done3 = true;
@@ -172,13 +190,6 @@
                               "
                               color="primary"
                               label="Próximo"
-                            />
-                            <q-btn
-                              flat
-                              @click="step = 2"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
                             />
                           </q-stepper-navigation>
                         </q-step>
@@ -197,6 +208,13 @@
 
                           <q-stepper-navigation>
                             <q-btn
+                              flat
+                              @click="step = 3"
+                              color="primary"
+                              label="Voltar"
+                              class="q-ml-sm"
+                            />
+                            <q-btn
                               @click="
                                 () => {
                                   done4 = true;
@@ -205,13 +223,6 @@
                               "
                               color="primary"
                               label="Próximo"
-                            />
-                            <q-btn
-                              flat
-                              @click="step = 3"
-                              color="primary"
-                              label="Voltar"
-                              class="q-ml-sm"
                             />
                           </q-stepper-navigation>
                         </q-step>
@@ -228,17 +239,17 @@
 
                           <q-stepper-navigation>
                             <q-btn
-                              v-close-popup
-                              color="primary"
-                              @click="close"
-                              label="Terminar"
-                            />
-                            <q-btn
                               flat
                               @click="step = 4"
                               color="primary"
                               label="Voltar"
                               class="q-ml-sm"
+                            />
+                            <q-btn
+                              v-close-popup
+                              color="primary"
+                              @click="close"
+                              label="Terminar"
                             />
                           </q-stepper-navigation>
                         </q-step>
@@ -270,12 +281,15 @@ imports
 */
 
 //import { onMounted, computed } from '@vue/runtime-core';
-import { reactive, ref, watch, onMounted, computed , inject} from 'vue';
+import { reactive, ref, watch, onMounted, computed, inject } from 'vue';
 import tbComponent from 'src/components/clinicInformation/tbComponent.vue';
 import monitoringComponent from 'src/components/clinicInformation/MonitoringComponent.vue';
 import adverseReactionComponent from 'src/components/clinicInformation/AdverseReactionComponent.vue';
 import vitalDataComponent from 'src/components/clinicInformation/VitalDataComponent.vue';
 import moment from 'moment';
+import { useUtils } from 'src/use/useUtils';
+
+const { ageCalculator } = useUtils();
 
 /*
   Props
@@ -290,7 +304,7 @@ const props = defineProps({
   clinicInformation: {
     type: Object,
   },
-   patient: {
+  patient: {
     type: Object,
   },
 });
@@ -299,15 +313,7 @@ const props = defineProps({
 Declarations
 */
 const step = reactive(ref(1));
-
-
-/*onst calculateAge = (birthday) => {
-    const startDate = new Date();
-    const endDate = new Date(birthday);
-    return Math.abs(moment.duration(endDate - startDate).years());
-}
-console.log(calculateAge('1999-11-23'))
-*/
+let show_dialog = inject('show_dialog');
 
 let clinicInformation = reactive(props.clinicInformation);
 
@@ -367,4 +373,8 @@ watch(
       props.clinicInformation.adversereactionmedicine.toString();
   }
 );
+
+const close = () => {
+  show_dialog = false;
+};
 </script>
