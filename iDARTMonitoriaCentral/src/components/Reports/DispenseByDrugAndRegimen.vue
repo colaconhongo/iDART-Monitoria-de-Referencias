@@ -23,18 +23,17 @@
 /*
   Imports
   */
-
+// import reportService from 'src/services/ReportServices/reportService';
 import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
-import reportReferidos from 'src/services/ReportServices/referidos/reportReferidos';
+import reportDispenseDrugRegimen from 'src/services/ReportServices/dispenseDrugRegimen/reportDispenseDrugRegimen';
 import moment from 'moment'
 
-const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
+const title = ref('Lista de Dispensas por Frasco e Regime');
 
 const generateReport = (params) => {
-  console.log(params)
-  reportReferidos.downloadPDF(
+  reportDispenseDrugRegimen.downloadPDF(
     params.value.clinic.clinicname,
     params.value.province.name,
     moment(params.value.startDate).format('DD/MM/YYYY'),

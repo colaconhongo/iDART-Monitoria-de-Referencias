@@ -23,18 +23,17 @@
 /*
   Imports
   */
-
 import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
-import reportReferidos from 'src/services/ReportServices/referidos/reportReferidos';
+import reportNotSyncDispense from 'src/services/ReportServices/notSyncDispense/reportNotSyncDispense';
 import moment from 'moment'
 
-const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
+const title = ref('Lista de Dispensas que não Foram Sincronizadas');
 
 const generateReport = (params) => {
   console.log(params)
-  reportReferidos.downloadPDF(
+  reportNotSyncDispense.downloadPDF(
     params.value.clinic.clinicname,
     params.value.province.name,
     moment(params.value.startDate).format('DD/MM/YYYY'),

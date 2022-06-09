@@ -16,7 +16,7 @@ import { useQuasar, QSpinnerBall, SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
-import districtService from 'src/services/districtService/districtService';
+import DistrictService from 'src/services/districtService/districtService';
 import { onMounted, reactive, ref, provide, computed, onActivated, onDeactivated } from 'vue';
 /*
 Declarations
@@ -28,7 +28,7 @@ let selectRecord = reactive(ref({}));
 const district = reactive(ref([]));
 const facility = reactive(ref([]));
 const pharmacy = reactive(ref([]));
-const province = reactive(
+const provincia = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
 
@@ -37,7 +37,7 @@ const province = reactive(
   Computed
 */
 const allProvincias = computed(() => {
-  return ProvinceService.getAllFromStorage();
+  return provinceService.getAllFromStorage();
 });
 
 const districtsByProvince = computed(() => {

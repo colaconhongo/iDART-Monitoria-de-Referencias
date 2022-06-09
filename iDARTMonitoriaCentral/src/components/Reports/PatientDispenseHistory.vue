@@ -23,18 +23,18 @@
 /*
   Imports
   */
-
+// import reportService from 'src/services/ReportServices/reportService';
 import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
-import reportReferidos from 'src/services/ReportServices/referidos/reportReferidos';
+import reportDispenseHistory from 'src/services/ReportServices/dispenseHistory/reportDispenseHistory';
 import moment from 'moment'
 
-const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
+const title = ref('Histórico de Levantamentos de Pacientes Referidos');
 
 const generateReport = (params) => {
   console.log(params)
-  reportReferidos.downloadPDF(
+  reportDispenseHistory.downloadPDF(
     params.value.clinic.clinicname,
     params.value.province.name,
     moment(params.value.startDate).format('DD/MM/YYYY'),
