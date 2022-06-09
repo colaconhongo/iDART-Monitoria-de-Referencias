@@ -58,20 +58,22 @@ export default {
 
         .then((resp) => {
           sync_temp_patients.save(resp.data);
-          alert('After Save');
           if (resp.data.length > 0) {
-            console.log('Ai esta teu resultado: ', resp.data);
             setTimeout(this.get, 2);
           }
         })
     );
   },
-
   patch(id: number, params: string) {
+    console.log(params);
     return api()
-      .patch('sync_temp_patients/' + id, params)
+      .patch('sync_temp_patients?id=eq.' + id, params)
       .then((resp) => {
-        sync_temp_patients.save(resp.data);
+        console.log(resp);
+        sync_temp_patients.save(JSON.parse(resp.config.data));
+      })
+      .catch((error) => {
+        console.error(error);
       });
   },
   delete(id: number) {
@@ -87,9 +89,7 @@ export default {
   },
   getAllFromStorage() {
     return sync_temp_patients.all();
-    alert('returned');
   },
-
   getAllPatientWithPrescriptionDate() {
     return sync_temp_patients
       .query()
@@ -100,43 +100,58 @@ export default {
   },
 
   getPatientsByYear(year) {
-  const yearBefore = year -1;
-    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
-    console.log(startDate)
-    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
-      return api()
-        .get('sync_temp_patients?prescriptiondate=gt.'+startDate+'&prescriptiondate=lt.'+endDate)
-        .then((resp) => {
-          sync_temp_patients.save(resp.data);
-        });
+    const yearBefore = year - 1;
+    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
+    console.log(startDate);
+    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    return api()
+      .get(
+        'sync_temp_patients?prescriptiondate=gt.' +
+          startDate +
+          '&prescriptiondate=lt.' +
+          endDate
+      )
+      .then((resp) => {
+        sync_temp_patients.save(resp.data);
+      });
   },
 
-  getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year, district, clinic,pharmacy) {
-    const yearBefore = year -1;
-    const startDate = new Date('12-21-'+yearBefore)
-    console.log(startDate)
-  const endDate = new Date('12-20-'+year)
-    console.log(endDate)
+  getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    year,
+    district,
+    clinic,
+    pharmacy
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    console.log(startDate);
+    const endDate = new Date('12-20-' + year);
+    console.log(endDate);
 
-     let clinics = [] ;
+    let clinics = [];
 
-     if (pharmacy.value != null || pharmacy.value != undefined) {
-      clinics.push(pharmacy.value.uuid)
-     } 
-     else if (district.value != null || district.value != undefined) {
-      clinics = ClinicService.getAllByDistrict(district.value)
-       clinics = clinics.map(clinic => clinic.uuid);
-       console.log(clinics)
-     }
-     const patients = sync_temp_patients
-     .query()
-     .where((patient) => {
-       return patient.prescriptiondate !== null &&
-       new Date(patient.prescriptiondate)>= startDate && new Date(patient.prescriptiondate) <= endDate &&
-         (clinics.length > 0 ? clinics.includes(patient.clinicuuid) : patient.prescriptiondate)})
-       .orderBy('prescriptiondate','desc')
- .get();
-    console.log(patients)
-     return patients
-   },
+    if (pharmacy.value != null || pharmacy.value != undefined) {
+      clinics.push(pharmacy.value.uuid);
+    } else if (district.value != null || district.value != undefined) {
+      clinics = ClinicService.getAllByDistrict(district.value);
+      clinics = clinics.map((clinic) => clinic.uuid);
+      console.log(clinics);
+    }
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          (clinics.length > 0
+            ? clinics.includes(patient.clinicuuid)
+            : patient.prescriptiondate)
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    console.log(patients);
+    return patients;
+  },
 };

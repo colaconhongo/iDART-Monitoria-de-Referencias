@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
+    <pre>{{ allClinics }}</pre>
     <q-dialog
       v-model="show_dialog"
       transition-show="flip-up"
@@ -45,8 +46,9 @@
                     label="Farmácia de [Referência]"
                     class="col q-ml-md"
                     v-model="episode.clinic"
-                    :options="allClinics.map((clinic) => clinic.clinicname)"
+                    :options="allClinics.map((clinic) => clinic)"
                     option-id="id"
+                    option-label="clinicname"
                   />
                 </div>
               </div>
