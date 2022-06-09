@@ -222,18 +222,20 @@ export default {
       .get();
   },
 
-  getDDPharmByDistrictAndPharmFromLocalStorage(district:District,pharmacy:Clinic) {
-     let clinics = [] ;
+  getDDPharmByDistrictAndPharmFromLocalStorage(
+    district: District,
+    pharmacy: Clinic
+  ) {
+    let clinics = [];
 
-     if (pharmacy.value != null || pharmacy.value != undefined) {
-      clinics.push(pharmacy.value)
-     } 
-     else if (district.value != null || district.value != undefined) {
-      clinics = this.getAllPharmacyFromDistrict(district.value.name)
-       console.log(clinics)
-     } else {
+    if (pharmacy.value != null || pharmacy.value != undefined) {
+      clinics.push(pharmacy.value);
+    } else if (district.value != null || district.value != undefined) {
+      clinics = this.getAllPharmacyFromDistrict(district.value.name);
+      console.log(clinics);
+    } else {
       clinics = this.getAllDDPharm();
-     }
-     return clinics
-   },
+    }
+    return clinics;
+  },
 };
