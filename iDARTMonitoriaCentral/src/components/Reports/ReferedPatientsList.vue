@@ -28,16 +28,27 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportFaltososARV from 'src/services/ReportServices/faltosos/reportFaltososARV';
+import reportExcel from 'src/services/ReportServices/faltosos/reportExcelJs';
 
 const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
 
 const generateReport = (params) => {
-  reportFaltososARV.downloadPDF(
-    'CS Nicoadala',
-    'Zambézia',
-    '01-01-2020',
-    '02-01-2020'
-  );
+  console.log(params.value.fileType);
+  if (params.value.fileType === 'PDF') {
+    reportFaltososARV.downloadPDF(
+      'CS Nicoadala',
+      'Zambézia',
+      '01-01-2020',
+      '02-01-2020'
+    );
+  } else {
+    reportFaltososARV.downloadExcel(
+      'CS Nicoadala',
+      'Zambézia',
+      '01-01-2020',
+      '02-01-2020'
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);
