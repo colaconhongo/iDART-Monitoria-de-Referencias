@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md q-pt-sm">
-  <Filter :is="true" />
+    <Filter :is="true" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">
         <q-bar dark class="bg-primary text-white">
@@ -33,8 +33,15 @@
   */
 import ListReportMenu from 'src/components/Reports/Menu/ListReportMenu.vue';
 import ReferedPatientsList from 'src/components/Reports/ReferedPatientsList.vue';
-import { uid } from 'quasar';
-import { reactive, ref, provide, computed } from 'vue';
+import { SessionStorage, uid } from 'quasar';
+import {
+  reactive,
+  ref,
+  provide,
+  computed,
+  onActivated,
+  onDeactivated,
+} from 'vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -45,8 +52,8 @@ const province = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
 const reportComps = {
-  ReferedPatientsList
-}
+  ReferedPatientsList,
+};
 const district = reactive(ref([]));
 const facility = reactive(ref([]));
 const pharmacy = reactive(ref([]));
@@ -80,21 +87,22 @@ const allPhamacyFromFacility = computed(() => {
 });
 
 onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
+  if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district');
   }
-    if (SessionStorage.getItem('pharmacy') !== null) {
-    pharmacy.value = SessionStorage.getItem('pharmacy')
+  if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy');
   }
- console.log(district)
+  console.log(district);
 });
 
 onDeactivated(() => {
-  console.log(district)
-  console.log(pharmacy)
-   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
-  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
-
+  console.log(district);
+  console.log(pharmacy);
+  if (district.value != null || district.value != undefined)
+    SessionStorage.set('district', district.value);
+  if (pharmacy.value != null || pharmacy.value != undefined)
+    SessionStorage.set('pharmacy', pharmacy.value);
 });
 
 provide('allProvincias', allProvincias);
