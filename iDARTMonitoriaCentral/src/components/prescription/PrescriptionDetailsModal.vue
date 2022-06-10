@@ -65,7 +65,7 @@ import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 import moment from 'moment';
 
-const patient = inject('patient')
+const patient = inject('patient');
 /*
   Props
 */
@@ -83,7 +83,7 @@ const props = defineProps({
     type: String,
     default: 'Dispensas',
   },
-   patient: {
+  patient: {
     type: Object,
   },
 });
@@ -102,7 +102,7 @@ const columns = [
     required: true,
     label: 'Data de levantamento',
     align: 'left',
-    field: (row) =>  moment(row.pickupdate).format('DD-MM-YYYY') ,
+    field: (row) => moment(row.pickupdate).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -134,7 +134,7 @@ const columns = [
     name: 'dateexpectedstring',
     align: 'left',
     label: 'Data próximo levantamento',
-    field: (row) =>  moment(row.dateexpectedstring).format('DD-MM-YYYY') ,
+    field: (row) => moment(row.dateexpectedstring).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -145,12 +145,12 @@ const columns = [
 */
 
 const allPrescription = computed(() => {
-  return prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
+  return prescriptionService.getPrescriptionsByPatientId(
+    patient.value.patientid
+  );
 });
 
-
 const close = () => {
-  show_dialog=false;
-  console.log('Fechando o MODAL: ',show_dialog)
+  show_dialog = false;
 };
 </script>

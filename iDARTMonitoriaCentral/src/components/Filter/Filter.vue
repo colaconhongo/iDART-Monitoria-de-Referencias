@@ -9,6 +9,7 @@
       option-label="name"
       option-value="id"
       filled
+      dense
     />
     <SelectField
       :label="districtLabel"
@@ -18,6 +19,7 @@
       option-label="name"
       option-value="id"
       filled
+      dense
       clearable
        @clear="clearDistrict()"
     />
@@ -30,6 +32,7 @@
       option-value="id"
       filled
       clearable
+      dense
        @clear="clearPharmacy()"
     />
     <div v-if="isDashboard"  class="col q-ml-md">
@@ -40,15 +43,16 @@
       option-label="name"
       option-value="name"
       filled
+      dense
     />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, onMounted, ref,onActivated, computed } from 'vue';
+import { inject, onMounted, ref, } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { LocalStorage,SessionStorage } from 'quasar'
+import { SessionStorage } from 'quasar'
 import SelectField from '../Shared/Input/SelectField.vue';
 import DistrictService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -84,27 +88,6 @@ onMounted(() => {
   console.log(province);
   console.log(alldistrictsFromProvince);
 });
-
-/*
-const allFacilityFromDistrict = computed(() => {
-   if(district.value !== undefined) {
-  return clinicService.getAllUSFromDistrict(district.value.name);
-   }
-});
-
-const allPhamacyFromFacility = computed(() => {
-   if(district.value !== undefined) {
-  return clinicService.getAllPharmacyFromDistrict(district.value.name);
-   }
-});
-
-onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
-  }
-  console.log(district)
-});
-*/
 
 const clearDistrict = () => {
    SessionStorage.remove('district')

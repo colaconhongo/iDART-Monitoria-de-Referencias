@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall, LocalStorage, SessionStorage } from 'quasar';
-import { computed, onMounted, ref, reactive , provide , watch, onUnmounted, onActivated,onDeactivated } from 'vue';
+import { computed, onMounted, ref, reactive , provide , watch, onActivated,onDeactivated } from 'vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
@@ -39,7 +39,6 @@ import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.v
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue'
 const provincia = reactive(ProvinceService.getFirstProvinceByNameFromStorage());
 let district = ref();
-let clinic = ref();
 let pharmacy = ref();
 const apexchart = VueApexCharts;
   let year = ref(2022);
@@ -77,9 +76,6 @@ watch(year, () => {
 watch(district, () => {
   console.log(district)
    console.log(district)
-   clinic = ref(null)
-    pharmacy = ref(null)
-     console.log(clinic)
     $q.loading.show({
     message: 'Carregando ...',
     spinnerColor: 'grey-4',
@@ -140,7 +136,6 @@ let total = reactive({
 
 provide('total', total);
 provide('district', district);
-provide('clinic', clinic);
 provide('pharmacy', pharmacy);
 provide('allProvincias', allProvincias);
 provide('province', provincia);

@@ -1,12 +1,15 @@
 <template>
-  <q-select
+  <q-input
     outlined
+    ref="ref"
     v-model="props.value"
-    :options="options"
-    ref="props.value"
-    :rules="rules"
+    type="text"
+    @input="(event) => $emit('update:value', event.target.value)"
+    lazy-rules
+    readonly
   />
 </template>
+
 <script setup>
 /*
   Props
@@ -16,11 +19,7 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  rules: {
-    type: String,
-  },
-  options: {
-    type: Array,
-  },
 });
 </script>
+
+<style></style>

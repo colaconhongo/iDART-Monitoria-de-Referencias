@@ -1,6 +1,6 @@
 <template>
   <Filter :is="true" />
-  <div class="q-pa-md q-pt-sm">
+  <div class="q-pa-md q-pt-xl">
     <q-splitter v-model="splitterModel">
       <template v-slot:before>
         <q-tabs
