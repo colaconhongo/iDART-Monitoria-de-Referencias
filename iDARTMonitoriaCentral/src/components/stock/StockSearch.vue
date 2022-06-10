@@ -8,7 +8,7 @@
         :with_actionDetailButton="true"
         :with_actionEditButton="false"
         :with_actionRemoveButton="false"
-        :rows="stockReport"
+        :rows="fullStockList"
         :visualizar="viewStock"
         title="Stock da Província"
       />
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-  import { computed, onMounted, reactive, ref, inject } from 'vue';
+  import { computed, onMounted, reactive, ref, inject, watch } from 'vue';
   import stockList from 'src/components/Shared/CRUD/TableList.vue';
   import stockReportService from 'src/services/ReportServices/stock/stockReportService';
 
@@ -35,9 +35,9 @@
   */
   const mode = reactive(ref('list'));
   const viewStock = inject('viewStock');
-  const district = inject('district');
-  const facility = inject('facility');
-  const pharmacy = inject('pharmacy');
+  let district = inject('district');
+  let pharmacy = inject('pharmacy');
+  let stockReportList = reactive(ref([]));
 
   const columns = [
     { name: 'code', required: true, label: 'Código FNM', align: 'left', field: (row) => row.fnm, format: (val) => `${val}`, sortable: true },
@@ -50,36 +50,62 @@
     Mounted Hooks
   */
   onMounted(() => {
-    if (stockReport.value.length <= 0) {
-      getStockReportFromAPI(0)
-    }
+    getStockReportFromAPI(0);
+    loadAllStock()
   });
+
+  const loadAllStock = () => {
+    stockReportList.value = stockReportService.getAllFromStorage();
+
+    return stockReportList.value
+  }
 
   /*
-    Computed
-  */
+  Computed
+*/
+const fullStockList = computed(() => {
+  if (district.value != null && district.value.id > 0) {
+    return stockReportList.value
+  } else {
+    return loadAllStock();
+  }
+});
 
-  const stockReport = computed(() => {
-    const list = stockReportService.getAllFromStorage();
-    if (list.length <= 0) return []
+/*
+Watchers
+*/
+watch(district, () => {
+    pharmacy.value = null
+    reloadByDistrict();
+});
 
-    let data = {}
-    if (district.value.id > 0) {
-      const filteredList = list.filter((item) => {
-        return item.district === district.value.name
-      })
-      data.value.push(filteredList)
-    console.log(data)
-      return data
-    }
-    if (pharmacy.value.id > 0) {
-      const filteredList = data.filter((item) => {
-        return item.clinicname === pharmacy.value.clinicname
-      })
-      return filteredList
-    }
-    return list
-  });
+const reloadByDistrict = () => {
+  const list = stockReportService.getAllFromStorage();
+  if (district.value != null) {
+    if (list.length <= 0) stockReportList.value = []
+
+    stockReportList.value = list.filter((item) => {
+      return item.district === district.value.name
+    })
+  } else {
+    stockReportList.value = fullStockList.value;
+  }
+}
+
+const reloadByClinic = () => {
+  if (pharmacy.value != null && stockReportList.value.length > 0) {
+    reloadByDistrict()
+    const bkp = stockReportList.value
+    stockReportList.value = []
+    stockReportList.value = bkp.filter((item) => {
+      return item.clinicname === pharmacy.value.clinicname
+    })
+  }
+}
+
+watch(pharmacy, () => {
+  reloadByClinic()
+});
 
   /*
     Methods

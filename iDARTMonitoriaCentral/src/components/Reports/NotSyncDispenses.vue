@@ -34,7 +34,7 @@ const title = ref('Lista de Dispensas que não Foram Sincronizadas');
 const generateReport = (params) => {
   console.log(params)
   reportNotSyncDispense.downloadPDF(
-    params.value.clinic.clinicname,
+    null,
     params.value.province.name,
     moment(params.value.startDate).format('DD/MM/YYYY'),
     moment(params.value.endDate).format('DD/MM/YYYY'),

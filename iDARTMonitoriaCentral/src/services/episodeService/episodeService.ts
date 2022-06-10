@@ -5,6 +5,7 @@ import moment from 'moment';
 import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
 import ClinicService from 'src/services/clinicService/clinicService';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 const sync_temp_episode = useRepo(Episode);
 
@@ -35,7 +36,6 @@ export default {
     return api()
       .get('patient_episodes_vw?idpatient=eq.' + nid)
       .then((resp) => {
-        console.log('EPISODE: ' + resp.data);
         sync_temp_episode.save(resp.data as Episode);
         if (resp.data.length > 0) {
           //setTimeout(this.get(offset), 2);
@@ -74,7 +74,6 @@ export default {
     return sync_temp_episode.getModel().$newInstance();
   },
   getAllFromStorage() {
-    console.log(sync_temp_episode.all());
     return sync_temp_episode.all();
   },
   getAllStartEpisode() {
@@ -90,7 +89,6 @@ export default {
     return sync_temp_episode
       .query()
       .where((episode) => {
-        console.log(episode);
         return episode.startreason === null;
       })
       .orderBy('startdate', 'desc')
@@ -98,19 +96,17 @@ export default {
   },
 
   getEpisodesByYear(year) {
-    const yearBefore = year -1;
-    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
-    console.log(startDate)
-    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
-    console.log(endDate)
-      return api()
-        .get('sync_temp_episode?stopdate=gt.'+startDate+'&stopdate=lt.'+endDate)
-        .then((resp) => {
-          sync_temp_episode.save(resp.data);
-        });
+    const yearBefore = year - 1;
+    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
+    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    return api()
+      .get(
+        'sync_temp_episode?stopdate=gt.' + startDate + '&stopdate=lt.' + endDate
+      )
+      .then((resp) => {
+        sync_temp_episode.save(resp.data);
+      });
   },
-
- 
 
   getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year:number, district:District,pharmacy:Clinic) {
    const yearBefore = year -1;

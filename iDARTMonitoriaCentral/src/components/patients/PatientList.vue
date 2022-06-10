@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-  <PatientSearchFields></PatientSearchFields>
+    <PatientSearchFields></PatientSearchFields>
     <listPatient
       :columns="columns"
       :mode="mode"
@@ -17,10 +17,10 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, inject, onMounted, reactive, ref,provide } from 'vue';
+import { computed, inject, onMounted, reactive, ref, provide } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
- import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
+import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
 import { useUtils } from 'src/use/useUtils';
 import Patient from 'src/stores/models/patient/patient';
@@ -111,10 +111,12 @@ onMounted(() => {
   Computed
 */
 const allPatients = computed(() => {
-  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(district,pharmacy,currPatient);
+  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(
+    district,
+    pharmacy,
+    currPatient
+  );
 });
-
-
 
 /*
   Methods
@@ -126,6 +128,6 @@ const getAllPatientsFromAPI = (offset) => {
   }
 };
 
-provide('allPatients',allPatients);
-provide('currPatient',currPatient);
+provide('allPatients', allPatients);
+provide('currPatient', currPatient);
 </script>

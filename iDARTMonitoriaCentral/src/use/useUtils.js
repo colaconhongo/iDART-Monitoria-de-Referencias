@@ -9,8 +9,6 @@ export function useUtils() {
       }
       result[item[key]].push(item);
     });
-    console.log(array);
-    console.log(result);
     groupedArray = result;
   };
 
@@ -19,7 +17,6 @@ export function useUtils() {
       const patientBirthDate = moment(birthDate);
       const todayDate = moment(new Date());
       const idade = todayDate.diff(patientBirthDate, 'years');
-      console.log(idade);
       return idade;
     }
   };
