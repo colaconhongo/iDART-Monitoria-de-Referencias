@@ -22,16 +22,13 @@ export default {
       });
   },
   get(offset: number) {
-    console.log('Entr:'+offset)
     if (offset >= 0) {
       return api()
         .get('sync_temp_patients?offset=' + offset + '&limit=100')
         .then((resp) => {
           sync_temp_patients.save(resp.data);
-          console.log(resp.data.length)
           if (resp.data.length > 0) {
             offset = offset + 100;
-            console.log('Entrou:'+offset)
             // setTimeout(this.get, 1000,offset);
              this.get(offset);
           }

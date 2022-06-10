@@ -2,6 +2,9 @@ import { useRepo } from 'pinia-orm';
 import Episode from 'src/stores/models/episode/episode';
 import api from '../apiService/apiService';
 import moment from 'moment';
+import District from 'src/stores/models/district/district';
+import Clinic from 'src/stores/models/clinic/clinic';
+import ClinicService from 'src/services/clinicService/clinicService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 const sync_temp_episode = useRepo(Episode);
@@ -23,7 +26,7 @@ export default {
           sync_temp_episode.save(resp.data);
           offset = offset + 100;
           if (resp.data.length > 0) {
-            setTimeout(this.get(offset), 2);
+            this.get(offset);
           }
         });
     }
@@ -105,57 +108,24 @@ export default {
       });
   },
 
-  getEpisodesByYearFromLocalStorage(year) {
-    // const startDate =  moment('01-01-'+year).format('DD-MM-YYYY')
-    const startDate = new Date('01-01-' + year);
-    //  const endDate = moment('12-31-'+year).format('DD-MM-YYYY')
-    const endDate = new Date('12-31-' + year);
+  getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year:number, district:District,pharmacy:Clinic) {
+   const yearBefore = year -1;
+    const startDate = new Date('12-21-'+yearBefore)
+    console.log(startDate)
+    const endDate = new Date('12-20-'+year)
+    console.log(endDate)
+
+     let clinics = [] ;
+
+      clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district,pharmacy);
+      clinics = clinics.map(clinic => clinic.uuid);
     const episodes = sync_temp_episode
-      .query()
-      .where((sync_temp_episode) => {
-        return (
-          new Date(sync_temp_episode.stopdate) >= startDate &&
-          new Date(sync_temp_episode.stopdate) <= endDate
-        );
-      })
-      .orderBy('stopdate', 'desc')
-      .get();
-    return episodes;
-  },
-
-  getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    year,
-    district,
-    clinic,
-    pharmacy
-  ) {
-    const yearBefore = year - 1;
-    const startDate = new Date('12-21-' + yearBefore);
-    const endDate = new Date('12-20-' + year);
-
-    let clinics = [];
-
-    if (pharmacy.value !== undefined) {
-      clinics.push(pharmacy.value.uuid);
-    } else if (clinic.value !== undefined) {
-      clinics.push(clinic.value.uuid);
-    } else if (district.value !== undefined) {
-      clinics = ClinicService.getAllByDistrict(district.value);
-      clinics = clinics.map((clinic) => clinic.uuid);
-    }
-    const episodes = sync_temp_episode
-      .query()
-      .where((sync_temp_episode) => {
-        return (
-          new Date(sync_temp_episode.stopdate) >= startDate &&
-          new Date(sync_temp_episode.stopdate) <= endDate &&
-          (clinics.length > 0
-            ? clinics.includes(sync_temp_episode.clinicuuid)
-            : sync_temp_episode.stopdate)
-        );
-      })
-      .orderBy('stopdate', 'desc')
-      .get();
-    return episodes;
+    .query()
+    .where((sync_temp_episode) => {
+      return new Date(sync_temp_episode.stopdate) >= startDate && new Date(sync_temp_episode.stopdate) <= endDate &&
+       clinics.includes(sync_temp_episode.clinicuuid) })
+      .orderBy('stopdate','desc')
+.get();
+    return episodes
   },
 };

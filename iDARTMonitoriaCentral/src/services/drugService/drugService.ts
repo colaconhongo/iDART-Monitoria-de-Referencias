@@ -22,7 +22,7 @@ export default {
           drug.save(resp.data);
           offset = offset + 100;
           if (resp.data.length > 0) {
-            setTimeout(this.get, 2);
+            this.get(offset);
           }
         });
     }
