@@ -68,11 +68,9 @@ export default {
     );
   },
   patch(id: number, params: string) {
-    console.log(params);
     return api()
       .patch('sync_temp_patients?id=eq.' + id, params)
       .then((resp) => {
-        console.log(resp);
         sync_temp_patients.save(JSON.parse(resp.config.data));
       })
       .catch((error) => {
@@ -105,7 +103,6 @@ export default {
   getPatientsByYear(year) {
     const yearBefore = year - 1;
     const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
-    console.log(startDate);
     const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
     return api()
       .get(
@@ -126,9 +123,7 @@ export default {
   ) {
     const yearBefore = year - 1;
     const startDate = new Date('12-21-' + yearBefore);
-    console.log(startDate);
     const endDate = new Date('12-20-' + year);
-    console.log(endDate);
 
     let clinics = [];
 
@@ -149,7 +144,6 @@ export default {
       })
       .orderBy('prescriptiondate', 'desc')
       .get();
-    console.log(patients);
     return patients;
   },
 
