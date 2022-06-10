@@ -12,7 +12,7 @@
                       v-model="params.periodType"
                       :rules="[ val => ( val != null) || ' Por favor indique o período']"
                       lazy-rules
-                      @blur="onPeriodoChange()"
+                      @update:model-value="onPeriodoChange(val)"
                       label="Período *" />
 
                      <div
@@ -95,6 +95,7 @@
  import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue'
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
+ import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
  import moment from 'moment'
   /*
   Declaration
@@ -161,8 +162,19 @@
   */
  const generateReport = (fileType) => {
    params.value.fileType = fileType
-   determineDateInterval()
-   emit('generateReport', params)
+   console.log(params.value)
+   if (params.value.period === null || params.value.period === undefined) {
+     alert(
+          'Alerta!',
+          'Por favor indicar o período a analisar!',
+          null,
+          null,
+          null
+        );
+   } else {
+      determineDateInterval()
+    emit('generateReport', params)
+   }
  }
 
  const determineDateInterval = () => {
@@ -202,10 +214,10 @@
    }
  }
 
- const onPeriodoChange = () => {
-      params.startDate = null
-      params.endDate = null
-      params.period = null
+ const onPeriodoChange = (val) => {
+      params.value.startDate = null
+      params.value.endDate = null
+      params.value.period = null
     }
 
  const emit = defineEmits(['generateReport'])

@@ -35,7 +35,7 @@ const title = ref('Histórico de Levantamentos de Pacientes Referidos');
 const generateReport = (params) => {
   console.log(params)
   reportDispenseHistory.downloadPDF(
-    params.value.clinic.clinicname,
+    null,
     params.value.province.name,
     moment(params.value.startDate).format('DD/MM/YYYY'),
     moment(params.value.endDate).format('DD/MM/YYYY'),
