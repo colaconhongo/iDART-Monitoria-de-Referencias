@@ -35,6 +35,10 @@
   */
   const mode = reactive(ref('list'));
   const viewStock = inject('viewStock');
+  const district = inject('district');
+  const facility = inject('facility');
+  const pharmacy = inject('pharmacy');
+
   const columns = [
     { name: 'code', required: true, label: 'Código FNM', align: 'left', field: (row) => row.fnm, format: (val) => `${val}`, sortable: true },
     { name: 'drugName', align: 'left', label: 'Nome do Medicamento', field: (row) => row.drugname, format: (val) => `${val}`, sortable: true },
@@ -58,6 +62,22 @@
   const stockReport = computed(() => {
     const list = stockReportService.getAllFromStorage();
     if (list.length <= 0) return []
+
+    let data = {}
+    if (district.value.id > 0) {
+      const filteredList = list.filter((item) => {
+        return item.district === district.value.name
+      })
+      data.value.push(filteredList)
+    console.log(data)
+      return data
+    }
+    if (pharmacy.value.id > 0) {
+      const filteredList = data.filter((item) => {
+        return item.clinicname === pharmacy.value.clinicname
+      })
+      return filteredList
+    }
     return list
   });
 

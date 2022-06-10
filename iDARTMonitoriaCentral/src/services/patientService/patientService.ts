@@ -65,20 +65,22 @@ export default {
 
         .then((resp) => {
           sync_temp_patients.save(resp.data);
-          alert('After Save');
           if (resp.data.length > 0) {
-            console.log('Ai esta teu resultado: ', resp.data);
             setTimeout(this.get, 2);
           }
         })
     );
   },
-
   patch(id: number, params: string) {
+    console.log(params);
     return api()
-      .patch('sync_temp_patients/' + id, params)
+      .patch('sync_temp_patients?id=eq.' + id, params)
       .then((resp) => {
-        sync_temp_patients.save(resp.data);
+        console.log(resp);
+        sync_temp_patients.save(JSON.parse(resp.config.data));
+      })
+      .catch((error) => {
+        console.error(error);
       });
   },
   delete(id: number) {
@@ -94,9 +96,7 @@ export default {
   },
   getAllFromStorage() {
     return sync_temp_patients.all();
-    alert('returned');
   },
-
   getAllPatientWithPrescriptionDate() {
     return sync_temp_patients
       .query()
@@ -107,66 +107,104 @@ export default {
   },
 
   getPatientsByYear(year) {
-  const yearBefore = year -1;
-    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
-    console.log(startDate)
-    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
-      return api()
-        .get('sync_temp_patients?prescriptiondate=gt.'+startDate+'&prescriptiondate=lt.'+endDate)
-        .then((resp) => {
-          sync_temp_patients.save(resp.data);
-        });
+    const yearBefore = year - 1;
+    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
+    console.log(startDate);
+    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    return api()
+      .get(
+        'sync_temp_patients?prescriptiondate=gt.' +
+          startDate +
+          '&prescriptiondate=lt.' +
+          endDate
+      )
+      .then((resp) => {
+        sync_temp_patients.save(resp.data);
+      });
   },
 
-  getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year:number, district:District,pharmacy:Clinic) {
-    const yearBefore = year -1;
-    const startDate = new Date('12-21-'+yearBefore)
-    console.log(startDate)
-  const endDate = new Date('12-20-'+year)
-    console.log(endDate)
+  getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    console.log(startDate);
+    const endDate = new Date('12-20-' + year);
+    console.log(endDate);
 
-     let clinics = [] ;
-  
-     clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district, pharmacy)
-     clinics = clinics.map(clinic => clinic.uuid);
-     const patients = sync_temp_patients
-     .query()
-     .where((patient) => {
-       return patient.prescriptiondate !== null &&
-       new Date(patient.prescriptiondate)>= startDate && new Date(patient.prescriptiondate) <= endDate &&
-          clinics.includes(patient.clinicuuid)})
-       .orderBy('prescriptiondate','desc')
- .get();
-    console.log(patients)
-     return patients
-   },
+    let clinics = [];
 
-   getPatientsByDistrictAndPharmacyFromLocalStorage(district:District ,pharmacy:Clinic, currPatient:Patient) {
-     let clinics = [] ;
-     clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district, pharmacy)
-     clinics = clinics.map(clinic => clinic.uuid);
-     let patients = sync_temp_patients
-     .query()
-     .where((patient) => {
-       return clinics.includes(patient.clinicuuid)})
-       .orderBy('prescriptiondate','desc')
- .get();
+    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+      district,
+      pharmacy
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinics.includes(patient.clinicuuid)
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    console.log(patients);
+    return patients;
+  },
 
- if (currPatient.patientid.length > 0 || currPatient.firstnames.length > 0 || currPatient.lastname.length > 0) {
-  patients = patients.filter((patient) => {
-    return this.filterPatient(patient,currPatient)
-    })
- }
-     return patients
-   },
- 
- filterPatient(patient: Patient,currPatient: Patient)  {
-         return this.stringContains(patient.patientid, currPatient.patientid) || this.stringContains(patient.firstnames, currPatient.firstnames)  || this.stringContains(patient.lastname, currPatient.lastname)
-       },     
- 
-  stringContains (stringToCheck:string,stringText:string) {
-         if (stringToCheck === '' || stringToCheck === null || stringToCheck === undefined) return false
-         if (stringText === '' || stringText === null || stringText === undefined) return false
-         return stringToCheck.toLowerCase().includes(stringText.toLowerCase())
-  }  
+  getPatientsByDistrictAndPharmacyFromLocalStorage(
+    district: District,
+    pharmacy: Clinic,
+    currPatient: Patient
+  ) {
+    let clinics = [];
+    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+      district,
+      pharmacy
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
+    let patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return clinics.includes(patient.clinicuuid);
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+
+    if (
+      currPatient.patientid.length > 0 ||
+      currPatient.firstnames.length > 0 ||
+      currPatient.lastname.length > 0
+    ) {
+      patients = patients.filter((patient) => {
+        return this.filterPatient(patient, currPatient);
+      });
+    }
+    return patients;
+  },
+
+  filterPatient(patient: Patient, currPatient: Patient) {
+    return (
+      this.stringContains(patient.patientid, currPatient.patientid) ||
+      this.stringContains(patient.firstnames, currPatient.firstnames) ||
+      this.stringContains(patient.lastname, currPatient.lastname)
+    );
+  },
+
+  stringContains(stringToCheck: string, stringText: string) {
+    if (
+      stringToCheck === '' ||
+      stringToCheck === null ||
+      stringToCheck === undefined
+    )
+      return false;
+    if (stringText === '' || stringText === null || stringText === undefined)
+      return false;
+    return stringToCheck.toLowerCase().includes(stringText.toLowerCase());
+  },
 };

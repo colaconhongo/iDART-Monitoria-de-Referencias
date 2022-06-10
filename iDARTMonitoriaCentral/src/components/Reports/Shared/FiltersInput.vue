@@ -12,6 +12,7 @@
                       v-model="params.periodType"
                       :rules="[ val => ( val != null) || ' Por favor indique o período']"
                       lazy-rules
+                      @blur="onPeriodoChange()"
                       label="Período *" />
 
                      <div
@@ -41,14 +42,14 @@
                           outlined
                           :disable="false"
                           class="col q-mr-md"
-                          v-model="params.enddate"
+                          v-model="params.endDate"
                           label="Data Fim">
                           <template v-slot:append>
                               <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                                   <q-date
                                     mask="DD-MM-YYYY"
-                                    v-model="params.enddate"
+                                    v-model="params.endDate"
                                    :options="blockDataFutura">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
@@ -89,7 +90,7 @@
   /*
   Imports
   */
- import { ref, reactive, provide, computed, inject } from 'vue';
+ import { ref, reactive, provide, computed, inject, toRaw } from 'vue';
  import MonthlyPeriod from 'src/components/Reports/Shared/MonthlyPeriod.vue'
  import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue'
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
@@ -98,6 +99,7 @@
   /*
   Declaration
   */
+ const province = inject('province');
  const district = inject('district');
  const facility = inject('facility');
  const pharmacy = inject('pharmacy');
@@ -116,9 +118,9 @@
                       districtId: null,
                       clinicId: null,
                       facility: facility.value,
-                      clinic: pharmacy.value,
-                      province: null,
-                      district: district.value,
+                      clinic: pharmacy,
+                      province: province.value,
+                      district: district,
                       endDate: null,
                       startDate: null,
                       year: new Date().getFullYear(),
@@ -171,31 +173,40 @@
      params.value.startDate = moment(params.value.startDate).set('date', 21);
    } else if (isSTrimestralSearch.value) {
      if (params.value.period.id === 1) {
-       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-03-'+ 20, 'YYYY-MM-DD')
      } else if (params.value.period.id === 2) {
-       params.value.startdate = moment(params.value.year +'-03-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year +'-03-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
      } else if (params.value.period.id === 3) {
-       params.value.startdate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-09-'+ 20, 'YYYY-MM-DD')
      } else if (params.value.period.id === 4) {
-       params.value.startdate = moment(params.value.year +'-09-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year +'-09-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
      }
    } else if (isSemestralSearch.value) {
      if (params.value.period.id === 1) {
-       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
      } else if (params.value.period.id === 2) {
-       params.value.startdate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
      }
    } else if (isAnnualSearch.value) {
-       params.value.startdate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+   }else {
+       params.value.startDate = moment(params.value.startDate, 'DD-MM-YYYY')
+       params.value.endDate = moment(params.value.endDate +'-12-'+ 20, 'DD-MM-YYYY')
    }
  }
+
+ const onPeriodoChange = () => {
+      params.startDate = null
+      params.endDate = null
+      params.period = null
+    }
 
  const emit = defineEmits(['generateReport'])
 

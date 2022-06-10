@@ -26,33 +26,33 @@ export default {
     const cols = [
       'NID',
       'Nome',
-      'Data do Último Levanatmento',
-      'Data em que Faltou ao Levantamento',
-      'Data em que Identificou o Abandono ao TARV [>59 dias faltosos]',
-      'Farmácia de Referência',
-      'Chamada Efectuada',
+      'Tipo TARV',
+      'Regime Terapeutico',
+      'Tipo Dispensa',
+      'Data Levant.',
+      'Data Prox. Levant.',
+      'Farmácia',
+      'Estado',
     ];
-    const rows = await reportService.getPatientsWithMissDispenses(params);
+    const rows = await reportService.getNotSyncDispenses(params);
     const data = [];
 
     for (const row in rows) {
       const createRow = [];
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastpickupdate));
+      createRow.push(rows[row].tipotarv);
+      createRow.push(rows[row].regime);
+      createRow.push(rows[row].dispensetype);
+      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
       createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(rows[row].dataabandono !== null ? reportService.getFormatDDMMYYYY(rows[row].dataabandono) : '-');
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].contact);
+      createRow.push(rows[row].clinicname);;
+      createRow.push('Não Sincronizado');
 
       data.push(createRow);
     }
     autoTable(doc, {
       margin: { top: 60 },
-      columnStyles: {
-        0: {cellWidth: 50},
-        1: {cellWidth: 50},
-      },
       bodyStyles: {
         halign: 'center',
       },
@@ -69,16 +69,9 @@ export default {
         doc.text('MINISTÉRIO DA SAÚDE', data.settings.margin.left + 7, 40);
         doc.text('SERVIÇO NACIONAL DE SAÚDE', data.settings.margin.left, 45);
         doc.setFontSize(16);
-        doc.text('Relatório de Pacientes Referidos e Faltosos ao',
+        doc.text('Relatório de Dispensas não Sincronizadas',
           width / 2,
-          35,
-          {
-            align: 'center',
-          }
-        );
-        doc.text('Levantamento de ARVs na Farmácia de Referência',
-          width / 2,
-          43,
+          40,
           {
             align: 'center',
           }
@@ -93,7 +86,7 @@ export default {
       head: [cols],
       body: data,
     });
-    return doc.save('FaltososAoLevantamento.pdf');
+    return doc.save('HistoricoDeLevantamentos.pdf');
   },
 };
 

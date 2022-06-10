@@ -14,6 +14,7 @@ export default class StockReport extends Model {
       estado: this.attr(''),
       active: this.attr(''),
       balance: this.attr(''),
+      district: this.attr(''),
     };
   }
 }
