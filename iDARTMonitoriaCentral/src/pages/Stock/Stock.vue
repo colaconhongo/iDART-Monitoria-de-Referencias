@@ -25,9 +25,8 @@ const $q = new useQuasar();
 const showStockSearch = reactive(ref(true));
 const stockData = reactive(ref([]));
 let selectRecord = reactive(ref({}));
-const district = reactive(ref([]));
-const facility = reactive(ref([]));
-const pharmacy = reactive(ref([]));
+const district = reactive(ref());
+const pharmacy = reactive(ref());
 const provincia = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
