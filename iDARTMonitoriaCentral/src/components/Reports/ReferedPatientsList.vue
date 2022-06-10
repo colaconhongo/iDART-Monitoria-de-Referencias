@@ -29,18 +29,29 @@ import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportReferidos from 'src/services/ReportServices/referidos/reportReferidos';
 import moment from 'moment'
+import reportExcel from 'src/services/ReportServices/faltosos/reportExcelJs';
+
 
 const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
 
 const generateReport = (params) => {
-  console.log(params)
-  reportReferidos.downloadPDF(
-    params.value.clinic.clinicname,
-    params.value.province.name,
-    moment(params.value.startDate).format('DD/MM/YYYY'),
-    moment(params.value.endDate).format('DD/MM/YYYY'),
-    params
-  );
+  console.log(params.value.fileType);
+    if (params.value.fileType === 'PDF') {
+      reportReferidos.downloadPDF(
+      params.value.clinic.clinicname,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  } else {
+    reportFaltososARV.downloadExcel(
+      'CS Nicoadala',
+      'Zambézia',
+      '01-01-2020',
+      '02-01-2020'
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);

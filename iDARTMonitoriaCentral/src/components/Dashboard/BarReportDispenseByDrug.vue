@@ -70,13 +70,12 @@ const props = defineProps({
 console.log(props)
 const year = inject('year')
 const district = inject('district')
-const clinic = inject('clinic')
 const pharmacy = inject('pharmacy')
 
 watch(props.loaded, () => {
   console.log(props.loaded)
    if(props.loaded) {
-     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year.value,district,clinic,pharmacy);
+     const allDispenses = DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year.value,district,pharmacy);
       let resultDrugs = groupedMap(allDispenses , 'drugname')
       // dispense by drug
         const keysByDrug = Array.from(resultDrugs.keys())

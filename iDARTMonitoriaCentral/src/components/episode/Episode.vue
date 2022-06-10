@@ -10,10 +10,11 @@
   </q-page>
 </template>
 <script setup>
-import { provide, reactive, ref } from 'vue';
+import { provide, reactive, ref, inject } from 'vue';
 import episodeHome from 'src/components/episode/episodeHome.vue';
 import EpisodeEditModal from 'src/components/episode/EpisodeEditModal.vue';
-import episodeService from 'src/services/episodeService/episodeService';
+import patientService from 'src/services/patientService/patientService.ts';
+import episodeService from 'src/services/episodeService/episodeService.ts';
 
 /*
   Declarations
@@ -21,30 +22,66 @@ import episodeService from 'src/services/episodeService/episodeService';
 const titleList = reactive(ref('Epsódios'));
 const show_dialog = reactive(ref(false));
 const episode = reactive(ref([]));
+const episodeStop = reactive(ref([]));
 const activeEditDialog = reactive(ref(false));
 const titleAddEdit = reactive(ref('Epsódio'));
+const titleEpisodeList = reactive(ref('Epsódios'));
 const activeEpisodeHome = reactive(ref(true));
 const submitting = reactive(ref(false));
+const patientAux = reactive(ref([]));
+const cliniBeforeUpdate = reactive(ref(''));
+
+const patient = inject('patient');
 
 const editEpisode = (episodeRow) => {
   titleAddEdit.value = 'Actualizar Epsódio';
   episode.value = episodeRow;
+  cliniBeforeUpdate.value = episodeRow.clinic;
+  episodeStop.value = episodeRow;
   activeEditDialog.value = true;
   show_dialog.value = true;
 };
 
 const update = () => {
-  submitting.value = true;
+  // clinicForUpdate = clinicService.getClinicByName(clinicnameBeforeUpdate.value);
+  // alert(clinicForUpdate.value.id);
+  console.log(patient.value.uuidopenmrs);
+  if (episode.value.stopdate == null) {
+    submitting.value = true;
+    patientAux.value.mainclinicname = patient.value.mainclinicname;
+    patientAux.value.clinicname = episode.value.clinic.clinicname;
+    patientAux.value.id = episode.value.id;
+    patientAux.value.clinicuuid = episode.value.clinic.uuid;
+    episodeStop.value.clinic = console.log('new: ', episodeStop.value);
+    console.log('clinic: ', cliniBeforeUpdate.value);
 
-  episodeService
-    .patch(episode.value.id, episode.value)
-    .then(() => {
-      submitting.value = false;
-      close();
-    })
-    .catch(() => {
-      submitting.value = false;
-    });
+    patientService
+      .patch(episode.value.id, Object.assign({}, patientAux.value))
+      .then(() => {
+        submitting.value = false;
+        episodeService.getById(patient.value.uuidopenmrs);
+        close();
+      })
+      .catch(() => {
+        submitting.value = false;
+      });
+  } else {
+    alert('Episodio de fim');
+  }
+
+  // submitting.value = true;
+  // console.log('VIVA: ', episode.value);
+  // close();
+
+  // // episodeService
+  // //   .patch(episode.value.id, episode.value)
+  // //   .then(() => {
+  // //     submitting.value = false;
+  // //     close();
+  // //   })
+  // //   .catch(() => {
+  // //     submitting.value = false;
+  // //   });
 };
 
 const close = () => {
@@ -55,7 +92,8 @@ const close = () => {
 
 provide('editEpisode', editEpisode);
 provide('close', close);
-provide('title', titleAddEdit);
+provide('titleEdit', titleAddEdit);
+provide('titleEpisode', titleEpisodeList);
 provide('episode', episode);
 provide('show_dialog', show_dialog);
 provide('submitting', submitting);

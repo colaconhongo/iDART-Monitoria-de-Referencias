@@ -1,10 +1,11 @@
 <template>
   <q-select
-    outlined
+    dense
     v-model="props.value"
     :options="options"
     ref="props.value"
     :rules="rules"
+    readonly
   />
 </template>
 <script setup>

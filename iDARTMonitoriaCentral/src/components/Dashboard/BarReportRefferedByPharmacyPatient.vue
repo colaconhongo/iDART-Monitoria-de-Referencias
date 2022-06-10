@@ -67,18 +67,16 @@ const props = defineProps({
 });
 const yearAnnualPeriod = inject('year')
 const district = inject('district')
-const clinic = inject('clinic')
 const pharmacy = inject('pharmacy')
 
 
 watch(props.loaded, () => {
   console.log(props.loaded)
    if(props.loaded) {
-     let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,clinic,pharmacy);
+     let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(yearAnnualPeriod.value,district,pharmacy);
     let resultPatientsByClinicUuid = groupedMap(patients , 'clinicuuid')
        let resultPatientsByPatientId = groupedMap(patients , 'patientid')
-         const patientsToCount = []
-              const arrayPatientReffered = []
+            
               // refferal by pharmacy
    const keysByPharm = Array.from(resultPatientsByClinicUuid.keys())
       series4.series4 = []
