@@ -95,6 +95,7 @@
  import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue'
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
+ import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
  import moment from 'moment'
   /*
   Declaration
@@ -161,8 +162,18 @@
   */
  const generateReport = (fileType) => {
    params.value.fileType = fileType
-   determineDateInterval()
-   emit('generateReport', params)
+   if (params.value.period === null || params.value.period === undefined) {
+     alert(
+          'Alerta!',
+          'Por favor indicar o período a analisar!',
+          null,
+          null,
+          null
+        );
+   } else {
+      determineDateInterval()
+    emit('generateReport', params)
+   }
  }
 
  const determineDateInterval = () => {
