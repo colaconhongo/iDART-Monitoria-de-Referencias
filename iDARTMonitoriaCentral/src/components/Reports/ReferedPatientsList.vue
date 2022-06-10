@@ -30,7 +30,6 @@ import Bar from 'src/components/Shared/Bar.vue';
 import reportReferidos from 'src/services/ReportServices/referidos/reportReferidos';
 import moment from 'moment'
 
-
 const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
 
 const generateReport = (params) => {
@@ -44,11 +43,12 @@ const generateReport = (params) => {
       params
     );
   } else {
-    reportFaltososARV.downloadExcel(
-      'CS Nicoadala',
-      'Zambézia',
-      '01-01-2020',
-      '02-01-2020'
+    reportReferidos.downloadExcel(
+      params.value.clinic.clinicname,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
     );
   }
 };

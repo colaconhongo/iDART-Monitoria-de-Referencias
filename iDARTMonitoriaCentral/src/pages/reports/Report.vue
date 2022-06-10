@@ -80,12 +80,12 @@ const thumbStyle = {
         opacity: 0.75
       };
 const reportComps = {
-  ReferedPatientsList, ReturnedReferedPatient, PatientsWithMissDispenses,PatientDispenseHistory,ActivePatientList,DispenseByDrugAndRegimen,PatientWithScreeningList,NotSyncDispenses
-}
+   ReferedPatientsList, ReturnedReferedPatient, PatientsWithMissDispenses,PatientDispenseHistory,ActivePatientList,DispenseByDrugAndRegimen,PatientWithScreeningList,NotSyncDispenses
+};
 
-const district = reactive(ref([]));
-const facility = reactive(ref([]));
-const pharmacy = reactive(ref([]));
+const district = reactive(ref());
+const facility = reactive(ref());
+const pharmacy = reactive(ref());
 
 /*
   Methods
@@ -107,12 +107,10 @@ const alldistrictsFromProvince = computed(() => {
   return districtService.getAllProvinceFromStorage();
 });
 
-const allFacilityFromDistrict = computed(() => {
-  return clinicService.getAllUSFromDistrict(district.value.name);
-});
-
 const allPhamacyFromFacility = computed(() => {
+      if(district.value != null || district.value != undefined) {
   return clinicService.getAllPharmacyFromDistrict(district.value.name);
+      }
 });
 
 onActivated(() => {
@@ -135,7 +133,6 @@ onDeactivated(() => {
 
 provide('allProvincias', allProvincias);
 provide('alldistrictsFromProvince', alldistrictsFromProvince);
-provide('allFacilityFromDistrict', allFacilityFromDistrict);
 provide('allPhamacyFromFacility', allPhamacyFromFacility);
 
 provide('province', province);
