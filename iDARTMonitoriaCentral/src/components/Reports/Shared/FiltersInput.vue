@@ -12,7 +12,7 @@
                       v-model="params.periodType"
                       :rules="[ val => ( val != null) || ' Por favor indique o período']"
                       lazy-rules
-                      @blur="onPeriodoChange()"
+                      @update:model-value="onPeriodoChange(val)"
                       label="Período *" />
 
                      <div
@@ -162,6 +162,7 @@
   */
  const generateReport = (fileType) => {
    params.value.fileType = fileType
+   console.log(params.value)
    if (params.value.period === null || params.value.period === undefined) {
      alert(
           'Alerta!',
@@ -213,10 +214,10 @@
    }
  }
 
- const onPeriodoChange = () => {
-      params.startDate = null
-      params.endDate = null
-      params.period = null
+ const onPeriodoChange = (val) => {
+      params.value.startDate = null
+      params.value.endDate = null
+      params.value.period = null
     }
 
  const emit = defineEmits(['generateReport'])
