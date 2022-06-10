@@ -21,7 +21,13 @@
 -->
 
 <template>
-  <q-input id="date-edit-episode" outlined :value="date" class="col" readonly>
+  <q-input
+    id="date-edit-episode"
+    outlined
+    v-model="props.value"
+    class="col"
+    readonly
+  >
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer" :value="props.date">
         <q-popup-proxy
@@ -31,7 +37,7 @@
         >
           <q-date
             :modelValue="date"
-            :value="date"
+            v-model="props.value"
             @input="(event) => $emit('update:date', $event.target.value)"
             disable
           >

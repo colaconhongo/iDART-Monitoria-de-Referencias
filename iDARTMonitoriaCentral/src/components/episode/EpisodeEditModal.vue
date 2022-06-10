@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <pre>{{ allClinics }}</pre>
     <q-dialog
       v-model="show_dialog"
       transition-show="flip-up"
@@ -23,7 +22,6 @@
         <q-card-section>
           <div class="text-h5 text-center">Editar Epsódio</div>
         </q-card-section>
-
         <q-separator />
         <q-card-section class="scroll" style="max-height: 80vh">
           <q-form class="q-gutter-md" @submit.prevent="update">
@@ -33,8 +31,7 @@
                   <DateFieldReadOnly
                     label="Data inicio"
                     class="col q-ml-md"
-                    v-model="start_date_formated"
-                    date="start_date_formated"
+                    v-model="episode.startdate"
                   />
                   <TextFieldReadOnly
                     label="Notas de Inicio [Referência]"
@@ -92,9 +89,6 @@ import districtService from 'src/services/districtService/districtService';
   Props
 */
 const $q = new useQuasar();
-const start_date_formated = moment(props.episode.startdate).format(
-  'DD-MM-YYYY'
-);
 const { ageCalculator } = useUtils();
 const props = defineProps({
   close: {
@@ -116,6 +110,8 @@ const title = inject('title');
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
 const patient = inject('patient');
+const episode = inject('episode');
+// alert(start_date_formated)
 
 /*
   Mounted Hooks

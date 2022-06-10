@@ -1,5 +1,8 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
+    <div class="row q-my-md">
+      <q-btn color="primary" @click="goBack" icon="arrow_back" label="Voltar" />
+    </div>
     <episodeHome :is="activeEpisodeHome" v-model:title="titleList" />
     <EpisodeEditModal
       v-if="editEpisode"
@@ -15,6 +18,9 @@ import episodeHome from 'src/components/episode/episodeHome.vue';
 import EpisodeEditModal from 'src/components/episode/EpisodeEditModal.vue';
 import patientService from 'src/services/patientService/patientService.ts';
 import episodeService from 'src/services/episodeService/episodeService.ts';
+import moment from 'moment';
+
+const emit = defineEmits(['goBack']);
 
 /*
   Declarations
@@ -22,45 +28,58 @@ import episodeService from 'src/services/episodeService/episodeService.ts';
 const titleList = reactive(ref('Epsódios'));
 const show_dialog = reactive(ref(false));
 const episode = reactive(ref([]));
-const episodeStop = reactive(ref([]));
+const episodeStop = ref([]);
 const activeEditDialog = reactive(ref(false));
 const titleAddEdit = reactive(ref('Epsódio'));
 const titleEpisodeList = reactive(ref('Epsódios'));
 const activeEpisodeHome = reactive(ref(true));
 const submitting = reactive(ref(false));
 const patientAux = reactive(ref([]));
-const cliniBeforeUpdate = reactive(ref(''));
+const clinicBeforeUpdate = reactive(ref(''));
 
 const patient = inject('patient');
+const activePatientList = inject('activePatientList');
 
 const editEpisode = (episodeRow) => {
   titleAddEdit.value = 'Actualizar Epsódio';
   episode.value = episodeRow;
-  cliniBeforeUpdate.value = episodeRow.clinic;
-  episodeStop.value = episodeRow;
+  episode.value.startdate = episodeRow.startdate;
+  clinicBeforeUpdate.value = episodeRow.clinic;
+  episodeStop.value = episodeService.newInstanceEntity();
   activeEditDialog.value = true;
   show_dialog.value = true;
 };
 
 const update = () => {
-  // clinicForUpdate = clinicService.getClinicByName(clinicnameBeforeUpdate.value);
-  // alert(clinicForUpdate.value.id);
-  console.log(patient.value.uuidopenmrs);
   if (episode.value.stopdate == null) {
     submitting.value = true;
     patientAux.value.mainclinicname = patient.value.mainclinicname;
     patientAux.value.clinicname = episode.value.clinic.clinicname;
     patientAux.value.id = episode.value.id;
     patientAux.value.clinicuuid = episode.value.clinic.uuid;
-    episodeStop.value.clinic = console.log('new: ', episodeStop.value);
-    console.log('clinic: ', cliniBeforeUpdate.value);
+
+    //Episodio de Fim na Farmacia anterior
+    episodeStop.value.clinic = clinicBeforeUpdate.value;
+
+    episodeStop.value.stopdate = moment(new Date()).format('DD-MM-YYYY');
+    episodeStop.value.stopnotes = 'Paciente enviado para outra Farmácia';
+    episodeStop.value.stopreason = 'Referido para outra Farmácia';
+    episodeStop.value.syncstatus = 'R';
+    episodeStop.value.patientuuid = episode.value.patientuuid;
+    episodeStop.value.startdate = episode.value.startdate;
+    episodeStop.value.usuuid = episode.value.usuuid;
+    episodeStop.value.clinicuuid = episode.value.clinicuuid;
+    episodeStop.value.startnotes = episode.value.startnotes;
+
+    removeAttributes(episodeStop.value);
 
     patientService
       .patch(episode.value.id, Object.assign({}, patientAux.value))
-      .then(() => {
+      .then((resp) => {
+        saveStopEpisode(episodeStop.value);
         submitting.value = false;
-        episodeService.getById(patient.value.uuidopenmrs);
         close();
+        episodeService.getById(patient.value.uuidopenmrs);
       })
       .catch(() => {
         submitting.value = false;
@@ -68,20 +87,30 @@ const update = () => {
   } else {
     alert('Episodio de fim');
   }
+};
 
-  // submitting.value = true;
-  // console.log('VIVA: ', episode.value);
-  // close();
+const saveStopEpisode = (episode) => {
+  console.log(episode);
+  episodeService
+    .post(episode)
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch(() => {
+      submitting.value = false;
+    });
+  episodeService.getById(patient.value.uuidopenmrs);
+};
 
-  // // episodeService
-  // //   .patch(episode.value.id, episode.value)
-  // //   .then(() => {
-  // //     submitting.value = false;
-  // //     close();
-  // //   })
-  // //   .catch(() => {
-  // //     submitting.value = false;
-  // //   });
+const removeAttributes = (objectEntity) => {
+  ['clinic', 'us', 'id'].forEach((attibute) => {
+    delete objectEntity[attibute];
+  });
+  return objectEntity;
+};
+
+const goBack = () => {
+  alert(activePatientList);
 };
 
 const close = () => {

@@ -18,9 +18,8 @@
 import { useQuasar, QSpinnerBall } from 'quasar';
 import episodeService from 'src/services/episodeService/episodeService';
 import { provide, inject, computed, onMounted, reactive, ref } from 'vue';
-import listEpisode from 'src/components/Shared/CRUD/TableList.vue';
+import listEpisode from 'src/components/Shared/CRUD/TableListEpisodesCustm.vue';
 import moment from 'moment';
-//import CreateEditEpisode from 'src/components/episode/EpisodeCreateEditModal.vue';
 
 /*
 Declarations
@@ -83,25 +82,11 @@ const columns = [
     sortable: true,
   },
 ];
+
 /*
   Mounted Hooks
 */
-// onMounted(() => {
-//   $q.loading.show({
-//     message: 'Carregando ...',
-//     spinnerColor: 'grey-4',
-//     spinner: QSpinnerBall,
-//   });
-//   setTimeout(() => {
-//     $q.loading.hide();
-//   }, 600);
-//   // getAllClinicFromAPI(0);
-//   alert(patient.uuidopenmrs);
-//   getPatientEpisodesFromAPI(patient.uuidopenmrs);
-// });
-
 onMounted(() => {
-
   $q.loading.show({
     message: 'Carregando ...',
     spinnerColor: 'grey-4',
@@ -125,12 +110,6 @@ const allEpisodes = computed(() => {
 /*
   Methods
 */
-
-// const getAllClinicFromAPI = (offset) => {
-//   if (offset >= 0) {
-//     clinicService.get(offset);
-//   }
-// };
 
 const getPatientEpisodesFromAPI = (nid) => {
   // episodeService.getById(id);
