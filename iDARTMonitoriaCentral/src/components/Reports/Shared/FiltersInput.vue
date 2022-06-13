@@ -23,12 +23,12 @@
                           outlined
                           :disable="false"
                           class="col q-mr-md"
-                          v-model="params.startDate"
+                          v-model="paramStartDate"
                           label="Data Início">
                           <template v-slot:append>
                               <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                  <q-date mask="DD-MM-YYYY" v-model="params.startDate">
+                                  <q-date mask="DD-MM-YYYY" v-model="paramStartDate">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
                                   </div>
@@ -42,14 +42,13 @@
                           outlined
                           :disable="false"
                           class="col q-mr-md"
-                          v-model="params.endDate"
+                          v-model="paramEndDate"
                           label="Data Fim">
                           <template v-slot:append>
                               <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                                   <q-date
-                                    mask="DD-MM-YYYY"
-                                    v-model="params.endDate"
+                                    v-model="paramEndDate"
                                    :options="blockDataFutura">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
@@ -96,6 +95,7 @@
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
  import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
+ import { useQuasar, QSpinnerGears } from 'quasar'
  import moment from 'moment'
   /*
   Declaration
@@ -104,6 +104,7 @@
  const district = inject('district');
  const facility = inject('facility');
  const pharmacy = inject('pharmacy');
+ const $q = useQuasar();
 
  const periodTypeList = ref([
                             { id: 1, description: 'Especifico', code: 'SPECIFIC' },
@@ -157,13 +158,55 @@
     if (params.value.periodType === null) return false
     return params.value.periodType.code === 'ANNUAL'
   });
+
+  const paramStartDate = computed({
+    get() {
+      console.log(params.value.startDate)
+      if (params.value.startDate === null) return null
+      if (typeof params.value.startDate !== 'string' || !(params.value.startDate instanceof String)) return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
+      return params.value.startDate
+      //return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
+      //return getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.startDate))
+      //params.value.startDate
+    },
+    set(newValue) {
+      params.value.startDate = newValue
+    },
+  });
+
+  const paramEndDate = computed({
+    get() {
+      if (params.value.endDate === null) return null
+      if (typeof params.value.endDate === 'string' || params.value.endDate instanceof String) getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.endDate))
+      return moment(params.value.endDate).format('DD-MM-YYYY')
+    },
+    set(newValue) {
+      console.log(newValue)
+      params.value.endDate = newValue
+    },
+  });
+
+  const getJSDateFromDDMMYYY = (dateString) => {
+      console.log(dateString)
+        const dateParts = dateString.split('-')
+        return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
+      };
+  const getDDMMYYYFromJSDate = (jsDate) => {
+      console.log(jsDate)
+        return moment(jsDate).format('DD-MM-YYYY')
+      };
   /*
   Methods
   */
+ const showLoading = () => {
+    $q.loading.show({
+      message: 'First message. Gonna change it in 3 seconds...'
+    })
+ }
  const generateReport = (fileType) => {
+   showLoading()
    params.value.fileType = fileType
-   console.log(params.value)
-   if ((params.value.period === null || params.value.period === undefined) && (params.value.startDate === null || params.value === null)) {
+   if (params.value.periodType.code !== 'ANNUAL' && (params.value.period === null || params.value.period === undefined) && (params.value.startDate === null || params.value === null)) {
      alert(
           'Alerta!',
           'Por favor indicar o período a analisar!',
@@ -171,10 +214,19 @@
           null,
           null
         );
+   } else if (params.value.periodType.code === 'SPECIFIC' && (new Date(params.value.endDate) < new Date(params.value.startDate))) {
+      alert(
+          'Alerta!',
+          'A data de fim não pode ser menor que a data de início!',
+          null,
+          null,
+          null
+        );
    } else {
       determineDateInterval()
-    emit('generateReport', params)
+      emit('generateReport', params)
    }
+   $q.loading.hide()
  }
 
  const determineDateInterval = () => {
@@ -215,8 +267,8 @@
  }
 
  const onPeriodoChange = (val) => {
-      params.value.startDate = null
-      params.value.endDate = null
+      //params.value.startDate = null
+      //params.value.endDate = null
       params.value.period = null
     }
 

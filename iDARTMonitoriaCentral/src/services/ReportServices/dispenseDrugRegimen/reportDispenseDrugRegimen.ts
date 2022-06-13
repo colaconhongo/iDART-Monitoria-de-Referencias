@@ -301,11 +301,11 @@ export default {
 
     for (const row in rows) {
       const createRow = [];
-      createRow.push(rows[row].patientid);
+      createRow.push(rows[row].drugname);
       createRow.push('');
-      createRow.push(rows[row].fullname);
+      createRow.push(rows[row].regimen);
       createRow.push('');
-      createRow.push(rows[row].tipotarv);
+      createRow.push(rows[row].qty);
 
       data.push(createRow);
     }
