@@ -61,7 +61,7 @@ const update = () => {
     episodeStop.value.stopreason = 'Referido para outra Farmácia';
     episodeStop.value.syncstatus = 'R';
     episodeStop.value.patientuuid = episode.value.patientuuid;
-    episodeStop.value.startdate = new Date(episode.value.startdate);
+    episodeStop.value.startdate = episode.value.startdate;
     episodeStop.value.usuuid = episode.value.usuuid;
     episodeStop.value.clinicuuid = episode.value.clinicuuid;
     episodeStop.value.startnotes = episode.value.startnotes;
