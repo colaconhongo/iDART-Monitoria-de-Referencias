@@ -31,7 +31,7 @@
                   <DateFieldReadOnly
                     label="Data inicio"
                     class="col q-ml-md"
-                    v-model="episode.startdate"
+                    v-model="startdateformated"
                   />
                   <TextFieldReadOnly
                     label="Notas de Inicio [Referência]"
@@ -101,10 +101,6 @@ const props = defineProps({
     type: Object,
   },
 });
-/*
-  Provides
-  */
-const start_notes = ref(['Referido para', 'Referido De']);
 
 const title = inject('title');
 const show_dialog = inject('show_dialog');
@@ -133,6 +129,13 @@ onMounted(() => {
 */
 const allClinics = computed(() => {
   return clinicService.getAllDDPharm();
+});
+
+const startdateformated = computed({
+  get() {
+    if (episode.value.startdate === null) return null;
+    return moment(new Date(episode.value.startdate)).format('DD-MM-YYYY');
+  },
 });
 
 /*
