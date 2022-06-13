@@ -53,7 +53,7 @@ export default {
   },
   getNotSyncDispenses(params) {
     return api()
-      .get(`refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&pickupdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}&syncstatus=eq.R${this.buildGenericCondition(params)}`)
+      .get(`refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&pickupdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}&syncstatus=eq.P${this.buildGenericCondition(params)}`)
       .then((resp) => {
         return resp.data;
       });
