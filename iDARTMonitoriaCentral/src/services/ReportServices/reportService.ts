@@ -69,7 +69,7 @@ export default {
     return moment(date).format('DD-MM-YYYY');
   },
   getFormatYYYYMMDD(date) {
-    return moment(date).format('YYYY-MM-DD');
+    return moment(date,'DD-MM-YYYY').format('YYYY-MM-DD');
   },
   buildGenericCondition(params) {
     let conditionString = '';

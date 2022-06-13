@@ -45,22 +45,8 @@ export default {
       'Unidade Sanitária',
     ];
     const rows = await reportService.getPatientWithClinicInfo(params);
-    const data = [];
-
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].referaldate)
-      );
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastscreeningdate));
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].facilityname);
-
-      data.push(createRow);
-    }
+    const data = this.createArrayOfArrayRow(rows);
+    
     autoTable(doc, {
       margin: { top: 60 },
       bodyStyles: {

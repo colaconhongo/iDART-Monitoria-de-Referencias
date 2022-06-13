@@ -47,22 +47,8 @@ export default {
       'Estado',
     ];
     const rows = await reportService.getNotSyncDispenses(params);
-    const data = [];
+    const data = this.createArrayOfArrayRow(rows);
 
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].tipotarv);
-      createRow.push(rows[row].regime);
-      createRow.push(rows[row].dispensetype);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(rows[row].clinicname);;
-      createRow.push('Não Sincronizado');
-
-      data.push(createRow);
-    }
     autoTable(doc, {
       margin: { top: 60 },
       bodyStyles: {
@@ -107,7 +93,7 @@ export default {
     endDate: string,
     params: Object
   ) {
-    const rows = await reportService.getReferedPatientsReport(params);
+    const rows = await reportService.getNotSyncDispenses(params);
     const data = this.createArrayOfArrayRow(rows);
 
     const workbook = new ExcelJS.Workbook();
