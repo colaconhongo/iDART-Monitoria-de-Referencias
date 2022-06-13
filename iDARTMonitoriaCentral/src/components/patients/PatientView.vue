@@ -18,7 +18,7 @@
               class="text-grey"
               style="text-align: left"
             >
-            <q-tab v-for="tab in tabs" :key="tab.name" v-bind="tab" />
+              <q-tab v-for="tab in tabs" :key="tab.name" v-bind="tab" />
             </q-tabs>
           </template>
 
@@ -50,7 +50,6 @@
                 <div class="text-h4 q-mb-md"></div>
                 <dispenses />
               </q-tab-panel>
-
             </q-tab-panels>
           </template>
         </q-splitter>
@@ -59,7 +58,7 @@
   </q-layout>
 </template>
 <script setup>
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { ref } from 'vue';
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';
@@ -67,7 +66,6 @@ import episodes from 'src/components/episode/Episode.vue';
 import clinicInformations from 'src/pages/ClinicInformation/ClinicInformation.vue';
 import prescriptions from 'src/pages/ClinicInformation/Prescription.vue';
 import dispenses from 'src/pages/ClinicInformation/Dispense.vue';
-
 
 const selectedTab = ref('episodios');
 const splitterModel = ref(15);
@@ -98,7 +96,5 @@ export default {
     };
   },
 };
-
-const patient = inject('patient');
 </script>
 <style></style>
