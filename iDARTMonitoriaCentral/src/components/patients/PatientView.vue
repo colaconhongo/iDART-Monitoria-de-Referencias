@@ -18,11 +18,19 @@
               class="text-grey"
               style="text-align: left"
             >
-            <q-tab v-for="tab in tabs" :key="tab.name" v-bind="tab" />
+              <q-tab v-for="tab in tabs" :key="tab.name" v-bind="tab" />
             </q-tabs>
           </template>
 
           <template v-slot:after>
+            <div class="row q-my-md">
+              <q-btn
+                color="primary"
+                @click="goBack"
+                icon="arrow_back"
+                label="Voltar"
+              />
+            </div>
             <q-tab-panels
               v-model="selectedTab"
               animated
@@ -50,7 +58,6 @@
                 <div class="text-h4 q-mb-md"></div>
                 <dispenses />
               </q-tab-panel>
-
             </q-tab-panels>
           </template>
         </q-splitter>
@@ -68,7 +75,6 @@ import clinicInformations from 'src/pages/ClinicInformation/ClinicInformation.vu
 import prescriptions from 'src/pages/ClinicInformation/Prescription.vue';
 import dispenses from 'src/pages/ClinicInformation/Dispense.vue';
 
-
 const selectedTab = ref('episodios');
 const splitterModel = ref(15);
 const tabs = [
@@ -81,6 +87,10 @@ const tabs = [
   { name: 'prescription', icon: 'medication', label: 'Prescrições' },
   { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
+
+const patient = inject('patient');
+
+const goBack = inject('goBack');
 </script>
 
 <script>
@@ -98,7 +108,5 @@ export default {
     };
   },
 };
-
-const patient = inject('patient');
 </script>
 <style></style>
