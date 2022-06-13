@@ -66,7 +66,7 @@
   </q-layout>
 </template>
 <script setup>
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { ref } from 'vue';
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';
