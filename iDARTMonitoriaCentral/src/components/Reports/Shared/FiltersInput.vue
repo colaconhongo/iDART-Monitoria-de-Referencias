@@ -96,7 +96,7 @@
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
  import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
- import { useQuasar, QSpinnerBall } from 'quasar'
+ import { useQuasar, QSpinnerBall,date } from 'quasar'
  import moment from 'moment'
   /*
   Declaration
@@ -207,6 +207,9 @@
       messageColor: 'black',
       message: 'Processando...'
     })
+ }
+const blockDataFutura = (date) => {
+            return date <= moment(new Date()).format('YYYY/MM/DD')
  }
  const generateReport = (fileType) => {
    params.value.fileType = fileType
