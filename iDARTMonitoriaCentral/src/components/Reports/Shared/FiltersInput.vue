@@ -89,13 +89,13 @@
   /*
   Imports
   */
- import { ref, reactive, provide, computed, inject, toRaw } from 'vue';
+ import { ref, reactive, provide, computed, inject } from 'vue';
  import MonthlyPeriod from 'src/components/Reports/Shared/MonthlyPeriod.vue'
  import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue'
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
  import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
- import { useQuasar, QSpinnerGears } from 'quasar'
+ import { useQuasar, QSpinnerBall } from 'quasar'
  import moment from 'moment'
   /*
   Declaration
@@ -129,7 +129,8 @@
                       period: null,
                       periodTypeView: null,
                       periodType: null,
-                      fileType: null
+                      fileType: null,
+                      loading: null
                     }))
   /*
   Computed
@@ -200,7 +201,10 @@
   */
  const showLoading = () => {
     $q.loading.show({
-      message: 'First message. Gonna change it in 3 seconds...'
+      spinner: QSpinnerBall,
+      spinnerColor: 'grey-4',
+      messageColor: 'black',
+      message: 'Processando...'
     })
  }
  const generateReport = (fileType) => {
@@ -224,9 +228,9 @@
         );
    } else {
       determineDateInterval()
+      params.value.loading = $q
       emit('generateReport', params)
    }
-   $q.loading.hide()
  }
 
  const determineDateInterval = () => {

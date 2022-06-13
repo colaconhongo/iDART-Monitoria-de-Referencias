@@ -98,6 +98,7 @@ export default {
       head: [cols],
       body: data,
     });
+    params.value.loading.loading.hide();
     return doc.save(reportName+'.pdf');
   },
   async downloadExcel(
@@ -151,7 +152,7 @@ export default {
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
     const colI = worksheet.getColumn('I');
-  
+
     // Format Table Cells
     // Alignment Format
     cellRepublica.alignment =
@@ -349,6 +350,8 @@ export default {
 
     const blob = new Blob([buffer], { type: fileType });
 
+    params.value.loading.loading.hide();
+    
     saveAs(blob, fileName + fileExtension);
   },
 

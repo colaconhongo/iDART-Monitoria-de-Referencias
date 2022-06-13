@@ -97,6 +97,7 @@ export default {
       head: [cols],
       body: data,
     });
+    params.value.loading.loading.hide();
     return doc.save('PacientesComAtencaoFarmaceutica.pdf');
   },
   async downloadExcel(
@@ -148,7 +149,7 @@ export default {
     const colE = worksheet.getColumn('E');
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
-  
+
     // Format Table Cells
     // Alignment Format
     cellRepublica.alignment =
@@ -334,6 +335,8 @@ export default {
 
     const blob = new Blob([buffer], { type: fileType });
 
+    params.value.loading.loading.hide();
+    
     saveAs(blob, fileName + fileExtension);
   },
 
