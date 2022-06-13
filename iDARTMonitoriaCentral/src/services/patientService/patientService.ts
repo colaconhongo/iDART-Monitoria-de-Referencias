@@ -27,9 +27,10 @@ export default {
         .get('sync_temp_patients?offset=' + offset + '&limit=100')
         .then((resp) => {
           sync_temp_patients.save(resp.data);
-          offset = offset + 100;
           if (resp.data.length > 0) {
-            setTimeout(this.get, 2);
+            offset = offset + 100;
+            // setTimeout(this.get, 1000,offset);
+             this.get(offset);
           }
         })
         .catch((error) => {
