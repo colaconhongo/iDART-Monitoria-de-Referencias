@@ -28,19 +28,29 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportReferidosDeVolta from 'src/services/ReportServices/referidosDeVolta/reportReferidosDeVolta';
-import moment from 'moment'
+import moment from 'moment';
 
 const title = ref('Lista de Pacientes que Voltaram da Referência');
 
 const generateReport = (params) => {
-  console.log(params)
-  reportReferidosDeVolta.downloadPDF(
-    null,
-    params.value.province.name,
-    moment(params.value.startDate).format('DD/MM/YYYY'),
-    moment(params.value.endDate).format('DD/MM/YYYY'),
-    params
-  );
+  console.log(params.value.fileType);
+  if (params.value.fileType === 'PDF') {
+    reportReferidosDeVolta.downloadPDF(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  } else {
+    reportReferidosDeVolta.downloadExcel(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);
