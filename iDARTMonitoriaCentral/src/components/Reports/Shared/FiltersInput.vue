@@ -208,7 +208,6 @@
     })
  }
  const generateReport = (fileType) => {
-   showLoading()
    params.value.fileType = fileType
    if (params.value.periodType.code !== 'ANNUAL' && (params.value.period === null || params.value.period === undefined) && (params.value.startDate === null || params.value === null)) {
      alert(
@@ -227,6 +226,7 @@
           null
         );
    } else {
+      showLoading()
       determineDateInterval()
       params.value.loading = $q
       emit('generateReport', params)
