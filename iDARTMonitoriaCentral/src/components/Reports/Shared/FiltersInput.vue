@@ -163,7 +163,7 @@
  const generateReport = (fileType) => {
    params.value.fileType = fileType
    console.log(params.value)
-   if (params.value.period === null || params.value.period === undefined) {
+   if ((params.value.period === null || params.value.period === undefined) && (params.value.startDate === null || params.value === null)) {
      alert(
           'Alerta!',
           'Por favor indicar o período a analisar!',

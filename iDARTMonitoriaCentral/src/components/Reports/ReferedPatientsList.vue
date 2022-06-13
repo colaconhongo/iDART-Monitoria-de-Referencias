@@ -44,7 +44,7 @@ const generateReport = (params) => {
     );
   } else {
     reportReferidos.downloadExcel(
-      params.value.clinic.clinicname,
+      null,
       params.value.province.name,
       moment(params.value.startDate).format('DD/MM/YYYY'),
       moment(params.value.endDate).format('DD/MM/YYYY'),

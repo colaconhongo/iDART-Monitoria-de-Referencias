@@ -73,11 +73,11 @@ export default {
   },
   buildGenericCondition(params) {
     let conditionString = '';
-    if (params.value.district.id !== undefined) {
+    if (params.value !== undefined && params.value.district !== undefined && params.value.district !== null && params.value.district.id !== undefined && params.value.district.id > 0) {
       conditionString = conditionString + '&district=eq.' + params.value.district.name
     }
 
-    if (params.value.clinic.id !== undefined) {
+    if (params.value !== undefined && params.value.clinic !== undefined && params.value.clinic !== null && params.value.clinic.id !== undefined) {
       conditionString = conditionString + '&clinicuuid=eq.' + params.value.clinic.uuid
     }
     return conditionString;
