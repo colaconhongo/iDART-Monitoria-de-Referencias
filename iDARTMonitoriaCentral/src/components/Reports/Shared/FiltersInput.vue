@@ -49,6 +49,7 @@
                               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                                   <q-date
                                     v-model="paramEndDate"
+                                    mask="DD-MM-YYYY"
                                    :options="blockDataFutura">
                                   <div class="row items-center justify-end">
                                       <q-btn v-close-popup label="Close" color="primary" flat />
@@ -95,7 +96,7 @@
  import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue'
  import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue'
  import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
- import { useQuasar, QSpinnerBall } from 'quasar'
+ import { useQuasar, QSpinnerBall,date } from 'quasar'
  import moment from 'moment'
   /*
   Declaration
@@ -164,7 +165,7 @@
     get() {
       console.log(params.value.startDate)
       if (params.value.startDate === null) return null
-      if (typeof params.value.startDate !== 'string' || !(params.value.startDate instanceof String)) return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
+      if (typeof params.value.startDate !== 'string' || !(params.value.startDate instanceof String)) return moment(params.value.startDate,'DD-MM-YYYY').format('DD-MM-YYYY')
       return params.value.startDate
       //return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
       //return getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.startDate))
@@ -178,7 +179,7 @@
   const paramEndDate = computed({
     get() {
       if (params.value.endDate === null) return null
-      if (typeof params.value.endDate === 'string' || params.value.endDate instanceof String) getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.endDate))
+      if (typeof params.value.endDate !== 'string' || !(params.value.endDate instanceof String)) return moment(params.value.endDate,'DD-MM-YYYY').format('DD-MM-YYYY')
       return moment(params.value.endDate).format('DD-MM-YYYY')
     },
     set(newValue) {
@@ -206,6 +207,9 @@
       messageColor: 'black',
       message: 'Processando...'
     })
+ }
+const blockDataFutura = (date) => {
+            return date <= moment(new Date()).format('YYYY/MM/DD')
  }
  const generateReport = (fileType) => {
    params.value.fileType = fileType
@@ -264,9 +268,6 @@
    } else if (isAnnualSearch.value) {
        params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
        params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
-   }else {
-       params.value.startDate = moment(params.value.startDate, 'DD-MM-YYYY')
-       params.value.endDate = moment(params.value.endDate +'-12-'+ 20, 'DD-MM-YYYY')
    }
  }
 

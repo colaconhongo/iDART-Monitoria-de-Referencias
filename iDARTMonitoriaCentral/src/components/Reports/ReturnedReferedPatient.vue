@@ -38,16 +38,16 @@ const generateReport = (params) => {
     reportReferidosDeVolta.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   } else {
     reportReferidosDeVolta.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   }

@@ -37,16 +37,16 @@ const generateReport = (params) => {
     reportActivePatients.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   } else {
     reportActivePatients.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   }
