@@ -33,9 +33,9 @@ export default {
 
     for (const row in rows) {
       const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].tipotarv);
+      createRow.push(rows[row].drugname);
+      createRow.push(rows[row].regimen);
+      createRow.push(rows[row].qty);
 
       data.push(createRow);
     }
@@ -74,7 +74,7 @@ export default {
       head: [cols],
       body: data,
     });
-    return doc.save('HistoricoDeLevantamentos.pdf');
+    return doc.save('DispensasPorFrascosRegime.pdf');
   },
 };
 
