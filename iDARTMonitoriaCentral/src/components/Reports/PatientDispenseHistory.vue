@@ -28,19 +28,29 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportDispenseHistory from 'src/services/ReportServices/dispenseHistory/reportDispenseHistory';
-import moment from 'moment'
+import moment from 'moment';
 
 const title = ref('Histórico de Levantamentos de Pacientes Referidos');
 
 const generateReport = (params) => {
-  console.log(params)
-  reportDispenseHistory.downloadPDF(
-    null,
-    params.value.province.name,
-    moment(params.value.startDate).format('DD/MM/YYYY'),
-    moment(params.value.endDate).format('DD/MM/YYYY'),
-    params
-  );
+  console.log(params);
+  if (params.value.fileType === 'PDF') {
+    reportDispenseHistory.downloadPDF(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  } else {
+    reportDispenseHistory.downloadExcel(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);

@@ -34,10 +34,8 @@ const { t } = useI18n();
 const mode = reactive(ref('list'));
 const viewPatient = inject('viewPatient');
 const title = inject('titleList');
-const activePatientList = inject('activePatientList');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
-const isSearch = reactive(ref(true));
 
 const { ageCalculator } = useUtils();
 

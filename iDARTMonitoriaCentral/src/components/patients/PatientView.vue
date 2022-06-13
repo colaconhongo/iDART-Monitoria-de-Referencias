@@ -23,6 +23,14 @@
           </template>
 
           <template v-slot:after>
+            <div class="row q-my-md">
+              <q-btn
+                color="primary"
+                @click="goBack"
+                icon="arrow_back"
+                label="Voltar"
+              />
+            </div>
             <q-tab-panels
               v-model="selectedTab"
               animated
@@ -79,6 +87,10 @@ const tabs = [
   { name: 'prescription', icon: 'medication', label: 'Prescrições' },
   { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
+
+const patient = inject('patient');
+
+const goBack = inject('goBack');
 </script>
 
 <script>

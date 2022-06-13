@@ -62,13 +62,15 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
-  console.log(district);
-  console.log(pharmacy);
   if (district.value != null || district.value != undefined)
     SessionStorage.set('district', district.value);
   if (pharmacy.value != null || pharmacy.value != undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
+
+const goBack = () => {
+  activePatientList.value = true;
+};
 
 provide('titleList', titleList);
 provide('viewPatient', viewPatient);
@@ -81,4 +83,5 @@ provide('district', district);
 provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
+provide('goBack', goBack);
 </script>
