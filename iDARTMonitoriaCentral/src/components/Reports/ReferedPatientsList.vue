@@ -31,9 +31,7 @@ import reportReferidos from 'src/services/ReportServices/referidos/reportReferid
 import moment from 'moment'
 
 const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
-
 const generateReport = (params) => {
-  console.log(params.value.fileType);
     if (params.value.fileType === 'PDF') {
       reportReferidos.downloadPDF(
       null,

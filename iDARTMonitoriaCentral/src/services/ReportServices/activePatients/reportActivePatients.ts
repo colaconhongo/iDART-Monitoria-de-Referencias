@@ -93,6 +93,7 @@ export default {
       head: [cols],
       body: data,
     });
+    params.value.loading.loading.hide();
     return doc.save('PacientesActivos.pdf');
   },
 };
