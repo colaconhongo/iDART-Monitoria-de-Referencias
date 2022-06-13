@@ -10,18 +10,21 @@
         />
         <div>
           <div class="patient-details">
-            <p style="margin-bottom: 0%">
+            <p style="margin-bottom: 0%" class="text-weight-bolder">
               {{ patient.firstnames + ' ' + patient.lastname }}
             </p>
           </div>
           <div class="patient-details">
-            NID: <span>{{ patient.patientid }}</span>
+            <span class="text-weight-bolder"> NID: </span
+            ><span>{{ patient.patientid }}</span>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="perm_identity" color="blue-8" /></span>
+              <span>
+                <q-icon name="perm_identity" color="blue-8" size="sm"
+              /></span>
             </div>
             <div class="patient-details">
               <span>{{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }}</span>
@@ -29,7 +32,9 @@
           </div>
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="calendar_today" color="blue-8" /></span>
+              <span>
+                <q-icon name="calendar_today" color="blue-8" size="sm"
+              /></span>
             </div>
             <div class="patient-details">
               <span> {{ ageCalculator(patient.dateofbirth) }} anos </span>
@@ -37,7 +42,7 @@
           </div>
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="phone" color="blue-8" /></span>
+              <span> <q-icon name="phone" color="blue-8" size="sm" /></span>
             </div>
             <div>
               <span>{{ patient.cellphone }}</span>
@@ -46,7 +51,7 @@
         </div>
         <div>
           <span>
-            <q-icon name="place" color="blue-8" />
+            <q-icon name="place" color="blue-8" size="sm" />
             <small> {{ patient.address1 }}</small></span
           >
         </div>
@@ -68,7 +73,7 @@
         </div>
         <div style="text-align: left">Unidade Sanitária</div>
         <div class="dados-referencia" style="text-align: left">
-          <span>{{ patient.mainclinic }}</span>
+          <span>{{ patient.mainclinicname }}</span>
         </div>
         <div style="text-align: left">Data Início TARV</div>
         <div class="dados-referencia" style="text-align: left">

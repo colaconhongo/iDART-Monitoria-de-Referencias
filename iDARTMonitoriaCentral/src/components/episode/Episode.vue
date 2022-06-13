@@ -52,13 +52,14 @@ const update = () => {
     patientAux.value.clinicname = episode.value.clinic.clinicname;
     patientAux.value.id = episode.value.id;
     patientAux.value.clinicuuid = episode.value.clinic.uuid;
+    patientAux.value.clinic = episode.value.clinic.id;
+    patientAux.value.modied = 'T';
 
     //Episodio de Fim na Farmacia anterior
     episodeStop.value.clinic = clinicBeforeUpdate.value;
-
-    episodeStop.value.stopdate = new Date();
+    episodeStop.value.stopdate = moment(new Date()).format('DD-MM-YYYY');
     episodeStop.value.stopnotes = 'Paciente enviado para outra Farmácia';
-    episodeStop.value.stopreason = 'Referido para outra Farmácia';
+    episodeStop.value.stopreason = 'Contra Referido para outra Farmácia';
     episodeStop.value.syncstatus = 'R';
     episodeStop.value.patientuuid = episode.value.patientuuid;
     episodeStop.value.startdate = episode.value.startdate;
