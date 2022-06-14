@@ -20,7 +20,7 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, reactive, ref } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableListStatus.vue';
 import prescriptionDetailsModal from 'src/components/prescription/PrescriptionDetailsModal.vue';
 import moment from 'moment';
@@ -43,6 +43,7 @@ const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
 const editedIndex = reactive(ref(0));
+const patient = inject('patient');
 const columns = [
   {
     name: 'pickupdate',
@@ -114,7 +115,9 @@ onMounted(() => {
 */
 
 const allPrescription = computed(() => {
-  return prescriptionService.getAllFromStorage();
+  return prescriptionService.getPrescriptionsByPatientId(
+    patient.value.patientid
+  );
 });
 
 /*

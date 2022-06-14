@@ -198,19 +198,17 @@ export default {
     return clinic
       .query()
       .where((clinics) => {
-        return (
-          clinics.district === district.name
-        );
+        return clinics.district === district.name;
       })
       .orderBy('facilitytype')
       .orderBy('clinicname', 'desc')
       .get();
   },
-  
+
   getPharmByUUid(uuid) {
     return clinic.query().where('uuid', uuid).get();
   },
-  
+
   getAllUS() {
     return clinic
       .query()
@@ -232,7 +230,6 @@ export default {
       clinics.push(pharmacy.value);
     } else if (district.value != null || district.value != undefined) {
       clinics = this.getAllPharmacyFromDistrict(district.value.name);
-      console.log(clinics);
     } else {
       clinics = this.getAllDDPharm();
     }

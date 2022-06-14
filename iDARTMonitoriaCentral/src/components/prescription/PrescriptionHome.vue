@@ -120,9 +120,7 @@ onMounted(() => {
 
 const allPrescription = computed(() => {
   const dispensesAndPrescriptions =
-    prescriptionService.getPrescriptionsByPatientId('patient.value.patientid');
-  //'04010001/16/0268
-  //
+    prescriptionService.getPrescriptionsByPatientId(patient.value.patientid);
 
   let prescriptions = [
     ...new Map(

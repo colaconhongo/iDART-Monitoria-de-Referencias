@@ -53,14 +53,15 @@ const columns = [
     name: 'firstnames',
     align: 'left',
     label: t('Nome do Paciente | Idade'),
-    field: (row) =>
-      row.firstnames +
-      ' ' +
-      row.lastname +
-      ' | ' +
-      ageCalculator(row.dateofbirth) +
-      ' anos',
-    // row.firstnames + ' ' + row.lastname + '\r' + row.dateofbirth,
+    field: (row) => row.firstnames + ' ' + row.lastname,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'dateofbirth',
+    align: 'left',
+    label: t('idade'),
+    field: (row) => ageCalculator(row.dateofbirth) + ' anos',
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -76,7 +77,7 @@ const columns = [
     name: 'mainclinic',
     align: 'left',
     label: t('Unidade Sanitária'),
-    field: (row) => row.mainclinic,
+    field: (row) => row.mainclinicname,
     format: (val) => `${val}`,
     sortable: true,
   },

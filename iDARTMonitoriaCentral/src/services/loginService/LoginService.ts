@@ -6,7 +6,6 @@ export const logout = () => {
     .get('logout')
     .catch((error) => {
       if (error.response) {
-        console.log(JSON.stringify(error.response));
         alert(JSON.stringify(error.response.data));
       } else if (error.request) {
         console.log(error.request);

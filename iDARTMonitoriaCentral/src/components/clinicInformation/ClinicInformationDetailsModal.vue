@@ -320,7 +320,6 @@ let clinicInformation = reactive(props.clinicInformation);
 watch(
   () => props.clinicInformation,
   (newCount) => {
-    console.log(clinicInformation);
     // clinicInformation.tpi = 'true'; //props.clinicInformation.istreatmenttpi.toString();
     clinicInformation.imc =
       props.clinicInformation.imc !== null

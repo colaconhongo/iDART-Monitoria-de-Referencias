@@ -21,7 +21,7 @@
       filled
       dense
       clearable
-       @clear="clearDistrict()"
+      @clear="clearDistrict()"
     />
     <SelectField
       :label="pharmacyLabel"
@@ -33,26 +33,26 @@
       filled
       clearable
       dense
-       @clear="clearPharmacy()"
+      @clear="clearPharmacy()"
     />
-    <div v-if="isDashboard"  class="col q-ml-md">
-    <SelectField
-      :label="yearLabel"
-      v-model="year"
-      :options="yearsToShow"
-      option-label="name"
-      option-value="name"
-      filled
-      dense
-    />
+    <div v-if="isDashboard" class="col q-ml-md">
+      <SelectField
+        :label="yearLabel"
+        v-model="year"
+        :options="yearsToShow"
+        option-label="name"
+        option-value="name"
+        filled
+        dense
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, onMounted, ref, } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { SessionStorage } from 'quasar'
+import { SessionStorage } from 'quasar';
 import SelectField from '../Shared/Input/SelectField.vue';
 import DistrictService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -63,8 +63,7 @@ const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const facilityLabel = ref(t('facility'));
 const pharmacyLabel = ref(t('pharmacy'));
-const yearLabel =  ref(t('year'));
-
+const yearLabel = ref(t('year'));
 
 const props = defineProps(['isDashboard']);
 
@@ -80,23 +79,15 @@ const yearsToShow = inject('yearsToShow');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');
- const allPhamacyFromFacility = inject('allPhamacyFromFacility');
-
-
-onMounted(() => {
-  console.log(allProvincias);
-  console.log(province);
-  console.log(alldistrictsFromProvince);
-});
+const allPhamacyFromFacility = inject('allPhamacyFromFacility');
 
 const clearDistrict = () => {
-   SessionStorage.remove('district')
-}
+  SessionStorage.remove('district');
+};
 
 const clearPharmacy = () => {
-   SessionStorage.remove('pharmacy')
-}
-
+  SessionStorage.remove('pharmacy');
+};
 </script>
 
 <style></style>

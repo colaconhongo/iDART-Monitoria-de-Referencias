@@ -33,7 +33,6 @@ import moment from 'moment';
 const title = ref('Histórico de Levantamentos de Pacientes Referidos');
 
 const generateReport = (params) => {
-  console.log(params);
   if (params.value.fileType === 'PDF') {
     reportDispenseHistory.downloadPDF(
       null,

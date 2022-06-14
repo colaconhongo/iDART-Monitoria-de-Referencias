@@ -33,7 +33,6 @@ import moment from 'moment';
 const title = ref('Lista de Pacientes Faltosos ao Levantamento');
 
 const generateReport = (params) => {
-  console.log(params.value.fileType);
   if (params.value.fileType === 'PDF') {
     reportFaltososARV.downloadPDF(
       null,

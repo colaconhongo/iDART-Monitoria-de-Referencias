@@ -57,10 +57,7 @@
               </div>
             </q-card-section>
             <q-card-section align="center">
-              <q-form
-                @submit.prevent="processForm"
-                class="q-gutter-md"
-              >
+              <q-form @submit.prevent="processForm" class="q-gutter-md">
                 <div class="row justify-between">
                   <div
                     class="col-5 q-pa-sm q-pl-xl q-ml-xl text-center justify-center"
@@ -203,18 +200,12 @@ onMounted(() => {
   Methods
 */
 const processForm = () => {
-  console.log({
-    username: username.value,
-    pass: password.value,
-    provincia: provincia.value,
-  });
   submitting.value = true;
   login({
     username: username.value,
     pass: password.value,
   }).then((response) => {
     if (response) {
-      console.log('Login >>>>>>>>', response); //.access_token);
       localStorage.setItem('user', username.value);
       localStorage.setItem('token', response.data[0].token);
       localStorage.setItem('refresh_token', response.data[0].token);

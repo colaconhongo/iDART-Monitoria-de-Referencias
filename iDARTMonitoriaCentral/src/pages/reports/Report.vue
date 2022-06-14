@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md q-pt-sm">
-  <Filter class="q-mb-lg" :is="true" />
+  <div class="q-pa-sm q-gutter-md">
+    <Filter class="q-mb-lg" :is="true" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">
         <q-bar dark class="bg-primary text-white">
@@ -23,7 +23,7 @@
           :thumb-style="thumbStyle"
           :content-style="contentStyle"
           :content-active-style="contentActiveStyle"
-          style="height: 700px;"
+          style="height: 700px"
           class="q-pr-md"
         >
           <template v-for="comp in components" :key="comp.id">
@@ -50,7 +50,14 @@ import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
 
 import { uid } from 'quasar';
-import { reactive, ref, provide, computed, onActivated, onDeactivated } from 'vue';
+import {
+  reactive,
+  ref,
+  provide,
+  computed,
+  onActivated,
+  onDeactivated,
+} from 'vue';
 import { SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
@@ -63,24 +70,31 @@ const province = reactive(
 );
 
 const contentStyle = {
-        backgroundColor: '#ffffff',
-        color: '#555'
-      };
+  backgroundColor: '#ffffff',
+  color: '#555',
+};
 
 const contentActiveStyle = {
-        backgroundColor: '#eee',
-        color: 'white'
-      };
+  backgroundColor: '#eee',
+  color: 'white',
+};
 
 const thumbStyle = {
-        right: '2px',
-        borderRadius: '5px',
-        backgroundColor: '#2b72d6',
-        width: '5px',
-        opacity: 0.75
-      };
+  right: '2px',
+  borderRadius: '5px',
+  backgroundColor: '#2b72d6',
+  width: '5px',
+  opacity: 0.75,
+};
 const reportComps = {
-   ReferedPatientsList, ReturnedReferedPatient, PatientsWithMissDispenses,PatientDispenseHistory,ActivePatientList,DispenseByDrugAndRegimen,PatientWithScreeningList,NotSyncDispenses
+  ReferedPatientsList,
+  ReturnedReferedPatient,
+  PatientsWithMissDispenses,
+  PatientDispenseHistory,
+  ActivePatientList,
+  DispenseByDrugAndRegimen,
+  PatientWithScreeningList,
+  NotSyncDispenses,
 };
 
 const district = reactive(ref());
@@ -108,27 +122,25 @@ const alldistrictsFromProvince = computed(() => {
 });
 
 const allPhamacyFromFacility = computed(() => {
-      if(district.value != null || district.value != undefined) {
-  return clinicService.getAllPharmacyFromDistrict(district.value.name);
-      }
+  if (district.value != null || district.value != undefined) {
+    return clinicService.getAllPharmacyFromDistrict(district.value.name);
+  }
 });
 
 onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
+  if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district');
   }
-    if (SessionStorage.getItem('pharmacy') !== null) {
-    pharmacy.value = SessionStorage.getItem('pharmacy')
+  if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy');
   }
- console.log(district)
 });
 
 onDeactivated(() => {
-  console.log(district)
-  console.log(pharmacy)
-   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
-  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
-
+  if (district.value != null || district.value != undefined)
+    SessionStorage.set('district', district.value);
+  if (pharmacy.value != null || pharmacy.value != undefined)
+    SessionStorage.set('pharmacy', pharmacy.value);
 });
 
 provide('allProvincias', allProvincias);

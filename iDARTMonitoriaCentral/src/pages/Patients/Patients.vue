@@ -1,6 +1,7 @@
 <template>
-  <q-page class="q-pa-sm q-gutter-sm">
+  <q-page class="q-pa-sm q-gutter-md">
     <Filter :is="true" v-if="activePatientList" />
+    <q-bar v-if="activePatientList" dense dark class="bg-primary"> </q-bar>
     <PatientList v-if="activePatientList" v-model:title="titleList" />
     <PatientView v-else />
   </q-page>
@@ -18,7 +19,6 @@ import {
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
-//import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
@@ -35,7 +35,6 @@ const allProvincias = computed(() => {
 });
 
 const districtsByProvince = computed(() => {
-  console.log(DistrictService.getAllProvinceFromStorage());
   return DistrictService.getAllProvinceFromStorage();
 });
 
@@ -58,7 +57,6 @@ onActivated(() => {
   if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
-  console.log(district);
 });
 
 onDeactivated(() => {
