@@ -31,22 +31,22 @@ import reportReferidos from 'src/services/ReportServices/referidos/reportReferid
 import moment from 'moment';
 
 const title = ref('Lista de Pacientes Referidos para Outras Farmácias');
-
 const generateReport = (params) => {
+
   if (params.value.fileType === 'PDF') {
     reportReferidos.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   } else {
     reportReferidos.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   }

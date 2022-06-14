@@ -110,6 +110,7 @@ export default {
       head: [cols],
       body: data,
     });
+    params.value.loading.loading.hide();
     return doc.save('FaltososAoLevantamento.pdf');
   },
 
@@ -355,6 +356,8 @@ export default {
 
     const blob = new Blob([buffer], { type: fileType });
 
+    params.value.loading.loading.hide();
+    
     saveAs(blob, fileName + fileExtension);
   },
   createArrayOfArrayRow(rows: any) {

@@ -33,6 +33,7 @@ import moment from 'moment';
 const title = ref('Lista de Pacientes com Atenção Farmaceutica');
 
 const generateReport = (params) => {
+
   if (params.value.fileType === 'PDF') {
     reportPatientWithClinicInfo.downloadPDF(
       null,
@@ -42,11 +43,12 @@ const generateReport = (params) => {
       params
     );
   } else {
+
     reportPatientWithClinicInfo.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   }

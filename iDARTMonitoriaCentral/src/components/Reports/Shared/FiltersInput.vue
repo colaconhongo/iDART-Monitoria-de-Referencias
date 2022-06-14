@@ -67,6 +67,51 @@
           </template>
         </q-input>
       </div>
+                     <!--div
+                      class="row col q-mb-md"
+                      v-if="isSpecificSearch" >
+                        <q-input
+                          dense
+                          outlined
+                          :disable="false"
+                          class="col q-mr-md"
+                          v-model="paramStartDate"
+                          label="Data Início">
+                          <template v-slot:append>
+                              <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                                  <q-date mask="DD-MM-YYYY" v-model="paramStartDate">
+                                  <div class="row items-center justify-end">
+                                      <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                  </q-date>
+                              </q-popup-proxy>
+                              </q-icon>
+                          </template>
+                        </q-input>
+                        <q-input
+                          dense
+                          outlined
+                          :disable="false"
+                          class="col q-mr-md"
+                          v-model="paramEndDate"
+                          label="Data Fim">
+                          <template v-slot:append>
+                              <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                                  <q-date
+                                    v-model="paramEndDate"
+                                    mask="DD-MM-YYYY"
+                                   :options="blockDataFutura">
+                                  <div class="row items-center justify-end">
+                                      <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                  </q-date>
+                              </q-popup-proxy>
+                              </q-icon>
+                          </template>
+                        </q-input>
+                    </div-->
 
       <MonthlyPeriod class="col" v-if="isMonthlSearch" />
 
@@ -111,6 +156,7 @@
 /*
   Imports
   */
+
 import { ref, reactive, provide, computed, inject, toRaw } from 'vue';
 import MonthlyPeriod from 'src/components/Reports/Shared/MonthlyPeriod.vue';
 import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue';
@@ -120,6 +166,7 @@ import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useQuasar, QSpinnerGears } from 'quasar';
 import moment from 'moment';
 /*
+
   Declaration
   */
 const province = inject('province');
@@ -157,7 +204,8 @@ let params = reactive(
     fileType: null,
   })
 );
-/*
+
+  /*
   Computed
   */
 const isSpecificSearch = computed(() => {
@@ -184,6 +232,7 @@ const isAnnualSearch = computed(() => {
   if (params.value.periodType === null) return false;
   return params.value.periodType.code === 'ANNUAL';
 });
+
 
 const paramStartDate = computed({
   get() {
@@ -218,6 +267,7 @@ const paramEndDate = computed({
   },
 });
 
+
 const getJSDateFromDDMMYYY = (dateString) => {
   const dateParts = dateString.split('-');
   return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
@@ -228,6 +278,7 @@ const getDDMMYYYFromJSDate = (jsDate) => {
 /*
   Methods
   */
+  
 const showLoading = (fileType) => {
   if (fileType === 'PDF') {
     loadingPDF.value = true;
@@ -241,45 +292,74 @@ const hideLoading = (fileType) => {
   } else {
     loadingXLS.value = false;
   }
-  // $q.loading.show({
-  //   message: 'First message. Gonna change it in 3 seconds...',
-  // });
 };
-const generateReport = (fileType) => {
-  showLoading(fileType);
-  params.value.fileType = fileType;
-  if (
-    params.value.periodType.code !== 'ANNUAL' &&
-    (params.value.period === null || params.value.period === undefined) &&
-    (params.value.startDate === null || params.value === null)
-  ) {
-    alert(
-      'Alerta!',
-      'Por favor indicar o período a analisar!',
-      null,
-      null,
-      null
-    );
-  } else if (
-    params.value.periodType.code === 'SPECIFIC' &&
-    new Date(params.value.endDate) < new Date(params.value.startDate)
-  ) {
-    alert(
-      'Alerta!',
-      'A data de fim não pode ser menor que a data de início!',
-      null,
-      null,
-      null
-    );
-  } else {
-    determineDateInterval();
-    emit('generateReport', params);
-  }
-  setTimeout(() => {
+
+const blockDataFutura = (date) => {
+            return date <= moment(new Date()).format('YYYY/MM/DD')
+ }
+ const generateReport = (fileType) => {
+   params.value.fileType = fileType
+   if (params.value.periodType.code !== 'ANNUAL' && (params.value.period === null || params.value.period === undefined) && (params.value.startDate === null || params.value === null)) {
+     alert(
+          'Alerta!',
+          'Por favor indicar o período a analisar!',
+          null,
+          null,
+          null
+        );
+   } else if (params.value.periodType.code === 'SPECIFIC' && (new Date(params.value.endDate) < new Date(params.value.startDate))) {
+      alert(
+          'Alerta!',
+          'A data de fim não pode ser menor que a data de início!',
+          null,
+          null,
+          null
+        );
+   } else {
+      showLoading(fileType)
+      determineDateInterval()
+      params.value.loading = $q
+      emit('generateReport', params)
+      setTimeout(() => {
     hideLoading(fileType);
   }, 300);
-  // $q.loading.hide();
-};
+   }
+ }
+
+ const determineDateInterval = () => {
+   if (isMonthlSearch.value) {
+     params.value.endDate = moment(params.value.year +'-'+ params.value.period.id +'-'+ 20, 'YYYY-MM-DD')
+     params.value.startDate = Object.assign({}, params.value.endDate)
+     params.value.startDate = moment(params.value.startDate).subtract(30, 'days');
+     params.value.startDate = moment(params.value.startDate).set('date', 21);
+   } else if (isSTrimestralSearch.value) {
+     if (params.value.period.id === 1) {
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-03-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 2) {
+       params.value.startDate = moment(params.value.year +'-03-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 3) {
+       params.value.startDate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-09-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 4) {
+       params.value.startDate = moment(params.value.year +'-09-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+     }
+   } else if (isSemestralSearch.value) {
+     if (params.value.period.id === 1) {
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-06-'+ 20, 'YYYY-MM-DD')
+     } else if (params.value.period.id === 2) {
+       params.value.startDate = moment(params.value.year +'-06-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+     }
+   } else if (isAnnualSearch.value) {
+       params.value.startDate = moment(params.value.year - 1 +'-12-'+ 21, 'YYYY-MM-DD')
+       params.value.endDate = moment(params.value.year +'-12-'+ 20, 'YYYY-MM-DD')
+   }
+ }
+
 
 const determineDateInterval = () => {
   if (isMonthlSearch.value) {

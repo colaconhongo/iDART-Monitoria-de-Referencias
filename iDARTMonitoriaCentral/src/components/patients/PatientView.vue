@@ -23,6 +23,15 @@
           </template>
 
           <template v-slot:after>
+          
+            <div class="row q-my-md" style="margin: 2px">
+              <q-btn
+                color="primary"
+                @click="goBack"
+                icon="arrow_back"
+                label="Voltar"
+              />
+            </div>
             <q-tab-panels
               v-model="selectedTab"
               animated
@@ -32,17 +41,18 @@
               transition-next="slide-up"
             >
               <q-tab-panel name="episodios">
-                <div class="text-h4 q-mb-md"></div>
                 <episodes />
               </q-tab-panel>
 
+              <q-tab-panel name="clinicInformation">
+                <clinicInformations />
+              </q-tab-panel>
+
               <q-tab-panel name="prescription">
-                <div class="text-h4 q-mb-md"></div>
                 <prescriptions />
               </q-tab-panel>
 
               <q-tab-panel name="dispense">
-                <div class="text-h4 q-mb-md"></div>
                 <dispenses />
               </q-tab-panel>
 
@@ -58,7 +68,9 @@
   </q-layout>
 </template>
 <script setup>
+
 import { inject, ref } from 'vue';
+
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';

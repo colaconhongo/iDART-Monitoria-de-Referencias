@@ -42,14 +42,17 @@
 /*
     imports
   */
-import { computed, onMounted, inject, ref } from 'vue';
-import { useQuasar, QSpinnerBall } from 'quasar';
-import stockReportService from 'src/services/ReportServices/stock/stockReportService';
-import stockTable from 'src/components/Shared/CRUD/TableList.vue';
+
+  import { computed, onMounted, inject, ref } from 'vue';
+  import { useQuasar, QSpinnerBall } from 'quasar';
+  import stockReportService from 'src/services/ReportServices/stock/stockReportService';
+  import stockTable from 'src/components/Shared/CRUD/TableList.vue';
+  import moment from 'moment'
 
 /*
     Declarations
   */
+
 const $q = new useQuasar();
 const columns = [
   {
@@ -103,6 +106,7 @@ const columns = [
   },
 ];
 const selectRecord = inject('selectRecord');
+
 
 /*
     emits
