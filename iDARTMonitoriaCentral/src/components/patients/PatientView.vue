@@ -23,7 +23,7 @@
           </template>
 
           <template v-slot:after>
-            <div class="row q-my-md">
+            <div class="row q-my-md" style="margin: 2px">
               <q-btn
                 color="primary"
                 @click="goBack"
@@ -40,22 +40,18 @@
               transition-next="slide-up"
             >
               <q-tab-panel name="episodios">
-                <div class="text-h4 q-mb-md"></div>
                 <episodes />
               </q-tab-panel>
 
               <q-tab-panel name="clinicInformation">
-                <div class="text-h4 q-mb-md"></div>
                 <clinicInformations />
               </q-tab-panel>
 
               <q-tab-panel name="prescription">
-                <div class="text-h4 q-mb-md"></div>
                 <prescriptions />
               </q-tab-panel>
 
               <q-tab-panel name="dispense">
-                <div class="text-h4 q-mb-md"></div>
                 <dispenses />
               </q-tab-panel>
             </q-tab-panels>
@@ -66,7 +62,7 @@
   </q-layout>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';
@@ -87,8 +83,6 @@ const tabs = [
   { name: 'prescription', icon: 'medication', label: 'Prescrições' },
   { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
-
-const patient = inject('patient');
 
 const goBack = inject('goBack');
 </script>
