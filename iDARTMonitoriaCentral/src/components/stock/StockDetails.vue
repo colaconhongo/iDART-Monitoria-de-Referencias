@@ -37,18 +37,19 @@
   import { useQuasar, QSpinnerBall } from 'quasar';
   import stockReportService from 'src/services/ReportServices/stock/stockReportService';
   import stockTable from 'src/components/Shared/CRUD/TableList.vue';
+  import moment from 'moment'
 
   /*
     Declarations
   */
  const $q = new useQuasar();
  const columns = [
-    { name: 'entranceDate', required: true, label: 'Data Entrada', align: 'left', field: (row) => row.datereceived, format: (val) => `${val}`, sortable: true },
+    { name: 'entranceDate', required: true, label: 'Data Entrada', align: 'left', field: (row) => moment(row.datereceived).format('DD-MM-YYYY'), format: (val) => `${val}`, sortable: true },
     { name: 'lote', align: 'left', label: 'Lote', field: (row) => row.lote, format: (val) => `${val}`, sortable: true },
     { name: 'guia', align: 'left', label: 'N do Guia de Entrega', field: (row) => row.lote, format: (val) => `${val}`, sortable: true },
     { name: 'startBalance', align: 'left', label: 'Saldo Inicial', field: (row) => row.initbalance, format: (val) => `${val}`, sortable: true },
     { name: 'balance', align: 'left', label: 'Saldo Actual', field: (row) => row.curbalance, format: (val) => `${val}`, sortable: true },
-    { name: 'validade', align: 'left', label: 'Data Validade', field: (row) => row.expirydate, format: (val) => `${val}`, sortable: true }
+    { name: 'validade', align: 'left', label: 'Data Validade', field: (row) => moment(row.expirydate).format('DD-MM-YYYY'), format: (val) => `${val}`, sortable: true }
   ];
   const selectRecord = inject('selectRecord')
 
