@@ -53,57 +53,74 @@ export default {
   },
   getAllDispenseQuarterly() {
     return sync_temp_dispense
-    .query()
-    .where((dispense) => {
-      return dispense.dispensatrimestral === 1 })
-.get();
+      .query()
+      .where((dispense) => {
+        return dispense.dispensatrimestral === 1;
+      })
+      .get();
   },
   getAllDispenseSemestre() {
     return sync_temp_dispense
-    .query()
-    .where((dispense) => {
-      return dispense.dispensasemestral === 1 })
-.get();
+      .query()
+      .where((dispense) => {
+        return dispense.dispensasemestral === 1;
+      })
+      .get();
   },
   getAllDispenseMensal() {
     return sync_temp_dispense
-    .query()
-    .where((dispense) => {
-      return dispense.dispensasemestral === 0 && dispense.dispensatrimestral === 0})
-.get();
-  },
-
-  getDispensesByRegimeByYear(year:number) {
-    const yearBefore = year -1;
-    const startDate =  moment('12-21-'+yearBefore).format('MM-DD-YYYY')
-    console.log(startDate)
-    const endDate = moment('12-20-'+year).format('MM-DD-YYYY')
-    console.log(endDate)
-      return api()
-        .get('sync_temp_dispense?dispensedate=gt.'+startDate+'&dispensedate=lt.'+endDate)
-        .then((resp) => {
-          sync_temp_dispense.save(resp.data);
-        });
-  },
-  
-
-  getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage (year:number, district:District,pharmacy:Clinic) {
-    const yearBefore = year -1;
-    const startDate = new Date('12-21-'+yearBefore)
-    console.log(startDate)
-  const endDate = new Date('12-20-'+year)
-    console.log(endDate)
-
-    let patients = patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(year , district , pharmacy);
-    patients = patients.map(patient => patient.uuidopenmrs);
-    console.log(patients)
-      const dispenses = sync_temp_dispense
       .query()
       .where((dispense) => {
-        return new Date(dispense.dispensedate) >= startDate && new Date(dispense.dispensedate) <= endDate  &&
-        patients.includes(dispense.uuidopenmrs)})
-        .orderBy('dispensedate','desc')
-  .get();
-      return dispenses
-    },
+        return (
+          dispense.dispensasemestral === 0 && dispense.dispensatrimestral === 0
+        );
+      })
+      .get();
+  },
+
+  getDispensesByRegimeByYear(year: number) {
+    const yearBefore = year - 1;
+    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
+    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    return api()
+      .get(
+        'sync_temp_dispense?dispensedate=gt.' +
+          startDate +
+          '&dispensedate=lt.' +
+          endDate
+      )
+      .then((resp) => {
+        sync_temp_dispense.save(resp.data);
+      });
+  },
+
+  getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let patients =
+      patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+        year,
+        district,
+        pharmacy
+      );
+    patients = patients.map((patient) => patient.uuidopenmrs);
+    const dispenses = sync_temp_dispense
+      .query()
+      .where((dispense) => {
+        return (
+          new Date(dispense.dispensedate) >= startDate &&
+          new Date(dispense.dispensedate) <= endDate &&
+          patients.includes(dispense.uuidopenmrs)
+        );
+      })
+      .orderBy('dispensedate', 'desc')
+      .get();
+    return dispenses;
+  },
 };

@@ -38,28 +38,21 @@ instance.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-    const rToken = localStorage.getItem('refresh_token');
-    if (!rToken) {
-      if (
-        (error.response.status === 403 || error.response.status === 401) &&
-        !originalRequest._retry
-      ) {
-        originalRequest._retry = true;
-        return axios
-          .post(
-            'http://localhost:408/oauth/access_token?grant_type=refresh_token&refresh_token=' +
-              rToken // 'http://localhost:408/oauth/access_token?grant_type=refresh_token&refresh_token=' + rToken
-          )
-          .then(({ data }) => {
-            localStorage.setItem('token', data.access_token);
-            localStorage.setItem('refresh_token', data.access_token);
-            originalRequest.headers['Bearer'] = [
-              '',
-              localStorage.getItem('token'),
-            ].join(' ');
-            return axios(originalRequest);
-          });
-      }
+    if (error.response.status === 403 || error.response.status === 401) {
+      originalRequest._retry = true;
+      return axios
+        .post('http://dev.fgh.org.mz:3110/rpc/login', {
+          username: 'postgres',
+          pass: 'postgres',
+        })
+        .then(({ data }) => {
+          localStorage.setItem('token', data[0].token);
+          originalRequest.headers['Bearer'] = [
+            '',
+            localStorage.getItem('token'),
+          ].join(' ');
+          return axios(originalRequest);
+        });
     }
     return Promise.reject(error);
   }

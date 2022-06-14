@@ -257,7 +257,6 @@ const createProvincia = () => {
               listErrors.value.push(element.message);
             });
           }
-          console.log(listErrors.value);
         }
       });
   } else {
@@ -291,7 +290,6 @@ const createProvincia = () => {
               listErrors.value.push(element.message);
             });
           }
-          console.log(listErrors.value);
         }
       });
   }

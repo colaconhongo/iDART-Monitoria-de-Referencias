@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md q-pt-sm">
-  <Filter :is="true" v-if="showStockSearch" />
+    <Filter :is="true" v-if="showStockSearch" />
     <stockDetails v-if="!showStockSearch" @goBack="goBack" />
     <stockSearch v-if="showStockSearch" />
   </div>
@@ -17,7 +17,15 @@ import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import DistrictService from 'src/services/districtService/districtService';
-import { onMounted, reactive, ref, provide, computed, onActivated, onDeactivated } from 'vue';
+import {
+  onMounted,
+  reactive,
+  ref,
+  provide,
+  computed,
+  onActivated,
+  onDeactivated,
+} from 'vue';
 /*
 Declarations
 */
@@ -31,7 +39,6 @@ const provincia = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
 
-
 /*
   Computed
 */
@@ -43,14 +50,12 @@ const districtsByProvince = computed(() => {
   return DistrictService.getAllProvinceFromStorage();
 });
 
-
 const DDPharmByDistrict = computed(() => {
-    if(district.value != null || district.value != undefined) {
-      return clinicService.getAllPharmacyFromDistrict(district.value.name);
-    }
-    return []
+  if (district.value != null || district.value != undefined) {
+    return clinicService.getAllPharmacyFromDistrict(district.value.name);
+  }
+  return [];
 });
-
 
 /*
   Mounted Hooks
@@ -73,7 +78,6 @@ const viewStock = (stockInfo) => {
   selectRecord.value = stockInfo;
   stockData.value = stockInfo;
   showStockSearch.value = false;
-  console.log(selectRecord);
 };
 
 const goBack = () => {
@@ -88,23 +92,20 @@ const allFacilityFromDistrict = computed(() => {
   return clinicService.getAllUSFromDistrict(district.value.name);
 });
 
-
 onActivated(() => {
-    if (SessionStorage.getItem('district') !== null) {
-    district.value = SessionStorage.getItem('district')
+  if (SessionStorage.getItem('district') !== null) {
+    district.value = SessionStorage.getItem('district');
   }
-    if (SessionStorage.getItem('pharmacy') !== null) {
-    pharmacy.value = SessionStorage.getItem('pharmacy')
+  if (SessionStorage.getItem('pharmacy') !== null) {
+    pharmacy.value = SessionStorage.getItem('pharmacy');
   }
- console.log(district)
 });
 
 onDeactivated(() => {
-  console.log(district)
-  console.log(pharmacy)
-   if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
-  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
-
+  if (district.value != null || district.value != undefined)
+    SessionStorage.set('district', district.value);
+  if (pharmacy.value != null || pharmacy.value != undefined)
+    SessionStorage.set('pharmacy', pharmacy.value);
 });
 
 provide('allFacilityFromDistrict', allFacilityFromDistrict);

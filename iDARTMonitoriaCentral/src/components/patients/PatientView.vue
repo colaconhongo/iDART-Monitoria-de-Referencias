@@ -66,7 +66,7 @@
   </q-layout>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import PatientDetail from './PatientDetail.vue';
 
 import episodes from 'src/components/episode/Episode.vue';
@@ -87,8 +87,6 @@ const tabs = [
   { name: 'prescription', icon: 'medication', label: 'Prescrições' },
   { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
-
-const patient = inject('patient');
 
 const goBack = inject('goBack');
 </script>

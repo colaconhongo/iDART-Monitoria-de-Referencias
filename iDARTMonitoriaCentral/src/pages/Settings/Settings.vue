@@ -46,7 +46,15 @@
   </div>
 </template>
 <script setup>
-import { computed, provide, reactive, ref, onMounted, onActivated,onDeactivated } from 'vue';
+import {
+  computed,
+  provide,
+  reactive,
+  ref,
+  onMounted,
+  onActivated,
+  onDeactivated,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import clinics from '../Clinic/Clinic.vue';
 import clinic_sector from '../ClinicSector/ClinicSector.vue';
@@ -72,30 +80,21 @@ const district = reactive(ref());
 const facility = reactive(ref());
 const pharmacy = reactive(ref());
 
-
-onMounted(() => {
-  console.log(allProvincias);
-  console.log(province);
-  console.log(alldistrictsFromProvince);
-});
-
 onActivated(() => {
-    if (SessionStorage.getItem('district') !== undefined) {
-    district.value = SessionStorage.getItem('district')
+  if (SessionStorage.getItem('district') !== undefined) {
+    district.value = SessionStorage.getItem('district');
   }
-    if (SessionStorage.getItem('pharmacy') !== undefined) {
-    pharmacy.value = SessionStorage.getItem('pharmacy')
+  if (SessionStorage.getItem('pharmacy') !== undefined) {
+    pharmacy.value = SessionStorage.getItem('pharmacy');
   }
-  console.log(district)
 });
 
 onDeactivated(() => {
-  console.log(district)
-  console.log(pharmacy)
- if(district.value != null || district.value != undefined) SessionStorage.set('district', district.value)
-  if(pharmacy.value != null || pharmacy.value != undefined)   SessionStorage.set('pharmacy', pharmacy.value)
+  if (district.value != null || district.value != undefined)
+    SessionStorage.set('district', district.value);
+  if (pharmacy.value != null || pharmacy.value != undefined)
+    SessionStorage.set('pharmacy', pharmacy.value);
 });
-
 
 /*
   Computed
@@ -108,13 +107,11 @@ const alldistrictsFromProvince = computed(() => {
   return districtService.getAllProvinceFromStorage();
 });
 
-
 const allPhamacyFromFacility = computed(() => {
-   if(district.value != null || district.value != undefined) { 
-  return clinicService.getAllPharmacyFromDistrict(district.value.name);
-   }
+  if (district.value != null || district.value != undefined) {
+    return clinicService.getAllPharmacyFromDistrict(district.value.name);
+  }
 });
-
 
 provide('allProvincias', allProvincias);
 provide('alldistrictsFromProvince', alldistrictsFromProvince);

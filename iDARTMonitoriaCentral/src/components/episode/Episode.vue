@@ -86,15 +86,9 @@ const update = () => {
 };
 
 const saveStopEpisode = (episode) => {
-  console.log(episode);
-  episodeService
-    .post(episode)
-    .then((resp) => {
-      console.log(resp);
-    })
-    .catch(() => {
-      submitting.value = false;
-    });
+  episodeService.post(episode).catch(() => {
+    submitting.value = false;
+  });
   episodeService.getById(patient.value.uuidopenmrs);
 };
 

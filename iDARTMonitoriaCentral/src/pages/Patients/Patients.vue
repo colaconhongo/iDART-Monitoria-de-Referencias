@@ -18,7 +18,6 @@ import {
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
-//import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
@@ -35,7 +34,6 @@ const allProvincias = computed(() => {
 });
 
 const districtsByProvince = computed(() => {
-  console.log(DistrictService.getAllProvinceFromStorage());
   return DistrictService.getAllProvinceFromStorage();
 });
 
@@ -58,7 +56,6 @@ onActivated(() => {
   if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
-  console.log(district);
 });
 
 onDeactivated(() => {
