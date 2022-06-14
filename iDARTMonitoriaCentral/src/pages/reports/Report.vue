@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-pt-sm">
+  <div class="q-pa-sm q-gutter-md">
     <Filter class="q-mb-lg" :is="true" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">

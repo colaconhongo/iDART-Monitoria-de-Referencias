@@ -80,6 +80,7 @@
     <div class="row q-ml-md">
       <div class="col">
         <q-btn
+          :loading="loadingXLS"
           class="row gt-xs"
           flat
           dense
@@ -90,6 +91,7 @@
           .Xls
         </q-btn>
         <q-btn
+          :loading="loadingPDF"
           class="gt-xs"
           flat
           dense
@@ -124,6 +126,8 @@ const province = inject('province');
 const district = inject('district');
 const facility = inject('facility');
 const pharmacy = inject('pharmacy');
+const loadingPDF = ref(false);
+const loadingXLS = ref(false);
 const $q = useQuasar();
 
 const periodTypeList = ref([
@@ -224,13 +228,25 @@ const getDDMMYYYFromJSDate = (jsDate) => {
 /*
   Methods
   */
-const showLoading = () => {
-  $q.loading.show({
-    message: 'First message. Gonna change it in 3 seconds...',
-  });
+const showLoading = (fileType) => {
+  if (fileType === 'PDF') {
+    loadingPDF.value = true;
+  } else {
+    loadingXLS.value = true;
+  }
+};
+const hideLoading = (fileType) => {
+  if (fileType === 'PDF') {
+    loadingPDF.value = false;
+  } else {
+    loadingXLS.value = false;
+  }
+  // $q.loading.show({
+  //   message: 'First message. Gonna change it in 3 seconds...',
+  // });
 };
 const generateReport = (fileType) => {
-  showLoading();
+  showLoading(fileType);
   params.value.fileType = fileType;
   if (
     params.value.periodType.code !== 'ANNUAL' &&
@@ -259,7 +275,10 @@ const generateReport = (fileType) => {
     determineDateInterval();
     emit('generateReport', params);
   }
-  $q.loading.hide();
+  setTimeout(() => {
+    hideLoading(fileType);
+  }, 300);
+  // $q.loading.hide();
 };
 
 const determineDateInterval = () => {

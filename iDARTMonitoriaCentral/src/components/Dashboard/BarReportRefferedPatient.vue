@@ -1,6 +1,6 @@
 <template>
   <div
-    style="width: 100%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)"
+    style="width: 99%; height: 100%;linear-gradient( 135deg, #343E59 10%, #2B2D3E 40%)"
     class="panel"
   >
     <apexchart

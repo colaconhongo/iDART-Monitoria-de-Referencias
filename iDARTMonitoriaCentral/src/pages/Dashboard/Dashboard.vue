@@ -1,19 +1,12 @@
 <template>
-  <div class="background">
-    <div class="q-mt-lg">
-      <Filter :is="true" :isDashboard="isDashboard" />
-      <br />
-      <q-bar dense dark class="bg-primary"> </q-bar>
-      <totalSummary />
-      <q-separator />
-      <chartReferralByPharmacy v-model:loaded="loaded" />
-      <q-separator />
-      <chartDispenseByDrug v-model:loaded="loaded" />
-      <q-separator />
-      <chartBarReffered v-model:loaded="loaded" />
-      <q-separator />
-      <lineChart v-model:loaded="loaded" />
-    </div>
+  <div class="q-pa-sm q-gutter-md">
+    <Filter :is="true" :isDashboard="isDashboard" />
+    <q-bar dense dark class="bg-primary"> </q-bar>
+    <totalSummary />
+    <chartReferralByPharmacy v-model:loaded="loaded" />
+    <chartDispenseByDrug v-model:loaded="loaded" />
+    <chartBarReffered v-model:loaded="loaded" />
+    <lineChart v-model:loaded="loaded" />
   </div>
 </template>
 <script setup>

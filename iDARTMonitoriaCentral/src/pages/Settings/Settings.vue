@@ -1,6 +1,7 @@
 <template>
-  <Filter :is="true" />
-  <div class="q-pa-md q-pt-xl">
+  <div class="q-pa-sm q-gutter-md">
+    <Filter :is="true" />
+    <q-bar dense dark class="bg-primary"> </q-bar>
     <q-splitter v-model="splitterModel">
       <template v-slot:before>
         <q-tabs
@@ -51,7 +52,6 @@ import {
   provide,
   reactive,
   ref,
-  onMounted,
   onActivated,
   onDeactivated,
 } from 'vue';

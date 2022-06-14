@@ -1,6 +1,7 @@
 <template>
-  <div class="q-pa-md q-pt-sm">
+  <div class="q-pa-sm q-gutter-md">
     <Filter :is="true" v-if="showStockSearch" />
+    <q-bar v-if="showStockSearch" dense dark class="bg-primary"> </q-bar>
     <stockDetails v-if="!showStockSearch" @goBack="goBack" />
     <stockSearch v-if="showStockSearch" />
   </div>

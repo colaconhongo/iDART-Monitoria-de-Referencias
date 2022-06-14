@@ -3,7 +3,9 @@
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
       <PatientDetail />
     </q-drawer>
-
+    <div class="row q-my-md">
+      <q-btn color="warning" @click="goBack" icon="arrow_back" label="Voltar" />
+    </div>
     <q-page-container>
       <div class="q-pa-md q-pt-xl">
         <q-splitter v-model="splitterModel">
@@ -11,26 +13,16 @@
             <q-tabs
               v-model="selectedTab"
               vertical
-              inline-label
               active-bg-color="white"
               active-color="primary"
               indicator-color="orange"
               class="text-grey"
-              style="text-align: left"
             >
               <q-tab v-for="tab in tabs" :key="tab.name" v-bind="tab" />
             </q-tabs>
           </template>
 
           <template v-slot:after>
-            <div class="row q-my-md">
-              <q-btn
-                color="primary"
-                @click="goBack"
-                icon="arrow_back"
-                label="Voltar"
-              />
-            </div>
             <q-tab-panels
               v-model="selectedTab"
               animated
@@ -44,11 +36,6 @@
                 <episodes />
               </q-tab-panel>
 
-              <q-tab-panel name="clinicInformation">
-                <div class="text-h4 q-mb-md"></div>
-                <clinicInformations />
-              </q-tab-panel>
-
               <q-tab-panel name="prescription">
                 <div class="text-h4 q-mb-md"></div>
                 <prescriptions />
@@ -57,6 +44,11 @@
               <q-tab-panel name="dispense">
                 <div class="text-h4 q-mb-md"></div>
                 <dispenses />
+              </q-tab-panel>
+
+              <q-tab-panel name="clinicInformation">
+                <div class="text-h4 q-mb-md"></div>
+                <clinicInformations />
               </q-tab-panel>
             </q-tab-panels>
           </template>
@@ -79,13 +71,13 @@ const selectedTab = ref('episodios');
 const splitterModel = ref(15);
 const tabs = [
   { name: 'episodios', icon: 'local_hospital', label: 'Episódios' },
+  { name: 'dispense', icon: 'medication', label: 'Dispensas' },
+  { name: 'prescription', icon: 'medication', label: 'Prescrições' },
   {
     name: 'clinicInformation',
     icon: 'local_pharmacy',
     label: 'Atenção Farmacêutica',
   },
-  { name: 'prescription', icon: 'medication', label: 'Prescrições' },
-  { name: 'dispense', icon: 'medication', label: 'Dispensas' },
 ];
 
 const goBack = inject('goBack');

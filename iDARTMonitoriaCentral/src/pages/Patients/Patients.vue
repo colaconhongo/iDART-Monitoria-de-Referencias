@@ -1,6 +1,7 @@
 <template>
-  <q-page class="q-pa-sm q-gutter-sm">
+  <q-page class="q-pa-sm q-gutter-md">
     <Filter :is="true" v-if="activePatientList" />
+    <q-bar v-if="activePatientList" dense dark class="bg-primary"> </q-bar>
     <PatientList v-if="activePatientList" v-model:title="titleList" />
     <PatientView v-else />
   </q-page>
