@@ -19,6 +19,7 @@ export default class Prescription extends Model {
       qtyinhand: this.attr(''),
       duration: this.attr(''),
       dateexpectedstring: this.attr(''),
+      timesperday: this.attr(''),
       syncstatus: this.attr(''),
     };
   }

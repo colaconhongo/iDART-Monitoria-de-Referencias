@@ -1,5 +1,9 @@
 import moment from 'moment';
 import api from 'src/services/apiService/apiService';
+import { useRepo } from 'pinia-orm';
+import Prescription from 'src/stores/models/prescription/prescription'; 
+
+const sync_temp_dispense = useRepo(Prescription);
 
 export default {
   // Axios API call
@@ -99,6 +103,14 @@ export default {
       .then((resp) => {
         return resp.data;
       });
+  },
+  getPrescriptionsByPatientId(patientid) {
+    const list = api()
+      .get('sync_temp_dispense?patientid=eq.' + patientid)
+      .then((resp) => {
+        return resp.data;
+      });
+    return list;
   },
   getFormatDDMMYYYY(date) {
     return moment(date).format('DD-MM-YYYY');

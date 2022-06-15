@@ -82,7 +82,7 @@
         <div class="dados-referencia" style="text-align: left">
           <span>{{ moment(patient.datainiciotarv).format('DD-MM-YYYY') }}</span>
         </div>
-        <q-separator color="blue-8"></q-separator>
+        <div class="dados-referencia-tit" style="text-align: left">Estado</div>
         <div
           style="
             background-color: rgb(216 255 242);
@@ -134,6 +134,15 @@
             <small style="font-size: small"> Pendente</small></span
           >
         </div>
+        <q-separator color="blue-8"></q-separator>
+        <div class="row q-my-md q-ml-xl">
+          <q-btn
+            color="primary"
+            icon="print"
+            label="Imprimir fila"
+            @click="printFilaReport"
+          />
+        </div>
       </q-card-section>
     </q-card>
   </div>
@@ -142,10 +151,17 @@
 <script setup>
 import { inject } from 'vue';
 import { useUtils } from 'src/use/useUtils';
+import reportFila from 'src/services/ReportServices/fila/filaReport';
+import prescriptionService from 'src/services/prescriptionService/prescriptionService';
+
 import moment from 'moment';
 
 const { ageCalculator } = useUtils();
 const patient = inject('patient');
+
+const printFilaReport = () => {
+  reportFila.downloadPDF(patient.value);
+};
 </script>
 
 <style scoped>
