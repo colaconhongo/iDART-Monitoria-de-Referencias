@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup>
-import { useQuasar, QSpinnerBall, LocalStorage, SessionStorage } from 'quasar';
+import { useQuasar, QSpinnerBall, SessionStorage } from 'quasar';
 import {
   computed,
   onMounted,
@@ -27,9 +27,6 @@ import ClinicService from 'src/services/clinicService/clinicService';
 import EpisodeService from 'src/services/episodeService/episodeService';
 import DispenseService from 'src/services/dispenseService/dispenseService';
 import patientService from 'src/services/patientService/patientService';
-import VueApexCharts from 'vue3-apexcharts';
-import randomcolor from 'randomcolor';
-import moment from 'moment';
 import DashboardUtils from '../../use/DashboardUtils';
 import Filter from 'src/components/Filter/Filter.vue';
 import totalSummary from 'src/components/Dashboard/ChartsSummary.vue';
@@ -40,8 +37,7 @@ import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatien
 const provincia = reactive(ProvinceService.getFirstProvinceByNameFromStorage());
 let district = ref();
 let pharmacy = ref();
-const apexchart = VueApexCharts;
-let year = ref(2022);
+let year = ref(new Date().getFullYear());
 const $q = useQuasar();
 const isDashboard = ref(true);
 

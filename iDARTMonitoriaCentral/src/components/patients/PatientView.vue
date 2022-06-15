@@ -23,15 +23,6 @@
           </template>
 
           <template v-slot:after>
-          
-            <div class="row q-my-md" style="margin: 2px">
-              <q-btn
-                color="primary"
-                @click="goBack"
-                icon="arrow_back"
-                label="Voltar"
-              />
-            </div>
             <q-tab-panels
               v-model="selectedTab"
               animated
@@ -68,7 +59,6 @@
   </q-layout>
 </template>
 <script setup>
-
 import { inject, ref } from 'vue';
 
 import PatientDetail from './PatientDetail.vue';

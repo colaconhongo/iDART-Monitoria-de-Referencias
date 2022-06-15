@@ -64,7 +64,10 @@
         </div>
         <div class="dados-referencia" style="text-align: left">
           <span>{{
-            moment(patient.prescriptiondate).format('DD-MM-YYYY')
+            patient.prescriptiondate === null ||
+            patient.prescriptiondate === undefined
+              ? 'Não definido '
+              : moment(patient.prescriptiondate).format('DD-MM-YYYY')
           }}</span>
         </div>
         <div style="text-align: left">Framácia de Referência</div>
@@ -137,7 +140,7 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { inject } from 'vue';
 import { useUtils } from 'src/use/useUtils';
 import moment from 'moment';
 
@@ -147,11 +150,11 @@ const patient = inject('patient');
 
 <style scoped>
 .patient-detail {
-  margin-top: 190px;
+  margin-top: 150px;
   padding: 10px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 13px;
+  font-size: 14px;
 }
 .dados-referencia {
   background-color: rgb(228 245 255);

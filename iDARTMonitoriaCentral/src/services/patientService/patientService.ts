@@ -24,13 +24,17 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('sync_temp_patients?offset=' + offset + '&limit=100')
+        .get(
+          'sync_temp_patients?estadopaciente=eq.Activo&offset=' +
+            offset +
+            '&limit=100'
+        )
         .then((resp) => {
           sync_temp_patients.save(resp.data);
           if (resp.data.length > 0) {
             offset = offset + 100;
             // setTimeout(this.get, 1000,offset);
-             this.get(offset);
+            this.get(offset);
           }
         })
         .catch((error) => {
@@ -107,7 +111,7 @@ export default {
     const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
     return api()
       .get(
-        'sync_temp_patients?prescriptiondate=gt.' +
+        'sync_temp_patients?estadopaciente=eq.Activo&prescriptiondate=gt.' +
           startDate +
           '&prescriptiondate=lt.' +
           endDate
