@@ -1,11 +1,20 @@
 import moment from 'moment';
 import api from 'src/services/apiService/apiService';
+import { useRepo } from 'pinia-orm';
+import Prescription from 'src/stores/models/prescription/prescription';
+import Dispense from 'src/stores/models/dispense/dispense';
+
+const sync_temp_dispense = useRepo(Prescription);
 
 export default {
   // Axios API call
   getReferedPatientsReport(params) {
-    const url = `refered_patients_vw?referaldate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&referaldate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`;
-    console.log(url)
+    const url = `refered_patients_vw?referaldate=gte.${this.getFormatYYYYMMDD(
+      params.value.startDate
+    )}&referaldate=lte.${this.getFormatYYYYMMDD(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
+    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -14,28 +23,48 @@ export default {
   },
   getReturnedReferedPatient(params) {
     return api()
-      .get(`returned_refered_patients_vw?returndate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&returndate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`)
+      .get(
+        `returned_refered_patients_vw?returndate=gte.${this.getFormatYYYYMMDD(
+          params.value.startDate
+        )}&returndate=lte.${this.getFormatYYYYMMDD(
+          params.value.endDate
+        )}${this.buildGenericCondition(params)}`
+      )
       .then((resp) => {
         return resp.data;
       });
   },
   getPatientDispenseHistory(params) {
     return api()
-      .get(`refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&pickupdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`)
+      .get(
+        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+          params.value.startDate
+        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+          params.value.endDate
+        )}${this.buildGenericCondition(params)}`
+      )
       .then((resp) => {
         return resp.data;
       });
   },
   getDispensesByDrugAndRegimen(params) {
     return api()
-      .get(`refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&pickupdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`)
+      .get(
+        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+          params.value.startDate
+        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+          params.value.endDate
+        )}${this.buildGenericCondition(params)}`
+      )
       .then((resp) => {
         return resp.data;
       });
   },
   getPatientsWithMissDispenses(params) {
-    const url = `rpc/getfaltosos?enddate=${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`
-    console.log(url)
+    const url = `rpc/getfaltosos?enddate=${this.getFormatYYYYMMDD(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
+    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -43,8 +72,10 @@ export default {
       });
   },
   getActivePatients(params) {
-    const url = `rpc/get_active_patients?enddate=${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`
-    console.log(url)
+    const url = `rpc/get_active_patients?enddate=${this.getFormatYYYYMMDD(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
+    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -53,18 +84,39 @@ export default {
   },
   getNotSyncDispenses(params) {
     return api()
-      .get(`refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&pickupdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}&syncstatus=eq.R${this.buildGenericCondition(params)}`)
+      .get(
+        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+          params.value.startDate
+        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+          params.value.endDate
+        )}&syncstatus=eq.R${this.buildGenericCondition(params)}`
+      )
       .then((resp) => {
         return resp.data;
       });
   },
   getPatientWithClinicInfo(params) {
     return api()
-      .get(`patients_with_clinic_info_vw?lastscreeningdate=gte.${this.getFormatYYYYMMDD(params.value.startDate)}&lastscreeningdate=lte.${this.getFormatYYYYMMDD(params.value.endDate)}${this.buildGenericCondition(params)}`)
+      .get(
+        `patients_with_clinic_info_vw?lastscreeningdate=gte.${this.getFormatYYYYMMDD(
+          params.value.startDate
+        )}&lastscreeningdate=lte.${this.getFormatYYYYMMDD(
+          params.value.endDate
+        )}${this.buildGenericCondition(params)}`
+      )
       .then((resp) => {
         return resp.data;
       });
   },
+  getPrescriptionsByPatientId(patientid) {
+    const list = api()
+      .get('sync_temp_dispense?patientid=eq.' + patientid)
+      .then((resp) => {
+        return resp.data;
+      });
+    return list;
+  },
+
   getFormatDDMMYYYY(date) {
     return moment(date).format('DD-MM-YYYY');
   },
@@ -73,12 +125,25 @@ export default {
   },
   buildGenericCondition(params) {
     let conditionString = '';
-    if (params.value !== undefined && params.value.district !== undefined && params.value.district !== null && params.value.district.id !== undefined && params.value.district.id > 0) {
-      conditionString = conditionString + '&district=eq.' + params.value.district.name
+    if (
+      params.value !== undefined &&
+      params.value.district !== undefined &&
+      params.value.district !== null &&
+      params.value.district.id !== undefined &&
+      params.value.district.id > 0
+    ) {
+      conditionString =
+        conditionString + '&district=eq.' + params.value.district.name;
     }
 
-    if (params.value !== undefined && params.value.clinic !== undefined && params.value.clinic !== null && params.value.clinic.id !== undefined) {
-      conditionString = conditionString + '&clinicuuid=eq.' + params.value.clinic.uuid
+    if (
+      params.value !== undefined &&
+      params.value.clinic !== undefined &&
+      params.value.clinic !== null &&
+      params.value.clinic.id !== undefined
+    ) {
+      conditionString =
+        conditionString + '&clinicuuid=eq.' + params.value.clinic.uuid;
     }
     return conditionString;
   },
