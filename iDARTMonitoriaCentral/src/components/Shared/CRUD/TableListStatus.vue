@@ -68,20 +68,21 @@
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
           <div v-if="col.value === 'I' && col.name === 'syncstatus'">
             <label style="color: green">
-              <q-icon name="cloud_upload"  size ="md"></q-icon>
-              </label
-            >
+              <q-icon name="cloud_upload" size="md"></q-icon>
+            </label>
             <!--Enviado-->
           </div>
           <div v-else-if="col.value === 'L' && col.name === 'syncstatus'">
-            <label style="color: orange"
-              > <q-icon name="cloud_download"  size ="md"></q-icon> <!--Actualizado--></label
+            <label style="color: orange">
+              <q-icon name="cloud_download" size="md"></q-icon>
+              <!--Actualizado--></label
             >
           </div>
           <div v-else-if="col.value === 'P' && col.name === 'syncstatus'">
             <label style="color: orange"
-              ><q-icon name="warning" size ="md"></q-icon> <!--Pendente-->  </label
-            >
+              ><q-icon name="warning" size="md"></q-icon>
+              <!--Pendente-->
+            </label>
           </div>
           <div v-else>
             {{ col.value }}
@@ -238,9 +239,6 @@ const wrapCsvValue = (val, formatFn) => {
 
 const exportTable = () => {
   // naive encoding to csv format
-  console.log('Entra');
-  console.log(colunas);
-  console.log(linhas);
   const content = [colunas.map((col) => wrapCsvValue(col.label))]
     .concat(
       linhas.map((row) =>

@@ -33,21 +33,20 @@ import moment from 'moment';
 const title = ref('Lista de Pacientes Faltosos ao Levantamento');
 
 const generateReport = (params) => {
-  console.log(params.value.fileType);
   if (params.value.fileType === 'PDF') {
     reportFaltososARV.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   } else {
     reportFaltososARV.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
       params
     );
   }

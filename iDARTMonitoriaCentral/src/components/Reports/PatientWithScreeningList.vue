@@ -28,19 +28,30 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportPatientWithClinicInfo from 'src/services/ReportServices/clinicInfo/reportPatientWithClinicInfo';
-import moment from 'moment'
+import moment from 'moment';
 
 const title = ref('Lista de Pacientes com Atenção Farmaceutica');
 
 const generateReport = (params) => {
-  console.log(params)
-  reportPatientWithClinicInfo.downloadPDF(
-    null,
-    params.value.province.name,
-    moment(params.value.startDate).format('DD/MM/YYYY'),
-    moment(params.value.endDate).format('DD/MM/YYYY'),
-    params
-  );
+
+  if (params.value.fileType === 'PDF') {
+    reportPatientWithClinicInfo.downloadPDF(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate).format('DD/MM/YYYY'),
+      moment(params.value.endDate).format('DD/MM/YYYY'),
+      params
+    );
+  } else {
+
+    reportPatientWithClinicInfo.downloadExcel(
+      null,
+      params.value.province.name,
+      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      params
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);

@@ -1,8 +1,5 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <div class="row q-my-md">
-      <q-btn color="primary" @click="goBack" icon="arrow_back" label="Voltar" />
-    </div>
     <episodeHome :is="activeEpisodeHome" v-model:title="titleList" />
     <EpisodeEditModal
       v-if="editEpisode"
@@ -19,8 +16,6 @@ import EpisodeEditModal from 'src/components/episode/EpisodeEditModal.vue';
 import patientService from 'src/services/patientService/patientService.ts';
 import episodeService from 'src/services/episodeService/episodeService.ts';
 import moment from 'moment';
-
-const emit = defineEmits(['goBack']);
 
 /*
   Declarations
@@ -57,13 +52,14 @@ const update = () => {
     patientAux.value.clinicname = episode.value.clinic.clinicname;
     patientAux.value.id = episode.value.id;
     patientAux.value.clinicuuid = episode.value.clinic.uuid;
+    patientAux.value.clinic = episode.value.clinic.id;
+    patientAux.value.modied = 'T';
 
     //Episodio de Fim na Farmacia anterior
     episodeStop.value.clinic = clinicBeforeUpdate.value;
-
     episodeStop.value.stopdate = moment(new Date()).format('DD-MM-YYYY');
     episodeStop.value.stopnotes = 'Paciente enviado para outra Farmácia';
-    episodeStop.value.stopreason = 'Referido para outra Farmácia';
+    episodeStop.value.stopreason = 'Contra Referido para outra Farmácia';
     episodeStop.value.syncstatus = 'R';
     episodeStop.value.patientuuid = episode.value.patientuuid;
     episodeStop.value.startdate = episode.value.startdate;
@@ -85,20 +81,14 @@ const update = () => {
         submitting.value = false;
       });
   } else {
-    alert('Episodio de fim');
+    // alert('Episodio de fim');
   }
 };
 
 const saveStopEpisode = (episode) => {
-  console.log(episode);
-  episodeService
-    .post(episode)
-    .then((resp) => {
-      console.log(resp);
-    })
-    .catch(() => {
-      submitting.value = false;
-    });
+  episodeService.post(episode).catch(() => {
+    submitting.value = false;
+  });
   episodeService.getById(patient.value.uuidopenmrs);
 };
 
@@ -107,10 +97,6 @@ const removeAttributes = (objectEntity) => {
     delete objectEntity[attibute];
   });
   return objectEntity;
-};
-
-const goBack = () => {
-  alert(activePatientList);
 };
 
 const close = () => {

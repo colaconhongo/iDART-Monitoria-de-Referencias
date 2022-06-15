@@ -61,13 +61,12 @@ export default {
     return district.all();
   },
   getAllProvinceFromStorage() {
-    console.log(Number(localStorage.getItem('province_id')))
     return district
       .query()
       .where('province', Number(localStorage.getItem('province_id')))
       .get();
   },
-  getDistrictFromStorage(id :number) {
-   return district.query().whereId(id).first()
-  }
+  getDistrictFromStorage(id: number) {
+    return district.query().whereId(id).first();
+  },
 };

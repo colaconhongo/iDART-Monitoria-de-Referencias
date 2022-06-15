@@ -1,8 +1,7 @@
 import moment from 'moment';
 import api from 'src/services/apiService/apiService';
 import { useRepo } from 'pinia-orm';
-import Prescription from 'src/stores/models/prescription/prescription';
-import Dispense from 'src/stores/models/dispense/dispense';
+import Prescription from 'src/stores/models/prescription/prescription'; 
 
 const sync_temp_dispense = useRepo(Prescription);
 
@@ -14,7 +13,6 @@ export default {
     )}&referaldate=lte.${this.getFormatYYYYMMDD(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
-    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -50,11 +48,11 @@ export default {
   getDispensesByDrugAndRegimen(params) {
     return api()
       .get(
-        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+        `rpc/get_dispenses_by_drugandregimen_onperiod?startdate=${this.getFormatYYYYMMDD(
           params.value.startDate
-        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+        )}&enddate=${this.getFormatYYYYMMDD(
           params.value.endDate
-        )}${this.buildGenericCondition(params)}`
+        )}${this.buildGenericFuncCondition(params)}`
       )
       .then((resp) => {
         return resp.data;
@@ -64,7 +62,6 @@ export default {
     const url = `rpc/getfaltosos?enddate=${this.getFormatYYYYMMDD(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
-    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -75,7 +72,6 @@ export default {
     const url = `rpc/get_active_patients?enddate=${this.getFormatYYYYMMDD(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
-    console.log(url);
     return api()
       .get(url)
       .then((resp) => {
@@ -89,7 +85,7 @@ export default {
           params.value.startDate
         )}&pickupdate=lte.${this.getFormatYYYYMMDD(
           params.value.endDate
-        )}&syncstatus=eq.R${this.buildGenericCondition(params)}`
+        )}&syncstatus=eq.P${this.buildGenericCondition(params)}`
       )
       .then((resp) => {
         return resp.data;
@@ -116,12 +112,11 @@ export default {
       });
     return list;
   },
-
   getFormatDDMMYYYY(date) {
     return moment(date).format('DD-MM-YYYY');
   },
   getFormatYYYYMMDD(date) {
-    return moment(date).format('YYYY-MM-DD');
+    return moment(date,'DD-MM-YYYY').format('YYYY-MM-DD');
   },
   buildGenericCondition(params) {
     let conditionString = '';
@@ -144,6 +139,30 @@ export default {
     ) {
       conditionString =
         conditionString + '&clinicuuid=eq.' + params.value.clinic.uuid;
+    }
+    return conditionString;
+  },
+  buildGenericFuncCondition(params) {
+    let conditionString = '';
+    if (
+      params.value !== undefined &&
+      params.value.district !== undefined &&
+      params.value.district !== null &&
+      params.value.district.id !== undefined &&
+      params.value.district.id > 0
+    ) {
+      conditionString =
+        conditionString + '&district=' + params.value.district.name;
+    }
+
+    if (
+      params.value !== undefined &&
+      params.value.clinic !== undefined &&
+      params.value.clinic !== null &&
+      params.value.clinic.id !== undefined
+    ) {
+      conditionString =
+        conditionString + '&clinicuuid=' + params.value.clinic.uuid;
     }
     return conditionString;
   },

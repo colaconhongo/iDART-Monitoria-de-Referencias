@@ -10,18 +10,21 @@
         />
         <div>
           <div class="patient-details">
-            <p style="margin-bottom: 0%">
+            <p style="margin-bottom: 0%" class="text-weight-bolder">
               {{ patient.firstnames + ' ' + patient.lastname }}
             </p>
           </div>
           <div class="patient-details">
-            NID: <span>{{ patient.patientid }}</span>
+            <span class="text-weight-bolder"> NID: </span
+            ><span>{{ patient.patientid }}</span>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="perm_identity" color="blue-8" /></span>
+              <span>
+                <q-icon name="perm_identity" color="blue-8" size="sm"
+              /></span>
             </div>
             <div class="patient-details">
               <span>{{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }}</span>
@@ -29,7 +32,9 @@
           </div>
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="calendar_today" color="blue-8" /></span>
+              <span>
+                <q-icon name="calendar_today" color="blue-8" size="sm"
+              /></span>
             </div>
             <div class="patient-details">
               <span> {{ ageCalculator(patient.dateofbirth) }} anos </span>
@@ -37,7 +42,7 @@
           </div>
           <div class="col-sm-4">
             <div class="patient-details">
-              <span> <q-icon name="phone" color="blue-8" /></span>
+              <span> <q-icon name="phone" color="blue-8" size="sm" /></span>
             </div>
             <div>
               <span>{{ patient.cellphone }}</span>
@@ -46,7 +51,7 @@
         </div>
         <div>
           <span>
-            <q-icon name="place" color="blue-8" />
+            <q-icon name="place" color="blue-8" size="sm" />
             <small> {{ patient.address1 }}</small></span
           >
         </div>
@@ -59,7 +64,10 @@
         </div>
         <div class="dados-referencia" style="text-align: left">
           <span>{{
-            moment(patient.prescriptiondate).format('DD-MM-YYYY')
+            patient.prescriptiondate === null ||
+            patient.prescriptiondate === undefined
+              ? 'Não definido '
+              : moment(patient.prescriptiondate).format('DD-MM-YYYY')
           }}</span>
         </div>
         <div style="text-align: left">Framácia de Referência</div>
@@ -68,7 +76,7 @@
         </div>
         <div style="text-align: left">Unidade Sanitária</div>
         <div class="dados-referencia" style="text-align: left">
-          <span>{{ patient.mainclinic }}</span>
+          <span>{{ patient.mainclinicname }}</span>
         </div>
         <div style="text-align: left">Data Início TARV</div>
         <div class="dados-referencia" style="text-align: left">
@@ -141,7 +149,7 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { inject } from 'vue';
 import { useUtils } from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
@@ -158,11 +166,11 @@ const printFilaReport = () => {
 
 <style scoped>
 .patient-detail {
-  margin-top: 190px;
+  margin-top: 150px;
   padding: 10px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 13px;
+  font-size: 14px;
 }
 .dados-referencia {
   background-color: rgb(228 245 255);
