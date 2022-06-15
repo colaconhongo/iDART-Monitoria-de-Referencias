@@ -17,7 +17,7 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import episodeService from 'src/services/episodeService/episodeService';
-import { provide, inject, computed, onMounted, reactive, ref } from 'vue';
+import { inject, computed, onMounted, reactive, ref } from 'vue';
 import listEpisode from 'src/components/Shared/CRUD/TableListEpisodesCustm.vue';
 import moment from 'moment';
 
@@ -36,7 +36,10 @@ const columns = [
     required: true,
     label: 'Data de Epsódio',
     align: 'left',
-    field: (row) => moment(row.startdate).format('DD-MM-YYYY'),
+    field: (row) =>
+      row.startdate === null || row.startdate === undefined
+        ? 'Não definido '
+        : moment(row.startdate).format('DD-MM-YYYY'),
     format: (val) => `${val}`,
     sortable: true,
   },

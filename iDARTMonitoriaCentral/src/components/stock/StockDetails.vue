@@ -9,7 +9,10 @@
   </div>
   <q-page class="q-pa-sm q-gutter-sm q-mx-xl">
     <div class="row q-mx-xl">
-      <div class="col-3 q-mx-md">
+      <div class="col-2 q-mx-md">
+        <q-input readonly v-model="selectRecord.clinicname" label="Farmácia" />
+      </div>
+      <div class="col-2 q-mx-md">
         <q-input readonly v-model="selectRecord.fnm" label="Código FNM" />
       </div>
       <div class="col q-mx-md">
@@ -19,7 +22,7 @@
           label="Nome do Medicamento"
         />
       </div>
-      <div class="col-3 q-mx-md">
+      <div class="col-2 q-mx-md">
         <q-input readonly v-model="selectRecord.balance" label="Saldo Actual" />
       </div>
     </div>
@@ -43,11 +46,11 @@
     imports
   */
 
-  import { computed, onMounted, inject, ref } from 'vue';
-  import { useQuasar, QSpinnerBall } from 'quasar';
-  import stockReportService from 'src/services/ReportServices/stock/stockReportService';
-  import stockTable from 'src/components/Shared/CRUD/TableList.vue';
-  import moment from 'moment'
+import { computed, onMounted, inject, ref } from 'vue';
+import { useQuasar, QSpinnerBall } from 'quasar';
+import stockReportService from 'src/services/ReportServices/stock/stockReportService';
+import stockTable from 'src/components/Shared/CRUD/TableList.vue';
+import moment from 'moment';
 
 /*
     Declarations
@@ -106,7 +109,6 @@ const columns = [
   },
 ];
 const selectRecord = inject('selectRecord');
-
 
 /*
     emits

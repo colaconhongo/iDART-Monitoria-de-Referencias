@@ -134,6 +134,7 @@ const groupedMap = (items, key) =>
 </script>
 <style lang="scss" scoped>
 .panel {
+  border: 0.5px solid $grey-13;
   border-radius: 15px;
   background-color: white;
 }

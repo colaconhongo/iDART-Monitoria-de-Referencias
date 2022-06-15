@@ -66,28 +66,27 @@
     <template v-slot:body="props">
       <q-tr :props="props">
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
-          {{ col.value }}
+          <div v-if="col.label === 'Estado'">
+            <div class="sending_status" v-if="col.value === 'Enviado'">
+              <span>
+                <q-icon name="done_all" color="#ff9d0d" />
+                <small style="font-size: small"> {{ col.value }} </small>
+              </span>
+            </div>
+            <div class="pending_status" v-if="col.value === 'Pendente'">
+              <span>
+                <q-icon name="pending_actions" color="#fb1808" />
+                <small style="font-size: small"> Pendente</small></span
+              >
+            </div>
+          </div>
+
+          <div v-else>
+            {{ col.value }}
+          </div>
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>
           <div class="q-gutter-sm q-px-md">
-            <q-btn
-              color="red"
-              icon="delete_forever"
-              no-caps
-              round
-              size="sm"
-              v-if="with_actionRemoveButton"
-              @click="remover(props.row)"
-            >
-              <q-tooltip
-                content-class="bg-white text-primary shadow-4"
-                :offset="[10, 10]"
-                transition-show="rotate"
-                transition-hide="rotate"
-              >
-                Remover
-              </q-tooltip>
-            </q-btn>
             <q-btn
               color="orange"
               icon="edit"
@@ -104,29 +103,6 @@
                 transition-hide="rotate"
               >
                 Editar
-              </q-tooltip>
-            </q-btn>
-
-            <q-btn
-              color="primary"
-              icon-right="east"
-              align="left"
-              no-caps
-              label="Ver"
-              unelevated
-              rounded
-              size="sm"
-              style="min-width: 78px"
-              v-if="with_actionDetailButton"
-              @click="visualizar(props.row)"
-            >
-              <q-tooltip
-                content-class="bg-red text-white shadow-4"
-                :offset="[10, 10]"
-                transition-show="rotate"
-                transition-hide="rotate"
-              >
-                Ver detalhes
               </q-tooltip>
             </q-btn>
           </div>
@@ -251,3 +227,35 @@ const exportTable = () => {
   }
 };
 </script>
+<style scoped>
+.pending_status {
+  border-radius: 20px;
+  background-color: #f5cbc8;
+  color: #fb1808;
+  text-align: center;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 8px;
+}
+.updating_status {
+  border-radius: 20px;
+  background-color: rgb(255 240 231);
+  color: #ff9d0d;
+  text-align: center;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 8px;
+}
+.sending_status {
+  border-radius: 20px;
+  background-color: rgb(216 255 242);
+  color: #26bb0a;
+  text-align: center;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 8px;
+}
+</style>
