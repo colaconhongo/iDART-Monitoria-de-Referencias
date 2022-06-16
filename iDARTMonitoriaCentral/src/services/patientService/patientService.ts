@@ -8,6 +8,7 @@ import clinicSectorService from '../clinicSectorService/clinicSectorService';
 import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
 import { off } from 'process';
+import useUtils from 'src/use/useUtils';
 
 const sync_temp_patients = useRepo(Patient);
 const sync_temp_episode = useRepo(Episode);
@@ -107,8 +108,8 @@ export default {
 
   getPatientsByYear(year) {
     const yearBefore = year - 1;
-    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
-    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
     return api()
       .get(
         'sync_temp_patients?estadopaciente=eq.Activo&prescriptiondate=gt.' +

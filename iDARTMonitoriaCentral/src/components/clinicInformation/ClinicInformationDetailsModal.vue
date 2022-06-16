@@ -287,7 +287,7 @@ import monitoringComponent from 'src/components/clinicInformation/MonitoringComp
 import adverseReactionComponent from 'src/components/clinicInformation/AdverseReactionComponent.vue';
 import vitalDataComponent from 'src/components/clinicInformation/VitalDataComponent.vue';
 import moment from 'moment';
-import { useUtils } from 'src/use/useUtils';
+import useUtils from 'src/use/useUtils';
 
 const { ageCalculator } = useUtils();
 

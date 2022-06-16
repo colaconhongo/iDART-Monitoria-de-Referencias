@@ -22,8 +22,9 @@ import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
 import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
-import { useUtils } from 'src/use/useUtils';
+import c from 'src/use/useUtils';
 import Patient from 'src/stores/models/patient/patient';
+import useUtils from 'src/use/useUtils';
 /*
 Declarations
 */
@@ -37,13 +38,11 @@ const title = inject('titleList');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 
-const { ageCalculator } = useUtils();
-
 const columns = [
   {
     name: 'patientid',
     required: true,
-    label: t('NID'),
+    label: t('patientid'),
     align: 'left',
     field: (row) => row.patientid,
     format: (val) => `${val}`,
@@ -52,7 +51,7 @@ const columns = [
   {
     name: 'firstnames',
     align: 'left',
-    label: t('Nome do Paciente | Idade'),
+    label: t('firstnames'),
     field: (row) => row.firstnames + ' ' + row.lastname,
     format: (val) => `${val}`,
     sortable: true,
@@ -60,15 +59,15 @@ const columns = [
   {
     name: 'dateofbirth',
     align: 'left',
-    label: t('idade'),
-    field: (row) => ageCalculator(row.dateofbirth) + ' anos',
+    label: t('dateofbirth'),
+    field: (row) => useUtils.ageCalculator(row.dateofbirth) + ' anos',
     format: (val) => `${val}`,
     sortable: true,
   },
   {
     name: 'sex',
     align: 'left',
-    label: t('Sexo'),
+    label: t('sex'),
     field: (row) => (row.sex === 'F' ? 'Feminino' : 'Masculino'),
     format: (val) => `${val}`,
     sortable: true,
@@ -76,7 +75,7 @@ const columns = [
   {
     name: 'mainclinic',
     align: 'left',
-    label: t('Unidade Sanitária'),
+    label: t('mainclinic'),
     field: (row) => row.mainclinicname,
     format: (val) => `${val}`,
     sortable: true,
@@ -84,7 +83,7 @@ const columns = [
   {
     name: 'clinicname',
     align: 'left',
-    label: t('Framácia  de Referência'),
+    label: 'Farmácia de Referência',
     field: (row) => row.clinicname,
     format: (val) => `${val}`,
     sortable: true,

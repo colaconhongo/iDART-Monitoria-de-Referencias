@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm q-gutter-md">
-    <Filter :is="true" />
+    <Filter />
     <q-bar dense dark class="bg-primary"> </q-bar>
     <q-splitter v-model="splitterModel">
       <template v-slot:before>
@@ -64,6 +64,7 @@ import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
+import DashboardUtils from '../../use/DashboardUtils';
 import { SessionStorage } from 'quasar';
 
 /*
@@ -72,6 +73,8 @@ import { SessionStorage } from 'quasar';
 const { t } = useI18n();
 const selectedTab = ref('clinic');
 const splitterModel = ref(15);
+let year = ref(new Date().getFullYear());
+const yearsToShow = DashboardUtils.getLastFiveYears();
 
 const province = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
@@ -122,8 +125,11 @@ provide('district', district);
 provide('facility', facility);
 provide('pharmacy', pharmacy);
 
+provide('yearsToShow', yearsToShow);
+provide('year', year);
+
 const tabs = [
-  { name: 'clinic', icon: 'local_hospital', label: t('pharmacy') },
+  { name: 'clinic', icon: 'local_hospital', label: 'Farmácia' },
   { name: 'clinic_sector', icon: 'local_pharmacy', label: t('clinicSector') },
   { name: 'drugs', icon: 'medication', label: t('drug') },
   { name: 'regimen', icon: 'healing', label: t('regimen') },

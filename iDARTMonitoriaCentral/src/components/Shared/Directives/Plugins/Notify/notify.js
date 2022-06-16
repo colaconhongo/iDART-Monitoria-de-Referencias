@@ -1,6 +1,4 @@
-import { useQuasar, Notify } from 'quasar';
-
-const $q = useQuasar();
+import { Notify } from 'quasar';
 
 // type: ['positive', 'negative', 'info', 'ongoing']
 export function ShowNotificationByType(type, message) {

@@ -6646,7 +6646,7 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
-"vue-i18n@^9.0.0", "vue-i18n@^9.1.0":
+"vue-i18n@^9.1.0", "vue-i18n@^9.1.10":
   "integrity" "sha512-jpr7gV5KPk4n+sSPdpZT8Qx3XzTcNDWffRlHV/cT2NUyEf+sEgTTmLvnBAibjOFJ0zsUyZlVTAWH5DDnYep+1g=="
   "resolved" "https://registry.npmjs.org/vue-i18n/-/vue-i18n-9.1.10.tgz"
   "version" "9.1.10"

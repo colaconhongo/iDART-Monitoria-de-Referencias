@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm q-gutter-md">
-    <Filter class="q-mb-lg" :is="true" />
+    <Filter class="q-mb-lg" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">
         <q-bar dark class="bg-primary text-white">
@@ -48,6 +48,7 @@ import DispenseByDrugAndRegimen from 'src/components/Reports/DispenseByDrugAndRe
 import PatientWithScreeningList from 'src/components/Reports/PatientWithScreeningList.vue';
 import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
+import DashboardUtils from '../../use/DashboardUtils';
 
 import { uid } from 'quasar';
 import {
@@ -64,6 +65,8 @@ import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 
+let year = ref(new Date().getFullYear());
+const yearsToShow = DashboardUtils.getLastFiveYears();
 let components = reactive([]);
 const province = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
@@ -151,6 +154,9 @@ provide('province', province);
 provide('district', district);
 provide('facility', facility);
 provide('pharmacy', pharmacy);
+
+provide('yearsToShow', yearsToShow);
+provide('year', year);
 </script>
 
 <style lang="scss" scoped>

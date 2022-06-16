@@ -35,7 +35,7 @@
       dense
       @clear="clearPharmacy()"
     />
-    <div v-if="isDashboard" class="col q-ml-md">
+    <div v-if="props.isDashboard" class="col q-ml-md">
       <SelectField
         :label="yearLabel"
         v-model="year"
@@ -50,19 +50,16 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { SessionStorage } from 'quasar';
 import SelectField from '../Shared/Input/SelectField.vue';
-import DistrictService from 'src/services/districtService/districtService';
-import clinicService from 'src/services/clinicService/clinicService';
 
 const { t } = useI18n();
 
 const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
-const facilityLabel = ref(t('facility'));
-const pharmacyLabel = ref(t('pharmacy'));
+const pharmacyLabel = ref('Farmácia');
 const yearLabel = ref(t('year'));
 
 const props = defineProps(['isDashboard']);
@@ -72,7 +69,6 @@ const props = defineProps(['isDashboard']);
 */
 const province = inject('province');
 const district = inject('district');
-const facility = inject('facility');
 const pharmacy = inject('pharmacy');
 const year = inject('year');
 const yearsToShow = inject('yearsToShow');

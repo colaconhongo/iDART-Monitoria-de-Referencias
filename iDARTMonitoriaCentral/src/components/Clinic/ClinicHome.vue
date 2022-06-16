@@ -35,14 +35,14 @@ const viewClinic = inject('viewClinic');
 const editClinic = inject('editClinic');
 const deleteClinic = inject('deleteClinic');
 const title = inject('titleList');
-const district = inject('district')
-const clinic = inject('clinic')
-const pharmacy = inject('pharmacy')
+const district = inject('district');
+const clinic = inject('clinic');
+const pharmacy = inject('pharmacy');
 const columns = [
   {
     name: 'code',
     required: true,
-    label: t('code'),
+    label: 'Código',
     align: 'left',
     field: (row) => row.code,
     format: (val) => `${val}`,
@@ -51,7 +51,7 @@ const columns = [
   {
     name: 'clinicname',
     align: 'left',
-    label: t('clinicname'),
+    label: 'Farmácia de Referência',
     field: (row) => row.clinicname,
     format: (val) => `${val}`,
     sortable: true,
@@ -59,7 +59,7 @@ const columns = [
   {
     name: 'facilitytype',
     align: 'left',
-    label: t('facilitytype'),
+    label: 'Tipo da Farmácia',
     field: (row) => row.facilitytype,
     format: (val) => `${val}`,
     sortable: true,
@@ -109,7 +109,10 @@ onMounted(() => {
 */
 
 const allClinics = computed(() => {
-  return clinicService.getDDPharmByDistrictAndPharmFromLocalStorage(district, pharmacy);
+  return clinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+    district,
+    pharmacy
+  );
 });
 
 /*

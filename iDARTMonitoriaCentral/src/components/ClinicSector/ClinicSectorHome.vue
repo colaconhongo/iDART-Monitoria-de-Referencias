@@ -38,7 +38,7 @@ const columns = [
   {
     name: 'code',
     required: true,
-    label: t('code'),
+    label: 'Código',
     align: 'left',
     field: (row) => row.code,
     format: (val) => `${val}`,
