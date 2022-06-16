@@ -150,7 +150,7 @@
 
 <script setup>
 import { inject } from 'vue';
-import { useUtils } from 'src/use/useUtils';
+import useUtils from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 

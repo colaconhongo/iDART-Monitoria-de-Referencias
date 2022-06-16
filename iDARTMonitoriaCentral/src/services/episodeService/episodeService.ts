@@ -1,11 +1,11 @@
 import { useRepo } from 'pinia-orm';
 import Episode from 'src/stores/models/episode/episode';
 import api from '../apiService/apiService';
-import moment from 'moment';
 import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
 import ClinicService from 'src/services/clinicService/clinicService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import useUtils from 'src/use/useUtils';
 
 const sync_temp_episode = useRepo(Episode);
 
@@ -95,10 +95,10 @@ export default {
       .get();
   },
 
-  getEpisodesByYear(year) {
+  getEpisodesByYear(year: number) {
     const yearBefore = year - 1;
-    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
-    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
     return api()
       .get(
         'sync_temp_episode?stopdate=gt.' + startDate + '&stopdate=lt.' + endDate

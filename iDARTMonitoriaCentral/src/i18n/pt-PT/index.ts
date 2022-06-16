@@ -7,11 +7,11 @@ export default {
   facility: 'Unidade Santária',
   code: 'Código',
   uuid: 'UUID',
-  clinicname: 'Nome da Farmácia',
+  clinicname: 'Farmácia de Referência',
   facilitytype: 'Tipo da Farmácia',
   notes: 'Observação',
   telephone: 'Telefone',
-  mainclinic: 'Farmácia Principal',
+  mainclinic: 'Unidade Sanitária',
   province: 'Província',
   district: 'Distrito',
   subdistrict: 'Localidade',
@@ -44,6 +44,13 @@ export default {
   regimen: 'Regime Terapêutico',
   regimeesquema: 'Esquema',
   codigoregime: 'Código do Regime',
+
+  // Paciente
+  patientid: 'NID',
+  firstnames: 'Nome do Paciente',
+  dateofbirth: 'Idade',
+  sex: 'Sexo',
+
   // General
   true: 'Sim',
   false: 'Não',
@@ -52,7 +59,5 @@ export default {
   add: 'Adicionar',
   edit: 'Actualizar',
   view: 'Detalhes',
-
-   //
-   year : 'Ano'
+  year: 'Ano',
 };

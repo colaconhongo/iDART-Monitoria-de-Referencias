@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm q-gutter-md">
-    <Filter :is="true" :isDashboard="isDashboard" />
+    <Filter :isDashboard="isDashboard" />
     <q-bar dense dark class="bg-primary"> </q-bar>
     <totalSummary />
     <chartReferralByPharmacy v-model:loaded="loaded" />

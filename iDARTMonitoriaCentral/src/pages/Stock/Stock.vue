@@ -18,6 +18,8 @@ import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import DistrictService from 'src/services/districtService/districtService';
+import DashboardUtils from '../../use/DashboardUtils';
+
 import {
   onMounted,
   reactive,
@@ -39,7 +41,8 @@ const pharmacy = reactive(ref());
 const provincia = reactive(
   ref(provinceService.getFirstProvinceByNameFromStorage())
 );
-
+let year = ref(new Date().getFullYear());
+const yearsToShow = DashboardUtils.getLastFiveYears();
 /*
   Computed
 */
@@ -120,6 +123,8 @@ provide('district', district);
 provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
+provide('yearsToShow', yearsToShow);
+provide('year', year);
 </script>
 
 <style></style>

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-md">
-    <Filter :is="true" v-if="activePatientList" />
+    <Filter v-if="activePatientList" />
     <q-bar v-if="activePatientList" dense dark class="bg-primary"> </q-bar>
     <PatientList v-if="activePatientList" v-model:title="titleList" />
     <PatientView v-else />
@@ -23,12 +23,16 @@ import Filter from 'src/components/Filter/Filter.vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
-const provincia = reactive(ProvinceService.getFirstProvinceByNameFromStorage());
+import DashboardUtils from '../../use/DashboardUtils';
+
+const provincia = ProvinceService.getFirstProvinceByNameFromStorage();
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 const titleList = reactive(ref('Pacientes'));
 const patient = reactive(ref([]));
 const activePatientList = reactive(ref(true));
+let year = ref(new Date().getFullYear());
+const yearsToShow = DashboardUtils.getLastFiveYears();
 
 const allProvincias = computed(() => {
   return ProvinceService.getAllFromStorage();
@@ -82,4 +86,6 @@ provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('goBack', goBack);
+provide('yearsToShow', yearsToShow);
+provide('year', year);
 </script>

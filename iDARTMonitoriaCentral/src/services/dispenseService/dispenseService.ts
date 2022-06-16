@@ -5,6 +5,7 @@ import api from '../apiService/apiService';
 import moment from 'moment';
 import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
+import useUtils from 'src/use/useUtils';
 
 const sync_temp_dispense = useRepo(Dispense);
 
@@ -80,8 +81,8 @@ export default {
 
   getDispensesByRegimeByYear(year: number) {
     const yearBefore = year - 1;
-    const startDate = moment('12-21-' + yearBefore).format('MM-DD-YYYY');
-    const endDate = moment('12-20-' + year).format('MM-DD-YYYY');
+    const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
     return api()
       .get(
         'sync_temp_dispense?dispensedate=gt.' +

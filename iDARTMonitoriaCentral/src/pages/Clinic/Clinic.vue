@@ -34,9 +34,9 @@ import { useI18n } from 'vue-i18n';
 Declarations
 */
 const { t } = useI18n();
-const titleList = reactive(ref(t('pharmacy')));
-const titleAddEdit = reactive(ref(t('pharmacy')));
-const titleDetails = reactive(ref(t('pharmacy')));
+const titleList = reactive(ref('Farmácia'));
+const titleAddEdit = reactive(ref('Farmácia'));
+const titleDetails = reactive(ref('Farmácia'));
 const show_dialog = reactive(ref(false));
 const details_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
@@ -50,7 +50,7 @@ const editedIndex = reactive(ref(0));
   Methods
 */
 const createClinic = () => {
-  titleAddEdit.value = t('add').concat(' ').concat(t('pharmacy'));
+  titleAddEdit.value = t('add').concat(' ').concat('Farmácia');
   clinic.value = reactive(clinicService.newInstanceEntity());
   activeEditDialog.value = true;
   show_dialog.value = true;
@@ -110,7 +110,7 @@ const deleteService = (clinicRow) => {
 };
 
 const editClinic = (clinicRow) => {
-  titleAddEdit.value = t('edit').concat(' ').concat(t('pharmacy'));
+  titleAddEdit.value = t('edit').concat(' ').concat('Farmácia');
   clinic.value = clinicRow;
   activeEditDialog.value = true;
   show_dialog.value = true;
@@ -118,7 +118,7 @@ const editClinic = (clinicRow) => {
 };
 
 const viewClinic = (clinicRow) => {
-  titleDetails.value = t('view').concat(' ').concat(t('pharmacy'));
+  titleDetails.value = t('view').concat(' ').concat('Farmácia');
   clinic.value = clinicRow;
   activeDetails.value = true;
   details_dialog.value = true;

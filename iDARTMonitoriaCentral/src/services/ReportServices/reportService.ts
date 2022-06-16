@@ -1,7 +1,8 @@
 import moment from 'moment';
 import api from 'src/services/apiService/apiService';
 import { useRepo } from 'pinia-orm';
-import Prescription from 'src/stores/models/prescription/prescription'; 
+import Prescription from 'src/stores/models/prescription/prescription';
+import useUtils from 'src/use/useUtils';
 
 const sync_temp_dispense = useRepo(Prescription);
 
@@ -104,7 +105,7 @@ export default {
         return resp.data;
       });
   },
-  getPrescriptionsByPatientId(patientid) {
+  getPrescriptionsByPatientId(patientid: string) {
     const list = api()
       .get('sync_temp_dispense?patientid=eq.' + patientid)
       .then((resp) => {
@@ -112,11 +113,11 @@ export default {
       });
     return list;
   },
-  getFormatDDMMYYYY(date) {
-    return moment(date).format('DD-MM-YYYY');
+  getFormatDDMMYYYY(date: string) {
+    return useUtils.getDateFormatDDMMYYYY(date); //moment(date).format('DD-MM-YYYY');
   },
-  getFormatYYYYMMDD(date) {
-    return moment(date,'DD-MM-YYYY').format('YYYY-MM-DD');
+  getFormatYYYYMMDD(date: string) {
+    return useUtils.getDateFormatYYYYMMDD(date); //moment(date,'DD-MM-YYYY').format('YYYY-MM-DD');
   },
   buildGenericCondition(params) {
     let conditionString = '';

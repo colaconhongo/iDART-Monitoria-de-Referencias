@@ -79,7 +79,7 @@ import { computed, inject, ref, onMounted } from 'vue';
 import DateFieldReadOnly from '../Shared/Input/DateFieldReadOnly.vue';
 import SelectField from '../Shared/Input/SelectField.vue';
 import TextFieldReadOnly from '../Shared/Input/TextFieldReadOnly.vue';
-import { useUtils } from 'src/use/useUtils';
+import useUtils from 'src/use/useUtils';
 import clinicService from 'src/services/clinicService/clinicService';
 import moment from 'moment';
 import provinceService from 'src/services/provinceService/provinceService';
@@ -102,7 +102,6 @@ const props = defineProps({
   },
 });
 
-const title = inject('title');
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
 const patient = inject('patient');
