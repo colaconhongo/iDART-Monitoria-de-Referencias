@@ -4,13 +4,14 @@ import reportService from '../reportService';
 import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const reportName = 'HistoricoDeLevantamentos';
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Histórico de Levantamentos Para Pacientes Referidos';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {
@@ -45,21 +46,8 @@ export default {
       'Farmácia',
     ];
     const rows = await reportService.getPatientDispenseHistory(params);
-    const data = [];
+    const data = this.createArrayOfArrayRow(rows);
 
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].tipotarv);
-      createRow.push(rows[row].regime);
-      createRow.push(rows[row].dispensetype);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(rows[row].clinicname);
-
-      data.push(createRow);
-    }
     autoTable(doc, {
       margin: { top: 60 },
       bodyStyles: {
@@ -350,8 +338,8 @@ export default {
       createRow.push(rows[row].tipotarv);
       createRow.push(rows[row].regime);
       createRow.push(rows[row].dispensetype);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);

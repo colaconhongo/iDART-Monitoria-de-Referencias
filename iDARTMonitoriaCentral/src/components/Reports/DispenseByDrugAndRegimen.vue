@@ -28,18 +28,28 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportDispenseDrugRegimen from 'src/services/ReportServices/dispenseDrugRegimen/reportDispenseDrugRegimen';
-import moment from 'moment'
+import useUtils from 'src/use/useUtils';
 
 const title = ref('Lista de Dispensas por Frasco e Regime');
 
 const generateReport = (params) => {
-  reportDispenseDrugRegimen.downloadPDF(
+    if (params.value.fileType === 'PDF') {
+   reportDispenseDrugRegimen.downloadPDF(
     null,
     params.value.province.name,
-    moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
-    moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+     useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
     params
   );
+ } else {
+     reportDispenseDrugRegimen.downloadExcel(
+      null,
+      params.value.province.name,
+      useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
+      params
+    );
+ }
 };
 
 const filterDrugStoreSection = ref(null);

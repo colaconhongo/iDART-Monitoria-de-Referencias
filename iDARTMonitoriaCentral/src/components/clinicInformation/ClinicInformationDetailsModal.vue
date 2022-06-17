@@ -23,7 +23,7 @@
             >
             |
             <span>
-              {{ Math.abs(ageCalculator(props.patient.dateofbirth)) }}</span
+              {{ Mathabs(useUtils.ageCalculator(props.patient.dateofbirth)) }}</span
             >
           </div>
         </q-card-section>
@@ -266,7 +266,7 @@
           <q-btn
             v-close-popup
             color="negative"
-            label="Cancelar"
+            label="Voltar"
             type="reset"
             @click="close"
           />
@@ -289,7 +289,7 @@ import vitalDataComponent from 'src/components/clinicInformation/VitalDataCompon
 import moment from 'moment';
 import useUtils from 'src/use/useUtils';
 
-const { ageCalculator } = useUtils();
+// const { ageCalculator } = useUtils();
 
 /*
   Props

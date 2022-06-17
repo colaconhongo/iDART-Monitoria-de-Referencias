@@ -44,7 +44,7 @@
           <q-btn
             v-close-popup
             color="negative"
-            label="Cancelar"
+            label="Voltar"
             type="reset"
             @click="close"
           />
@@ -81,7 +81,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: 'Dispensas',
+    default: 'Prescrições',
   },
   patient: {
     type: Object,

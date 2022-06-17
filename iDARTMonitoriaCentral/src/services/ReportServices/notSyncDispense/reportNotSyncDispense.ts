@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Relatório de Dispensas não Sincronizadas';
 const reportName = 'DispensasNaoSicronizadas';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 
@@ -351,8 +352,8 @@ export default {
       createRow.push(rows[row].tipotarv);
       createRow.push(rows[row].regime);
       createRow.push(rows[row].dispensetype);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
       createRow.push(rows[row].clinicname);;
       createRow.push('Não Sincronizado');
 

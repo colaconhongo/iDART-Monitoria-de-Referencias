@@ -37,7 +37,7 @@
               /></span>
             </div>
             <div class="patient-details">
-              <span> {{ ageCalculator(patient.dateofbirth) }} anos </span>
+              <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos </span>
             </div>
           </div>
           <div class="col-sm-4">
@@ -67,7 +67,7 @@
             patient.prescriptiondate === null ||
             patient.prescriptiondate === undefined
               ? 'Não definido '
-              : moment(patient.prescriptiondate).format('DD-MM-YYYY')
+              : useUtils.getDateFormatDDMMYYYY(patient.prescriptiondate)
           }}</span>
         </div>
         <div style="text-align: left">Framácia de Referência</div>
@@ -80,7 +80,7 @@
         </div>
         <div style="text-align: left">Data Início TARV</div>
         <div class="dados-referencia" style="text-align: left">
-          <span>{{ moment(patient.datainiciotarv).format('DD-MM-YYYY') }}</span>
+          <span>{{ patient.datainiciotarv }}</span>
         </div>
         <div class="dados-referencia-tit" style="text-align: left">Estado</div>
         <div
@@ -154,9 +154,7 @@ import useUtils from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 
-import moment from 'moment';
-
-const { ageCalculator } = useUtils();
+//const { ageCalculator } = useUtils();
 const patient = inject('patient');
 
 const printFilaReport = () => {

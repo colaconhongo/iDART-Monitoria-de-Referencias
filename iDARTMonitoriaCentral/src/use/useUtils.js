@@ -162,4 +162,16 @@ export default {
   getDateFormatYYYYMMDD(date) {
     return moment(date, 'MM-DD-YYYY').format('MM-DD-YYYY');
   },
+
+  getDateFormatYYYYMMDDFromDDMMYYYY(date) {
+    return moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+  },
+
+  getDateFormatDDMMYYYYFromYYYYMMDD(date) {
+    return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY');
+  },
+
+  getDateFormatDDMMYYYYDash(date) {
+    return moment(date, 'DD-MM-YYYY').format('DD/MM/YYYY');
+  },
 };

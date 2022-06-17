@@ -57,7 +57,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="paramEndDate" :options="blockDataFutura">
+                <q-date v-model="paramEndDate"  mask="DD-MM-YYYY" :options="blockDataFutura">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -163,8 +163,9 @@ import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue';
 import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue';
 import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue';
 import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
-import { useQuasar, QSpinnerGears } from 'quasar';
+import { useQuasar, QSpinnerGears,date } from 'quasar';
 import moment from 'moment';
+import useUtils from 'src/use/useUtils';
 /*
 
   Declaration
@@ -201,7 +202,7 @@ let params = reactive(
     period: null,
     periodTypeView: null,
     periodType: null,
-    fileType: null,
+    fileType: null
   })
 );
 
@@ -236,11 +237,7 @@ const isAnnualSearch = computed(() => {
 const paramStartDate = computed({
   get() {
     if (params.value.startDate === null) return null;
-    if (
-      typeof params.value.startDate !== 'string' ||
-      !(params.value.startDate instanceof String)
-    )
-      return moment(new Date(params.value.startDate)).format('DD-MM-YYYY');
+    if (typeof params.value.startDate !== 'string' || !(params.value.startDate instanceof String)) return useUtils.getDateFormatDDMMYYYY(params.value.startDate)
     return params.value.startDate;
     //return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
     //return getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.startDate))
@@ -254,11 +251,7 @@ const paramStartDate = computed({
 const paramEndDate = computed({
   get() {
     if (params.value.endDate === null) return null;
-    if (
-      typeof params.value.endDate === 'string' ||
-      params.value.endDate instanceof String
-    )
-      getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.endDate));
+   if (typeof params.value.endDate !== 'string' || !(params.value.endDate instanceof String)) return useUtils.getDateFormatDDMMYYYY(params.value.endDate)
     return moment(params.value.endDate).format('DD-MM-YYYY');
   },
   set(newValue) {
