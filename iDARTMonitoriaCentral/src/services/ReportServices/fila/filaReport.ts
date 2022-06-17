@@ -10,7 +10,7 @@ import { walkBlockDeclarations } from '@vue/compiler-core';
 const title = 'Ficha Individual de Levantamento de ARVs ( FILA)';
 const reportName = 'fila';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {
@@ -44,12 +44,13 @@ export default {
 
     for (const row in rows) {
       const createRow = [];
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].pickupdate));
+      console.log(rows[row])
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate));
       createRow.push(rows[row].drugname);
       createRow.push(rows[row].qtyinhand.replace(/[{()}]/g, ''));
       createRow.push(rows[row].timesperday);
       createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].dateexpectedstring)
+        rows[row].dateexpectedstring
       );
 
       data.push(createRow);
@@ -149,11 +150,11 @@ export default {
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
       createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].prescriptiondate)
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].prescriptiondate)
       );
       createRow.push(rows[row].regime);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].referaldate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate));
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);

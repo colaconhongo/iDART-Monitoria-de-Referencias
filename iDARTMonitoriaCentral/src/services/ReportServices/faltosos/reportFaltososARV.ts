@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Lista de Pacientes de Pacientes Faltosos ao Levantamento';
 const reportName = 'PacientesFaltososAoLevantamento';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {
@@ -44,24 +45,8 @@ export default {
       'Chamada Efectuada',
     ];
     const rows = await reportService.getPatientsWithMissDispenses(params);
-    const data = [];
+    const data = this.createArrayOfArrayRow(rows);
 
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(
-        rows[row].dataabandono !== null
-          ? reportService.getFormatDDMMYYYY(rows[row].dataabandono)
-          : '-'
-      );
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].contact);
-
-      data.push(createRow);
-    }
     autoTable(doc, {
       margin: { top: 60 },
       columnStyles: {
@@ -355,8 +340,6 @@ export default {
     const fileExtension = '.xlsx';
 
     const blob = new Blob([buffer], { type: fileType });
-
-    params.value.loading.loading.hide();
     
     saveAs(blob, fileName + fileExtension);
   },
@@ -367,13 +350,15 @@ export default {
       const createRow = [];
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate));
+      createRow.push(rows[row].nextpickupdate !== null
+        ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+        : '-');
       createRow.push(
         rows[row].dataabandono !== null
-          ? reportService.getFormatDDMMYYYY(rows[row].dataabandono)
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].dataabandono)
           : '-'
       );
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
       createRow.push(rows[row].clinicname);
 
       createRow.push(rows[row].contact);

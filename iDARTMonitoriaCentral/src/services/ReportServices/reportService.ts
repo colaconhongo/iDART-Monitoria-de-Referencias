@@ -1,17 +1,17 @@
 import moment from 'moment';
 import api from 'src/services/apiService/apiService';
 import { useRepo } from 'pinia-orm';
-import Prescription from 'src/stores/models/prescription/prescription';
+import Dispense from 'src/stores/models/dispense/dispense';
 import useUtils from 'src/use/useUtils';
 
-const sync_temp_dispense = useRepo(Prescription);
+const sync_temp_dispense = useRepo(Dispense);
 
 export default {
   // Axios API call
   getReferedPatientsReport(params) {
-    const url = `refered_patients_vw?referaldate=gte.${this.getFormatYYYYMMDD(
+    const url = `refered_patients_vw?referaldate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.startDate
-    )}&referaldate=lte.${this.getFormatYYYYMMDD(
+    )}&referaldate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()
@@ -23,9 +23,9 @@ export default {
   getReturnedReferedPatient(params) {
     return api()
       .get(
-        `returned_refered_patients_vw?returndate=gte.${this.getFormatYYYYMMDD(
+        `returned_refered_patients_vw?returndate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.startDate
-        )}&returndate=lte.${this.getFormatYYYYMMDD(
+        )}&returndate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.endDate
         )}${this.buildGenericCondition(params)}`
       )
@@ -36,9 +36,9 @@ export default {
   getPatientDispenseHistory(params) {
     return api()
       .get(
-        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+        `refered_patients_dispense_history_vw?pickupdate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.startDate
-        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+        )}&pickupdate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.endDate
         )}${this.buildGenericCondition(params)}`
       )
@@ -49,9 +49,9 @@ export default {
   getDispensesByDrugAndRegimen(params) {
     return api()
       .get(
-        `rpc/get_dispenses_by_drugandregimen_onperiod?startdate=${this.getFormatYYYYMMDD(
+        `rpc/get_dispenses_by_drugandregimen_onperiod?startdate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.startDate
-        )}&enddate=${this.getFormatYYYYMMDD(
+        )}&enddate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.endDate
         )}${this.buildGenericFuncCondition(params)}`
       )
@@ -60,7 +60,7 @@ export default {
       });
   },
   getPatientsWithMissDispenses(params) {
-    const url = `rpc/getfaltosos?enddate=${this.getFormatYYYYMMDD(
+    const url = `rpc/getfaltosos?enddate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()
@@ -70,7 +70,7 @@ export default {
       });
   },
   getActivePatients(params) {
-    const url = `rpc/get_active_patients?enddate=${this.getFormatYYYYMMDD(
+    const url = `rpc/get_active_patients?enddate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()
@@ -82,9 +82,9 @@ export default {
   getNotSyncDispenses(params) {
     return api()
       .get(
-        `refered_patients_dispense_history_vw?pickupdate=gte.${this.getFormatYYYYMMDD(
+        `refered_patients_dispense_history_vw?pickupdate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.startDate
-        )}&pickupdate=lte.${this.getFormatYYYYMMDD(
+        )}&pickupdate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.endDate
         )}&syncstatus=eq.P${this.buildGenericCondition(params)}`
       )
@@ -95,9 +95,9 @@ export default {
   getPatientWithClinicInfo(params) {
     return api()
       .get(
-        `patients_with_clinic_info_vw?lastscreeningdate=gte.${this.getFormatYYYYMMDD(
+        `patients_with_clinic_info_vw?lastscreeningdate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.startDate
-        )}&lastscreeningdate=lte.${this.getFormatYYYYMMDD(
+        )}&lastscreeningdate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
           params.value.endDate
         )}${this.buildGenericCondition(params)}`
       )

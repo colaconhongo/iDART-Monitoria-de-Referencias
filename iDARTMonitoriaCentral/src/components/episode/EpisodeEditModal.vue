@@ -14,7 +14,7 @@
             /></span>
             <span> {{ patient.firstnames + ' ' + patient.lastname }} </span> |
             <span> {{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }} </span> |
-            <span> {{ ageCalculator(patient.dateofbirth) }} anos de idade</span>
+            <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de idade</span>
           </div>
         </q-card-section>
         <q-separator />
@@ -89,7 +89,7 @@ import districtService from 'src/services/districtService/districtService';
   Props
 */
 const $q = new useQuasar();
-const { ageCalculator } = useUtils();
+// const { ageCalculator } = useUtils();
 const props = defineProps({
   close: {
     type: Function,

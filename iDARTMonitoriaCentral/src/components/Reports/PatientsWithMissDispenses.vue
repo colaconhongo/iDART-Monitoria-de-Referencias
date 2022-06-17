@@ -28,7 +28,7 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportFaltososARV from 'src/services/ReportServices/faltosos/reportFaltososARV';
-import moment from 'moment';
+import useUtils from 'src/use/useUtils';
 
 const title = ref('Lista de Pacientes Faltosos ao Levantamento');
 
@@ -37,16 +37,16 @@ const generateReport = (params) => {
     reportFaltososARV.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
-      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+       useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
       params
     );
   } else {
     reportFaltososARV.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
-      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+       useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
       params
     );
   }

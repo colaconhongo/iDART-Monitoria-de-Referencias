@@ -4,13 +4,14 @@ import reportService from '../reportService';
 import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const reportName = 'PacientesActivosNaFarmacia';
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Lista de Pacientes Activos na Farmácia';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {
@@ -46,7 +47,7 @@ export default {
       'Farmácia',
     ];
     const rows = await reportService.getActivePatients(params);
-    const data = [];
+    const data = this.createArrayOfArrayRow(rows);
 
     for (const row in rows) {
       const createRow = [];
@@ -56,8 +57,8 @@ export default {
       createRow.push(rows[row].contact);
       createRow.push(rows[row].linhanome);
       createRow.push(rows[row].regime);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);
@@ -363,8 +364,8 @@ export default {
       createRow.push(rows[row].contact);
       createRow.push(rows[row].linhanome);
       createRow.push(rows[row].regime);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);

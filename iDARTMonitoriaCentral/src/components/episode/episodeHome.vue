@@ -107,7 +107,7 @@ onMounted(() => {
   Computed
 */
 const allEpisodes = computed(() => {
-  return episodeService.getAllFromStorage();
+  return episodeService.getAllFromPatientFromStorage(patient.value.uuidopenmrs);
 });
 
 /*
