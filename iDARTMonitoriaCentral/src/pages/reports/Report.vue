@@ -50,7 +50,7 @@ import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
 import DashboardUtils from '../../use/DashboardUtils';
 
-import { uid } from 'quasar';
+import { QSpinnerBall, uid, useQuasar } from 'quasar';
 import {
   reactive,
   ref,
@@ -58,6 +58,8 @@ import {
   computed,
   onActivated,
   onDeactivated,
+  onUpdated,
+  onMounted,
 } from 'vue';
 import { SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
@@ -65,12 +67,11 @@ import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 
+const $q = useQuasar();
+
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
 let components = reactive([]);
-const province = reactive(
-  ref(provinceService.getFirstProvinceByNameFromStorage())
-);
 
 const contentStyle = {
   backgroundColor: '#ffffff',
@@ -113,6 +114,30 @@ const changeTab = (tabName) => {
   components.push(comp);
 };
 
+/*
+  Mounted Hooks
+*/
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    provinceService.get(0);
+    districtService.get(0);
+    clinicService.get(0);
+  });
+
+/*
+  Computed
+*/
+const province = computed(() => {
+  return provinceService.getFirstProvinceByNameFromStorage();
+});
 /*
   Computed
 */

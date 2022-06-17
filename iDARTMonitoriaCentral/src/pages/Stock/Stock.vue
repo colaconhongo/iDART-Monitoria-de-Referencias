@@ -28,6 +28,7 @@ import {
   computed,
   onActivated,
   onDeactivated,
+  onUpdated,
 } from 'vue';
 /*
 Declarations
@@ -38,9 +39,7 @@ const stockData = reactive(ref([]));
 let selectRecord = reactive(ref({}));
 const district = reactive(ref());
 const pharmacy = reactive(ref());
-const provincia = reactive(
-  ref(provinceService.getFirstProvinceByNameFromStorage())
-);
+
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
 /*
@@ -73,6 +72,31 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 800);
+});
+
+/*
+  Mounted Hooks
+*/
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    provinceService.get(0);
+    DistrictService.get(0);
+    clinicService.get(0);
+  });
+
+/*
+  Computed
+*/
+const provincia = computed(() => {
+  return provinceService.getFirstProvinceByNameFromStorage();
 });
 
 /*

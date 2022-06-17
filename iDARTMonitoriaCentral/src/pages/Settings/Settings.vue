@@ -54,6 +54,8 @@ import {
   ref,
   onActivated,
   onDeactivated,
+  onUpdated,
+  onMounted,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import clinics from '../Clinic/Clinic.vue';
@@ -65,20 +67,44 @@ import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import districtService from 'src/services/districtService/districtService';
 import DashboardUtils from '../../use/DashboardUtils';
-import { SessionStorage } from 'quasar';
+import { QSpinnerBall, SessionStorage, useQuasar } from 'quasar';
 
 /*
   Declaraftion
 */
+const $q = useQuasar();
+
 const { t } = useI18n();
 const selectedTab = ref('clinic');
 const splitterModel = ref(15);
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
 
-const province = reactive(
-  ref(provinceService.getFirstProvinceByNameFromStorage())
-);
+/*
+  Mounted Hooks
+*/
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    provinceService.get(0);
+    districtService.get(0);
+    clinicService.get(0);
+  });
+
+/*
+  Computed
+*/
+const province = computed(() => {
+  return provinceService.getFirstProvinceByNameFromStorage();
+});
+
 const district = reactive(ref());
 const facility = reactive(ref());
 const pharmacy = reactive(ref());

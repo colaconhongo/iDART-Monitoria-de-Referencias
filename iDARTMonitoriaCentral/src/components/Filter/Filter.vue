@@ -56,7 +56,6 @@ import { SessionStorage } from 'quasar';
 import SelectField from '../Shared/Input/SelectField.vue';
 
 const { t } = useI18n();
-
 const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const pharmacyLabel = ref('Farmácia');

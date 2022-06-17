@@ -80,9 +80,13 @@
         </div>
         <div style="text-align: left">Data Início TARV</div>
         <div class="dados-referencia" style="text-align: left">
-          <span>{{ patient.datainiciotarv }}</span>
+          <span>{{
+            patient.datainiciotarv === null ||
+            patient.datainiciotarv === undefined
+              ? 'Não definido '
+              : patient.datainiciotarv
+          }}</span>
         </div>
-        <div class="dados-referencia-tit" style="text-align: left">Estado</div>
         <div
           style="
             background-color: rgb(216 255 242);
@@ -154,7 +158,6 @@ import useUtils from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 
-//const { ageCalculator } = useUtils();
 const patient = inject('patient');
 
 const printFilaReport = () => {
