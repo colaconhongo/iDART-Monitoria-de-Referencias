@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Relatório de Pacientes com Informação Clínica';
 const reportName = 'PacientesComAtencaoFarmaceutica';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 
@@ -93,7 +94,7 @@ export default {
     endDate: string,
     params: Object
   ) {
-    const rows = await reportService.getReferedPatientsReport(params);
+    const rows = await reportService.getPatientWithClinicInfo(params);
     const data = this.createArrayOfArrayRow(rows);
 
     const workbook = new ExcelJS.Workbook();
@@ -321,7 +322,7 @@ export default {
 
     const blob = new Blob([buffer], { type: fileType });
 
-    params.value.loading.loading.hide();
+   // params.value.loading.loading.hide();
     
     saveAs(blob, fileName + fileExtension);
   },
@@ -335,9 +336,9 @@ export default {
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
       createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].referaldate)
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
       );
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].lastscreeningdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastscreeningdate));
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].facilityname);
       data.push(createRow);

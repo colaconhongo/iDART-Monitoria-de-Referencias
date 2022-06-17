@@ -38,7 +38,7 @@
     <q-card class="my-card" flat bordered>
       <q-item>
         <q-item-section class="text-font">
-          <q-item-label>Total de Pacientes referidos por Genero</q-item-label>
+          <q-item-label>Total de Pacientes referidos por Género</q-item-label>
         </q-item-section>
       </q-item>
       <q-card-section horizontal>

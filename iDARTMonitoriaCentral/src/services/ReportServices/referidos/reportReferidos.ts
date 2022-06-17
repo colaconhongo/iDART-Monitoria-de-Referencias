@@ -4,13 +4,14 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Lista de Pacientes Referidos para outra Farmácia';
 const reportName = 'PacientesReferidos';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {
@@ -46,24 +47,8 @@ export default {
       'Unidade Sanitária',
     ];
     const rows = await reportService.getReferedPatientsReport(params);
-    const data = [];
+    const data = this.createArrayOfArrayRow(rows);
 
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].prescriptiondate)
-      );
-      createRow.push(rows[row].regime);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].referaldate));
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].facilityname);
-
-      data.push(createRow);
-    }
     autoTable(doc, {
       margin: { top: 60 },
       bodyStyles: {
@@ -95,7 +80,6 @@ export default {
       head: [cols],
       body: data,
     });
-    params.value.loading.loading.hide();
     return doc.save(fileName.concat('.pdf'));
   },
   async downloadExcel(
@@ -148,6 +132,7 @@ export default {
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
+    const colI = worksheet.getColumn('I ');
 
     // Format Table Cells
     // Alignment Format
@@ -227,6 +212,7 @@ export default {
     colF.width = 15;
     colG.width = 15;
     colH.width = 30;
+    colI.width = 25;
 
     // Add Style
     cellTitle.font =
@@ -284,6 +270,11 @@ export default {
         },
         {
           name: 'Farmácia de Referência',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Unidade Sanitária',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -353,12 +344,13 @@ export default {
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
       createRow.push(
-        reportService.getFormatDDMMYYYY(rows[row].prescriptiondate)
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].prescriptiondate)
       );
       createRow.push(rows[row].regime);
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].nextpickupdate));
-      createRow.push(reportService.getFormatDDMMYYYY(rows[row].referaldate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
+      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate));
       createRow.push(rows[row].clinicname);
+      createRow.push(rows[row].facilityname);
 
       data.push(createRow);
     }

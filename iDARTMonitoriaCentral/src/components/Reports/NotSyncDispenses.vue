@@ -27,7 +27,7 @@ import { ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportNotSyncDispense from 'src/services/ReportServices/notSyncDispense/reportNotSyncDispense';
-import moment from 'moment';
+import useUtils from 'src/use/useUtils';
 
 const title = ref('Lista de Dispensas que não Foram Sincronizadas');
 
@@ -36,16 +36,16 @@ const generateReport = (params) => {
     reportNotSyncDispense.downloadPDF(
       null,
       params.value.province.name,
-      moment(params.value.startDate).format('DD/MM/YYYY'),
-      moment(params.value.endDate).format('DD/MM/YYYY'),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
       params
     );
   } else {
     reportNotSyncDispense.downloadExcel(
       null,
       params.value.province.name,
-      moment(params.value.startDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
-      moment(params.value.endDate,'DD-MM-YYYY').format('DD/MM/YYYY'),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
       params
     );
   }

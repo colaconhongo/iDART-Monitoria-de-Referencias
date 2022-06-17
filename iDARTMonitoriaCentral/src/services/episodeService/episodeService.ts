@@ -76,6 +76,15 @@ export default {
   getAllFromStorage() {
     return sync_temp_episode.all();
   },
+  getAllFromPatientFromStorage(patientUuid : string) {
+     return sync_temp_episode
+    .query()
+    .where((episode) => {
+      return episode.patientuuid === patientUuid
+    })
+    .orderBy('startdate', 'desc')
+    .get();
+  },
   getAllStartEpisode() {
     return sync_temp_episode
       .query()

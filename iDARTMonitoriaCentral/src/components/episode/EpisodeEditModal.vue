@@ -14,10 +14,7 @@
             /></span>
             <span> {{ patient.firstnames + ' ' + patient.lastname }} </span> |
             <span> {{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }} </span> |
-            <span>
-              {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de
-              idade</span
-            >
+            <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de idade</span>
           </div>
         </q-card-section>
         <q-separator />

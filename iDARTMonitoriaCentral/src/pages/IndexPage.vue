@@ -99,7 +99,7 @@
             class="text-bold"
             style="font-family: 'Arial Rounded MT Bold'; font-size: 20px"
           >
-            Parametros
+            Parâmetro
           </div>
         </q-btn>
       </div>

@@ -4,13 +4,15 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import useUtils from 'src/use/useUtils';
+
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Relatório de Dispensas por Frasco e Regime';
 const reportName = 'DispensasPorFrascoRegime';
 const fileName = reportName.concat(
-  '_' + reportService.getFormatDDMMYYYY(new Date())
+  '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
 export default {

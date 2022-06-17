@@ -37,9 +37,7 @@
               /></span>
             </div>
             <div class="patient-details">
-              <span>
-                {{ useUtils.ageCalculator(patient.dateofbirth) }} anos
-              </span>
+              <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos </span>
             </div>
           </div>
           <div class="col-sm-4">
@@ -158,6 +156,7 @@
 import { inject } from 'vue';
 import useUtils from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
+import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 
 const patient = inject('patient');
 
