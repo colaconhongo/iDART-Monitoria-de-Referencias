@@ -14,7 +14,10 @@
             /></span>
             <span> {{ patient.firstnames + ' ' + patient.lastname }} </span> |
             <span> {{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }} </span> |
-            <span> {{ ageCalculator(patient.dateofbirth) }} anos de idade</span>
+            <span>
+              {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de
+              idade</span
+            >
           </div>
         </q-card-section>
         <q-separator />
@@ -75,13 +78,12 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, inject, ref, onMounted } from 'vue';
+import { computed, inject, onMounted } from 'vue';
 import DateFieldReadOnly from '../Shared/Input/DateFieldReadOnly.vue';
 import SelectField from '../Shared/Input/SelectField.vue';
 import TextFieldReadOnly from '../Shared/Input/TextFieldReadOnly.vue';
 import useUtils from 'src/use/useUtils';
 import clinicService from 'src/services/clinicService/clinicService';
-import moment from 'moment';
 import provinceService from 'src/services/provinceService/provinceService';
 import districtService from 'src/services/districtService/districtService';
 
@@ -89,18 +91,6 @@ import districtService from 'src/services/districtService/districtService';
   Props
 */
 const $q = new useQuasar();
-const { ageCalculator } = useUtils();
-const props = defineProps({
-  close: {
-    type: Function,
-  },
-  update: {
-    type: Function,
-  },
-  episode: {
-    type: Object,
-  },
-});
 
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');

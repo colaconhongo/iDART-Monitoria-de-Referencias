@@ -1,11 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { saveAs } from 'file-saver';
-import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
-import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
-import { walkBlockDeclarations } from '@vue/compiler-core';
 
 const title = 'Ficha Individual de Levantamento de ARVs ( FILA)';
 const reportName = 'fila';
@@ -14,7 +10,7 @@ const fileName = reportName.concat(
 );
 
 export default {
-  async downloadPDF(patient: Object) {
+  async downloadPDF(patient: object) {
     const doc = new jsPDF({
       orientation: 'l',
       unit: 'mm',

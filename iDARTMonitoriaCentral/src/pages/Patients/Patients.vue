@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { SessionStorage } from 'quasar';
+import { QSpinnerBall, SessionStorage, useQuasar } from 'quasar';
 import {
   provide,
   reactive,
@@ -16,6 +16,8 @@ import {
   computed,
   onActivated,
   onDeactivated,
+  onUpdated,
+  onMounted,
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
@@ -24,8 +26,12 @@ import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
 import ClinicService from 'src/services/clinicService/clinicService';
 import DashboardUtils from '../../use/DashboardUtils';
+import provinceService from 'src/services/provinceService/provinceService';
+import districtService from 'src/services/districtService/districtService';
+import clinicService from 'src/services/clinicService/clinicService';
 
-const provincia = ProvinceService.getFirstProvinceByNameFromStorage();
+const $q = useQuasar();
+
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 const titleList = reactive(ref('Pacientes'));
@@ -53,6 +59,31 @@ const viewPatient = (patientRow) => {
   patient.value = patientRow;
   activePatientList.value = false;
 };
+
+/*
+  Mounted Hooks
+*/
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    provinceService.get(0);
+    districtService.get(0);
+    clinicService.get(0);
+  });
+
+/*
+  Computed
+*/
+const provincia = computed(() => {
+  return ProvinceService.getFirstProvinceByNameFromStorage();
+});
 
 onActivated(() => {
   if (SessionStorage.getItem('district') !== null) {

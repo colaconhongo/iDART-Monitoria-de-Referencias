@@ -111,7 +111,7 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
-import { onMounted } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 
 /*
   Declaration
@@ -121,19 +121,20 @@ const $q = useQuasar();
 /*
   Mounted Hooks
 */
-onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    provinceService.get(0);
+    districtService.get(0);
+    clinicService.get(0);
   });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-  provinceService.get(0);
-  districtService.get(0);
-  clinicService.get(0);
-});
 </script>
 <style scoped>
 @keyframes rotating {

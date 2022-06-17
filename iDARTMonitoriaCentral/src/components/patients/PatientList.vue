@@ -17,12 +17,19 @@
 </template>
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, inject, onMounted, reactive, ref, provide } from 'vue';
+import {
+  computed,
+  inject,
+  onMounted,
+  reactive,
+  ref,
+  provide,
+  onUpdated,
+} from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
 import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
-import c from 'src/use/useUtils';
 import Patient from 'src/stores/models/patient/patient';
 import useUtils from 'src/use/useUtils';
 /*
@@ -93,17 +100,18 @@ const columns = [
 /*
   Mounted Hooks
 */
-onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    getAllPatientsFromAPI(0);
   });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-  getAllPatientsFromAPI(0);
-});
 
 /*
   Computed

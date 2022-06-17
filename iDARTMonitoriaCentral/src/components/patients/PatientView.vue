@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh LpR fFf">
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
       <PatientDetail />
     </q-drawer>
@@ -69,6 +69,8 @@ import clinicInformations from 'src/pages/ClinicInformation/ClinicInformation.vu
 import prescriptions from 'src/pages/ClinicInformation/Prescription.vue';
 import dispenses from 'src/pages/ClinicInformation/Dispense.vue';
 
+const rightDrawerOpen = ref(false);
+
 const selectedTab = ref('episodios');
 const splitterModel = ref(15);
 const tabs = [
@@ -82,23 +84,11 @@ const tabs = [
   },
 ];
 
+const toggleRightDrawer = () => {
+  rightDrawerOpen.value = !rightDrawerOpen.value;
+};
+
 const goBack = inject('goBack');
 </script>
 
-<script>
-import { ref } from 'vue';
-
-export default {
-  setup() {
-    const rightDrawerOpen = ref(false);
-
-    return {
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value;
-      },
-    };
-  },
-};
-</script>
 <style></style>

@@ -20,6 +20,7 @@ import {
   watch,
   onActivated,
   onDeactivated,
+  onUpdated,
 } from 'vue';
 import ProvinceService from 'src/services/provinceService/provinceService';
 import DistrictService from 'src/services/districtService/districtService';
@@ -34,7 +35,7 @@ import chartReferralByPharmacy from '../../components/Dashboard/BarReportReffere
 import chartDispenseByDrug from '../../components/Dashboard/BarReportDispenseByDrug.vue';
 import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.vue';
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue';
-const provincia = reactive(ProvinceService.getFirstProvinceByNameFromStorage());
+
 let district = ref();
 let pharmacy = ref();
 let year = ref(new Date().getFullYear());
@@ -112,15 +113,6 @@ let total = reactive({
   totalFemaleNumbers: 0,
 });
 
-provide('total', total);
-provide('district', district);
-provide('pharmacy', pharmacy);
-provide('allProvincias', allProvincias);
-provide('province', provincia);
-provide('alldistrictsFromProvince', districtsByProvince);
-provide('allPhamacyFromFacility', DDPharmByDistrict);
-provide('yearsToShow', yearsToShow);
-provide('year', year);
 /*
    On Page Mounted
 */
@@ -145,6 +137,31 @@ onMounted(() => {
   });
 });
 
+/*
+  Mounted Hooks
+*/
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    ProvinceService.get(0);
+    DistrictService.get(0);
+    ClinicService.get(0);
+  });
+
+/*
+  Computed
+*/
+const provincia = computed(() => {
+  return ProvinceService.getFirstProvinceByNameFromStorage();
+});
+
 onActivated(() => {
   if (SessionStorage.getItem('district') !== null) {
     district.value = SessionStorage.getItem('district');
@@ -160,6 +177,16 @@ onDeactivated(() => {
   if (pharmacy.value != null || pharmacy.value != undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
+
+provide('total', total);
+provide('district', district);
+provide('pharmacy', pharmacy);
+provide('allProvincias', allProvincias);
+provide('province', provincia);
+provide('alldistrictsFromProvince', districtsByProvince);
+provide('allPhamacyFromFacility', DDPharmByDistrict);
+provide('yearsToShow', yearsToShow);
+provide('year', year);
 </script>
 
 <style lang="scss" scoped>
