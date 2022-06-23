@@ -42,7 +42,6 @@ const chartOptionsDispenseByDrug = {
   xaxis: {
     categories: [...monthsX],
   },
-  colors: ['#F44336', '#13c185'],
   animations: {
     enabled: true,
     easing: 'easeinout',

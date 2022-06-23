@@ -76,14 +76,14 @@ export default {
   getAllFromStorage() {
     return sync_temp_episode.all();
   },
-  getAllFromPatientFromStorage(patientUuid : string) {
-     return sync_temp_episode
-    .query()
-    .where((episode) => {
-      return episode.patientuuid === patientUuid
-    })
-    .orderBy('startdate', 'desc')
-    .get();
+  getAllFromPatientFromStorage(patientUuid: string) {
+    return sync_temp_episode
+      .query()
+      .where((episode) => {
+        return episode.patientuuid === patientUuid;
+      })
+      .orderBy('startdate', 'desc')
+      .get();
   },
   getAllStartEpisode() {
     return sync_temp_episode
@@ -110,7 +110,10 @@ export default {
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
     return api()
       .get(
-        'sync_temp_episode?stopdate=gt.' + startDate + '&stopdate=lt.' + endDate
+        'patient_episodes_vw?stopdate=gt.' +
+          startDate +
+          '&stopdate=lt.' +
+          endDate
       )
       .then((resp) => {
         sync_temp_episode.save(resp.data);
@@ -125,6 +128,8 @@ export default {
     const yearBefore = year - 1;
     const startDate = new Date('12-21-' + yearBefore);
     const endDate = new Date('12-20-' + year);
+    // const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    // const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
 
     let clinics = [];
 

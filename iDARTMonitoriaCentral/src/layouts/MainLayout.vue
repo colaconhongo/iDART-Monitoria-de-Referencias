@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf"  class="bg-gray">
+  <q-layout view="lHh Lpr lFf" class="bg-gray">
     <div>
       <q-header>
         <q-toolbar>
@@ -65,7 +65,7 @@
               :to="'/settings'"
               name="settings"
               icon="settings"
-              label="Parametros"
+              label="Parâmetro"
             />
           </q-tabs>
           <q-btn-dropdown

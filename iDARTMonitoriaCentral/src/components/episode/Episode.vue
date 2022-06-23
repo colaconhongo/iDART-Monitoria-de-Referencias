@@ -1,12 +1,7 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
     <episodeHome :is="activeEpisodeHome" v-model:title="titleList" />
-    <EpisodeEditModal
-      v-if="editEpisode"
-      v-model:update="update"
-      v-model:close="close"
-      v-model:episode="episode"
-    />
+    <EpisodeEditModal v-if="editEpisode" />
   </q-page>
 </template>
 <script setup>
@@ -20,13 +15,13 @@ import moment from 'moment';
 /*
   Declarations
 */
-const titleList = reactive(ref('Epsódios'));
+const titleList = reactive(ref('Episódios'));
 const show_dialog = reactive(ref(false));
 const episode = reactive(ref([]));
 const episodeStop = ref([]);
 const activeEditDialog = reactive(ref(false));
-const titleAddEdit = reactive(ref('Epsódio'));
-const titleEpisodeList = reactive(ref('Epsódios'));
+const titleAddEdit = reactive(ref('Episódio'));
+const titleEpisodeList = reactive(ref('Episódios'));
 const activeEpisodeHome = reactive(ref(true));
 const submitting = reactive(ref(false));
 const patientAux = reactive(ref([]));
@@ -36,7 +31,7 @@ const patient = inject('patient');
 const activePatientList = inject('activePatientList');
 
 const editEpisode = (episodeRow) => {
-  titleAddEdit.value = 'Actualizar Epsódio';
+  titleAddEdit.value = 'Actualizar Episódio';
   episode.value = episodeRow;
   episode.value.startdate = episodeRow.startdate;
   clinicBeforeUpdate.value = episodeRow.clinic;
@@ -53,16 +48,19 @@ const update = () => {
     patientAux.value.id = episode.value.id;
     patientAux.value.clinicuuid = episode.value.clinic.uuid;
     patientAux.value.clinic = episode.value.clinic.id;
-    patientAux.value.modied = 'T';
+    patientAux.value.modified = 'T';
 
     //Episodio de Fim na Farmacia anterior
     episodeStop.value.clinic = clinicBeforeUpdate.value;
-    episodeStop.value.stopdate = moment(new Date()).format('DD-MM-YYYY');
+    episodeStop.value.stopdate = moment(new Date());
     episodeStop.value.stopnotes = 'Paciente enviado para outra Farmácia';
     episodeStop.value.stopreason = 'Contra Referido para outra Farmácia';
     episodeStop.value.syncstatus = 'R';
     episodeStop.value.patientuuid = episode.value.patientuuid;
-    episodeStop.value.startdate = episode.value.startdate;
+    episodeStop.value.startdate =
+      episode.value.startdate === null || episode.value.startdate === undefined
+        ? moment(new Date())
+        : episode.value.startdate;
     episodeStop.value.usuuid = episode.value.usuuid;
     episodeStop.value.clinicuuid = episode.value.clinicuuid;
     episodeStop.value.startnotes = episode.value.startnotes;
@@ -112,4 +110,7 @@ provide('titleEpisode', titleEpisodeList);
 provide('episode', episode);
 provide('show_dialog', show_dialog);
 provide('submitting', submitting);
+provide('update', update);
+provide('close', close);
+provide('episode', episode);
 </script>

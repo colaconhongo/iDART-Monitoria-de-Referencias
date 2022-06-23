@@ -46,7 +46,7 @@
             color="negative"
             label="Voltar"
             type="reset"
-            @click="close"
+            @click="show_dialog == false"
           />
         </q-card-actions>
       </q-card>
@@ -58,8 +58,6 @@
 imports
 */
 
-import { onMounted } from '@vue/runtime-core';
-import { useQuasar, QSpinnerBall } from 'quasar';
 import { computed, reactive, ref, inject } from 'vue';
 import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
@@ -91,9 +89,7 @@ const props = defineProps({
 /*
 Declarations
 */
-const $q = new useQuasar();
 const mode = reactive(ref('list'));
-const editedIndex = reactive(ref(0));
 let show_dialog = inject('show_dialog');
 
 const columns = [

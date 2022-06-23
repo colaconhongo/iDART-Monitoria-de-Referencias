@@ -18,6 +18,7 @@ import {
   onDeactivated,
   onUpdated,
   onMounted,
+  watch,
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
@@ -29,13 +30,14 @@ import DashboardUtils from '../../use/DashboardUtils';
 import provinceService from 'src/services/provinceService/provinceService';
 import districtService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
+import PatientService from 'src/services/patientService/patientService';
 
 const $q = useQuasar();
 
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 const titleList = reactive(ref('Pacientes'));
-const patient = reactive(ref([]));
+const localPatient = reactive(ref([]));
 const activePatientList = reactive(ref(true));
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
@@ -56,9 +58,20 @@ const DDPharmByDistrict = computed(() => {
 });
 
 const viewPatient = (patientRow) => {
-  patient.value = patientRow;
+  localPatient.value = patientRow;
   activePatientList.value = false;
 };
+
+const patient = computed({
+  get() {
+    return PatientService.getPatientByUUidFromStorage(
+      localPatient.value.uuidopenmrs
+    );
+  },
+  set(newValue) {
+    patient = newValue;
+  },
+});
 
 /*
   Mounted Hooks
@@ -95,9 +108,9 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
-  if (district.value != null || district.value != undefined)
+  if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
-  if (pharmacy.value != null || pharmacy.value != undefined)
+  if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
 

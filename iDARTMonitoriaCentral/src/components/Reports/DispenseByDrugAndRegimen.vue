@@ -24,38 +24,44 @@
   Imports
   */
 // import reportService from 'src/services/ReportServices/reportService';
-import { ref } from 'vue';
+import { provide, reactive, ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
 import reportDispenseDrugRegimen from 'src/services/ReportServices/dispenseDrugRegimen/reportDispenseDrugRegimen';
 import useUtils from 'src/use/useUtils';
 
 const title = ref('Lista de Dispensas por Frasco e Regime');
+const loadingPDF = reactive(ref(false));
+const loadingXLS = reactive(ref(false));
 
 const generateReport = (params) => {
-    if (params.value.fileType === 'PDF') {
-   reportDispenseDrugRegimen.downloadPDF(
-    null,
-    params.value.province.name,
-     useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
-      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
-    params
-  );
- } else {
-     reportDispenseDrugRegimen.downloadExcel(
+  if (params.value.fileType === 'PDF') {
+    reportDispenseDrugRegimen.downloadPDF(
       null,
       params.value.province.name,
       useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
       useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
-      params
+      params,
+      loadingPDF
     );
- }
+  } else {
+    reportDispenseDrugRegimen.downloadExcel(
+      null,
+      params.value.province.name,
+      useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
+      useUtils.getDateFormatDDMMYYYYDash(params.value.endDate),
+      params,
+      loadingXLS
+    );
+  }
 };
 
 const filterDrugStoreSection = ref(null);
 const closeSection = () => {
   filterDrugStoreSection.value.remove();
 };
+provide('loadingPDF', loadingPDF);
+provide('loadingXLS', loadingXLS);
 </script>
 
 <style lang="scss" scoped>

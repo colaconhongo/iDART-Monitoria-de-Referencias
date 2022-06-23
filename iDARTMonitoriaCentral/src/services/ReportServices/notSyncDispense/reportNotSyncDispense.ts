@@ -14,14 +14,14 @@ const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
 
-
 export default {
   async downloadPDF(
     facility: string,
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingPDF: object
   ) {
     const doc = new jsPDF({
       orientation: 'l',
@@ -30,8 +30,10 @@ export default {
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
+    loadingPDF.value = true;
     const image = new Image();
-    image.src = '/src/assets/MoHLogo.png';
+    // image.src = '/src/assets/MoHLogo.png';
+    image.src = 'data:image/png;base64,' + MOHIMAGELOG;
     const width = doc.internal.pageSize.getWidth();
     /*
       Fill Table
@@ -68,15 +70,25 @@ export default {
         doc.text('MINISTÉRIO DA SAÚDE', data.settings.margin.left + 7, 40);
         doc.text('SERVIÇO NACIONAL DE SAÚDE', data.settings.margin.left, 45);
         doc.setFontSize(16);
-        doc.text(title,
-          width / 2,
-          40,
-          {
-            align: 'center',
-          }
-        );
+        doc.text(title, width / 2, 40, {
+          align: 'center',
+        });
         doc.setFontSize(10);
         doc.text('Província: ' + province, width / 15, 57);
+        params.value.district !== null && params.value.district !== undefined
+          ? doc.text(
+              'Distrito: ' + params.value.district.name,
+              width / 3 - 15,
+              57
+            )
+          : '';
+        params.value.clinic !== null && params.value.clinic !== undefined
+          ? doc.text(
+              'Farmácia: ' + params.value.clinic.clinicname,
+              width / 2 + 30,
+              57
+            )
+          : '';
         doc.text('Data Início: ' + startDate, width / 2 + 98, 49);
         doc.text('Data Fim: ' + endDate, width / 2 + 98, 57);
         // doc.line(0, 35, 400, 50);
@@ -85,16 +97,22 @@ export default {
       head: [cols],
       body: data,
     });
-    params.value.loading.loading.hide();
-    return doc.save(reportName+'.pdf');
+    loadingPDF.value = false;
+    return doc.save(reportName + '.pdf');
   },
   async downloadExcel(
     facility: string,
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingXLS: object
   ) {
+    facility =
+      params.value.clinic !== null && params.value.clinic !== undefined
+        ? params.value.clinic.clinicname
+        : '';
+    loadingXLS.value = true;
     const rows = await reportService.getNotSyncDispenses(params);
     const data = this.createArrayOfArrayRow(rows);
 
@@ -187,7 +205,10 @@ export default {
     cellTitle.value = title;
     cellPharmParamValue.value = facility;
     cellProvinceParamValue.value = province;
-    cellDistrictParamValue.value = '';
+    cellDistrictParamValue.value =
+      params.value.district !== null && params.value.district !== undefined
+        ? params.value.district.name
+        : '';
     cellStartDateParamValue.value = startDate;
     cellEndDateParamValue.value = endDate;
     cellPharm.value = 'Farmácia';
@@ -219,7 +240,6 @@ export default {
     colG.width = 15;
     colH.width = 15;
     colI.width = 15;
-
 
     // Add Style
     cellTitle.font =
@@ -337,8 +357,8 @@ export default {
 
     const blob = new Blob([buffer], { type: fileType });
 
-    params.value.loading.loading.hide();
-    
+    loadingXLS.value = false;
+
     saveAs(blob, fileName + fileExtension);
   },
 
@@ -352,9 +372,13 @@ export default {
       createRow.push(rows[row].tipotarv);
       createRow.push(rows[row].regime);
       createRow.push(rows[row].dispensetype);
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate));
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
-      createRow.push(rows[row].clinicname);;
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate)
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+      );
+      createRow.push(rows[row].clinicname);
       createRow.push('Não Sincronizado');
 
       data.push(createRow);
@@ -363,4 +387,3 @@ export default {
     return data;
   },
 };
-

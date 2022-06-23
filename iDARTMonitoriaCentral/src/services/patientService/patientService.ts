@@ -97,6 +97,9 @@ export default {
   getAllFromStorage() {
     return sync_temp_patients.all();
   },
+  getPatientByUUidFromStorage(uuid: string) {
+    return sync_temp_patients.query().where('uuidopenmrs', uuid).first();
+  },
   getAllPatientWithPrescriptionDate() {
     return sync_temp_patients
       .query()
@@ -106,7 +109,7 @@ export default {
       .get();
   },
 
-  getPatientsByYear(year) {
+  getPatientsByYear(year: number) {
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);

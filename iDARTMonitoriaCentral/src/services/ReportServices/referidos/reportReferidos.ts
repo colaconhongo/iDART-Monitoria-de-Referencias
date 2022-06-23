@@ -20,7 +20,8 @@ export default {
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingPDF: object
   ) {
     const doc = new jsPDF({
       orientation: 'l',
@@ -29,8 +30,10 @@ export default {
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
+    loadingPDF.value = true;
     const image = new Image();
-    image.src = '/src/assets/MoHLogo.png';
+    // image.src = '/src/assets/MoHLogo.png';
+    image.src = 'data:image/png;base64,' + MOHIMAGELOG;
     const width = doc.internal.pageSize.getWidth();
     /*
       Fill Table
@@ -72,6 +75,20 @@ export default {
         });
         doc.setFontSize(10);
         doc.text('Província: ' + province, width / 15, 57);
+        params.value.district !== null && params.value.district !== undefined
+          ? doc.text(
+              'Distrito: ' + params.value.district.name,
+              width / 3 - 15,
+              57
+            )
+          : '';
+        params.value.clinic !== null && params.value.clinic !== undefined
+          ? doc.text(
+              'Farmácia: ' + params.value.clinic.clinicname,
+              width / 2 + 30,
+              57
+            )
+          : '';
         doc.text('Data Início: ' + startDate, width / 2 + 98, 49);
         doc.text('Data Fim: ' + endDate, width / 2 + 98, 57);
         // doc.line(0, 35, 400, 50);
@@ -80,6 +97,7 @@ export default {
       head: [cols],
       body: data,
     });
+    loadingPDF.value = false;
     return doc.save(fileName.concat('.pdf'));
   },
   async downloadExcel(
@@ -87,8 +105,14 @@ export default {
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingXLS: object
   ) {
+    facility =
+      params.value.clinic !== null && params.value.clinic !== undefined
+        ? params.value.clinic.clinicname
+        : '';
+    loadingXLS.value = true;
     const rows = await reportService.getReferedPatientsReport(params);
     const data = this.createArrayOfArrayRow(rows);
 
@@ -132,7 +156,6 @@ export default {
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
-    const colI = worksheet.getColumn('I ');
 
     // Format Table Cells
     // Alignment Format
@@ -181,7 +204,10 @@ export default {
     cellTitle.value = title;
     cellPharmParamValue.value = facility;
     cellProvinceParamValue.value = province;
-    cellDistrictParamValue.value = '';
+    cellDistrictParamValue.value =
+      params.value.district !== null && params.value.district !== undefined
+        ? params.value.district.name
+        : '';
     cellStartDateParamValue.value = startDate;
     cellEndDateParamValue.value = endDate;
     cellPharm.value = 'Farmácia';
@@ -212,7 +238,6 @@ export default {
     colF.width = 15;
     colG.width = 15;
     colH.width = 30;
-    colI.width = 25;
 
     // Add Style
     cellTitle.font =
@@ -332,6 +357,8 @@ export default {
 
     params.value.loading.loading.hide();
 
+    loadingXLS.value = false;
+
     saveAs(blob, fileName + fileExtension);
   },
 
@@ -347,8 +374,12 @@ export default {
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].prescriptiondate)
       );
       createRow.push(rows[row].regime);
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate));
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+      );
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].facilityname);
 

@@ -49,7 +49,11 @@ import PatientWithScreeningList from 'src/components/Reports/PatientWithScreenin
 import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
 import DashboardUtils from '../../use/DashboardUtils';
-
+import { SessionStorage } from 'quasar';
+import Filter from 'src/components/Filter/Filter.vue';
+import provinceService from 'src/services/provinceService/provinceService';
+import clinicService from 'src/services/clinicService/clinicService';
+import districtService from 'src/services/districtService/districtService';
 import { QSpinnerBall, uid, useQuasar } from 'quasar';
 import {
   reactive,
@@ -61,11 +65,6 @@ import {
   onUpdated,
   onMounted,
 } from 'vue';
-import { SessionStorage } from 'quasar';
-import Filter from 'src/components/Filter/Filter.vue';
-import provinceService from 'src/services/provinceService/provinceService';
-import clinicService from 'src/services/clinicService/clinicService';
-import districtService from 'src/services/districtService/districtService';
 
 const $q = useQuasar();
 
@@ -152,7 +151,7 @@ const alldistrictsFromProvince = computed(() => {
 const allPhamacyFromFacility = computed(() => {
   if (district.value != null || district.value != undefined) {
     return clinicService.getAllPharmacyFromDistrict(district.value.name);
-  }
+  } else return [];
 });
 
 onActivated(() => {
@@ -165,9 +164,9 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
-  if (district.value != null || district.value != undefined)
+  if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
-  if (pharmacy.value != null || pharmacy.value != undefined)
+  if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
 

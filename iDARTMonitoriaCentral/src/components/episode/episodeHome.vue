@@ -34,12 +34,20 @@ const columns = [
   {
     name: 'startdate',
     required: true,
-    label: 'Data de Epsódio',
+    label: 'Data de Episódio',
     align: 'left',
     field: (row) =>
       row.startdate === null || row.startdate === undefined
         ? 'Não definido '
         : moment(row.startdate).format('DD-MM-YYYY'),
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'us',
+    align: 'left',
+    label: 'Unidade Sanitária',
+    field: (row) => row.us,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -60,21 +68,14 @@ const columns = [
     sortable: true,
   },
   {
-    name: 'us',
-    align: 'left',
-    label: 'Unidade Sanitária',
-    field: (row) => row.us,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
     name: 'clinic',
     align: 'left',
-    label: 'Framácia de Referência',
+    label: 'Farmácia de Referência',
     field: (row) => row.clinic,
     format: (val) => `${val}`,
     sortable: true,
   },
+
   {
     name: 'syncstatus',
     align: 'left',
