@@ -10,7 +10,7 @@
         <q-card-section>
           <div class="text-h7 text-left">
             <span
-              ><q-img src="/icons/patient.jpeg" height="20px" width="20px"
+              ><q-img src="/icons/patient.jpeg" height="50px" width="50px"
             /></span>
             <span class="q-ml-md">
               {{
@@ -23,7 +23,9 @@
             >
             |
             <span>
-              {{ Mathabs(useUtils.ageCalculator(props.patient.dateofbirth)) }}</span
+              {{
+                Mathabs(useUtils.ageCalculator(props.patient.dateofbirth))
+              }}</span
             >
           </div>
         </q-card-section>

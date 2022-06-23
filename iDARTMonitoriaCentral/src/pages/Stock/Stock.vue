@@ -56,8 +56,7 @@ const districtsByProvince = computed(() => {
 const DDPharmByDistrict = computed(() => {
   if (district.value != null || district.value != undefined) {
     return clinicService.getAllPharmacyFromDistrict(district.value.name);
-  }
-  return [];
+  } else return [];
 });
 
 /*
@@ -130,9 +129,9 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
-  if (district.value != null || district.value != undefined)
+  if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
-  if (pharmacy.value != null || pharmacy.value != undefined)
+  if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
 
@@ -144,7 +143,6 @@ provide('pharmacy', pharmacy);
 provide('allProvincias', allProvincias);
 provide('province', provincia);
 provide('district', district);
-provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);

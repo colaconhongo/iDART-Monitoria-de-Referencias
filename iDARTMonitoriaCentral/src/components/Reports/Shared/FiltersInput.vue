@@ -57,7 +57,11 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date v-model="paramEndDate"  mask="DD-MM-YYYY" :options="blockDataFutura">
+                <q-date
+                  v-model="paramEndDate"
+                  mask="DD-MM-YYYY"
+                  :options="blockDataFutura"
+                >
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -163,7 +167,7 @@ import QuarterlyPeriod from 'src/components/Reports/Shared/QuarterlyPeriod.vue';
 import SemesterPeriod from 'src/components/Reports/Shared/SemesterPeriod.vue';
 import AnnualPeriod from 'src/components/Reports/Shared/AnnualPeriod.vue';
 import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
-import { useQuasar, QSpinnerGears,date } from 'quasar';
+import { useQuasar, QSpinnerGears, date } from 'quasar';
 import moment from 'moment';
 import useUtils from 'src/use/useUtils';
 /*
@@ -174,8 +178,8 @@ const province = inject('province');
 const district = inject('district');
 const facility = inject('facility');
 const pharmacy = inject('pharmacy');
-const loadingPDF = ref(false);
-const loadingXLS = ref(false);
+const loadingPDF = inject('loadingPDF');
+const loadingXLS = inject('loadingXLS');
 const $q = useQuasar();
 
 const periodTypeList = ref([
@@ -202,7 +206,7 @@ let params = reactive(
     period: null,
     periodTypeView: null,
     periodType: null,
-    fileType: null
+    fileType: null,
   })
 );
 
@@ -237,7 +241,11 @@ const isAnnualSearch = computed(() => {
 const paramStartDate = computed({
   get() {
     if (params.value.startDate === null) return null;
-    if (typeof params.value.startDate !== 'string' || !(params.value.startDate instanceof String)) return useUtils.getDateFormatDDMMYYYY(params.value.startDate)
+    if (
+      typeof params.value.startDate !== 'string' ||
+      !(params.value.startDate instanceof String)
+    )
+      return useUtils.getDateFormatDDMMYYYY(params.value.startDate);
     return params.value.startDate;
     //return moment(new Date(params.value.startDate)).format('DD-MM-YYYY')
     //return getDDMMYYYFromJSDate(getJSDateFromDDMMYYY(params.value.startDate))
@@ -251,7 +259,11 @@ const paramStartDate = computed({
 const paramEndDate = computed({
   get() {
     if (params.value.endDate === null) return null;
-   if (typeof params.value.endDate !== 'string' || !(params.value.endDate instanceof String)) return useUtils.getDateFormatDDMMYYYY(params.value.endDate)
+    if (
+      typeof params.value.endDate !== 'string' ||
+      !(params.value.endDate instanceof String)
+    )
+      return useUtils.getDateFormatDDMMYYYY(params.value.endDate);
     return moment(params.value.endDate).format('DD-MM-YYYY');
   },
   set(newValue) {
@@ -269,21 +281,6 @@ const getDDMMYYYFromJSDate = (jsDate) => {
 /*
   Methods
   */
-
-const showLoading = (fileType) => {
-  if (fileType === 'PDF') {
-    loadingPDF.value = true;
-  } else {
-    loadingXLS.value = true;
-  }
-};
-const hideLoading = (fileType) => {
-  if (fileType === 'PDF') {
-    loadingPDF.value = false;
-  } else {
-    loadingXLS.value = false;
-  }
-};
 
 const blockDataFutura = (date) => {
   return date <= moment(new Date()).format('YYYY/MM/DD');
@@ -315,7 +312,9 @@ const generateReport = (fileType) => {
     );
   } else if (
     params.value.periodType.code === 'SPECIFIC' &&
-    new Date(params.value.endDate) < new Date(params.value.startDate)
+    moment(params.value.endDate, 'DD-MM-YYYY').diff(
+      moment(params.value.startDate, 'DD-MM-YYYY')
+    ) < 0
   ) {
     alert(
       'Alerta!',
@@ -325,13 +324,9 @@ const generateReport = (fileType) => {
       null
     );
   } else {
-    showLoading(fileType);
     determineDateInterval();
     params.value.loading = $q;
     emit('generateReport', params);
-    setTimeout(() => {
-      hideLoading(fileType);
-    }, 300);
   }
 };
 
@@ -416,94 +411,6 @@ const determineDateInterval = () => {
     );
   }
 };
-
-// const determineDateInterval = () => {
-//   if (isMonthlSearch.value) {
-//     params.value.endDate = moment(
-//       params.value.year + '-' + params.value.period.id + '-' + 20,
-//       'YYYY-MM-DD'
-//     );
-//     params.value.startDate = Object.assign({}, params.value.endDate);
-//     params.value.startDate = moment(params.value.startDate).subtract(
-//       30,
-//       'days'
-//     );
-//     params.value.startDate = moment(params.value.startDate).set('date', 21);
-//   } else if (isSTrimestralSearch.value) {
-//     if (params.value.period.id === 1) {
-//       params.value.startDate = moment(
-//         params.value.year - 1 + '-12-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-03-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     } else if (params.value.period.id === 2) {
-//       params.value.startDate = moment(
-//         params.value.year + '-03-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-06-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     } else if (params.value.period.id === 3) {
-//       params.value.startDate = moment(
-//         params.value.year + '-06-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-09-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     } else if (params.value.period.id === 4) {
-//       params.value.startDate = moment(
-//         params.value.year + '-09-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-12-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     }
-//   } else if (isSemestralSearch.value) {
-//     if (params.value.period.id === 1) {
-//       params.value.startDate = moment(
-//         params.value.year - 1 + '-12-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-06-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     } else if (params.value.period.id === 2) {
-//       params.value.startDate = moment(
-//         params.value.year + '-06-' + 21,
-//         'YYYY-MM-DD'
-//       );
-//       params.value.endDate = moment(
-//         params.value.year + '-12-' + 20,
-//         'YYYY-MM-DD'
-//       );
-//     }
-//   } else if (isAnnualSearch.value) {
-//     params.value.startDate = moment(
-//       params.value.year - 1 + '-12-' + 21,
-//       'YYYY-MM-DD'
-//     );
-//     params.value.endDate = moment(
-//       params.value.year + '-12-' + 20,
-//       'YYYY-MM-DD'
-//     );
-//   } else {
-//     params.value.startDate = moment(params.value.startDate, 'DD-MM-YYYY');
-//     params.value.endDate = moment(
-//       params.value.endDate + '-12-' + 20,
-//       'DD-MM-YYYY'
-//     );
-//   }
-// };
 
 const onPeriodoChange = (val) => {
   //params.value.startDate = null

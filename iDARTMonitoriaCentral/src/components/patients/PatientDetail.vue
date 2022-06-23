@@ -37,7 +37,9 @@
               /></span>
             </div>
             <div class="patient-details">
-              <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos </span>
+              <span>
+                {{ useUtils.ageCalculator(patient.dateofbirth) }} anos
+              </span>
             </div>
           </div>
           <div class="col-sm-4">
@@ -70,7 +72,7 @@
               : useUtils.getDateFormatDDMMYYYY(patient.prescriptiondate)
           }}</span>
         </div>
-        <div style="text-align: left">Framácia de Referência</div>
+        <div style="text-align: left">Farmácia de Referência</div>
         <div class="dados-referencia" style="text-align: left">
           <span>{{ patient.clinicname }}</span>
         </div>
@@ -141,6 +143,7 @@
         <q-separator color="blue-8"></q-separator>
         <div class="row q-my-md q-ml-xl">
           <q-btn
+            :loading="loadingPDF"
             color="primary"
             icon="print"
             label="Imprimir fila"
@@ -153,15 +156,15 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, reactive, ref } from 'vue';
 import useUtils from 'src/use/useUtils';
 import reportFila from 'src/services/ReportServices/fila/filaReport';
 import prescriptionService from 'src/services/prescriptionService/prescriptionService';
 
 const patient = inject('patient');
-
+const loadingPDF = reactive(ref(false));
 const printFilaReport = () => {
-  reportFila.downloadPDF(patient.value);
+  reportFila.downloadPDF(patient.value, loadingPDF);
 };
 </script>
 

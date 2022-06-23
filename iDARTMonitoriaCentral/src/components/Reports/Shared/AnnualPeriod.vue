@@ -1,34 +1,39 @@
 <template>
+  <div class="col q-mb-md" style="max-width: 300px">
+    <SelectField
+      :label="Ano"
+      v-model="yearAnnualPeriod"
+      :options="yearsToShow"
+      outlined
+      dense
+      @change="updateYear"
+    />
+    <!--q-input
+      class="col q-mr-md"
+      dense
+      outlined
+      v-model="yearAnnualPeriod"
+      type="number"
+      label="Ano"
+      @blur="updateYear"
+    /-->
+  </div>
+</template>
 
-     <div class="row q-mb-md">
-             <q-input
-              class="col q-mr-md"
-                dense
-                outlined
-                v-model="yearAnnualPeriod"
-                type="number"
-                label="Ano"
-                @blur="setSelectedYearAnnual()"
-            />
-       </div>
-  </template>
+<script setup>
+/*
+  Declarations
+*/
 
-<script>
+import DashboardUtils from 'src/use/DashboardUtils';
+import SelectField from 'src/components/Shared/Input/SelectField.vue';
+import { inject, ref } from 'vue';
 
-    export default {
-        data () {
-                return {
-                    yearAnnualPeriod: new Date().getFullYear(),
-                    semestres: [
-                        { id: 1, description: 'Semestre 1' },
-                        { id: 2, description: 'Semestre 2' }
-                        ]
-                        }
-            },
-        methods: {
-            setSelectedYearAnnual () {
-            this.$emit('setSelectedYearAnnual', this.yearAnnualPeriod)
-            }
-        }
-           }
+const params = inject('params');
+const yearsToShow = DashboardUtils.getLastFiveYears();
+const yearAnnualPeriod = ref(new Date().getFullYear());
+
+const updateYear = () => {
+  params.value.year = yearAnnualPeriod.value;
+};
 </script>

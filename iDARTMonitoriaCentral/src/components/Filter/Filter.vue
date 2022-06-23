@@ -78,10 +78,12 @@ const allPhamacyFromFacility = inject('allPhamacyFromFacility');
 
 const clearDistrict = () => {
   SessionStorage.remove('district');
+  // district.value = null;
 };
 
 const clearPharmacy = () => {
   SessionStorage.remove('pharmacy');
+  // pharmacy.value = null;
 };
 </script>
 

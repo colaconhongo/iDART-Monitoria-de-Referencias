@@ -9,18 +9,21 @@
       <q-card style="width: 1100px; max-width: 90vw">
         <q-card-section>
           <div class="text-h7 text-left">
-            <span
-              ><q-img src="/icons/patient.jpeg" height="20px" width="20px"
+            <span class="q-ml-md"
+              ><q-img src="/icons/patient.jpeg" height="50px" width="50px"
             /></span>
             <span> {{ patient.firstnames + ' ' + patient.lastname }} </span> |
             <span> {{ patient.sex == 'F' ? 'Feminino' : 'Masculino' }} </span> |
-            <span> {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de idade</span>
+            <span>
+              {{ useUtils.ageCalculator(patient.dateofbirth) }} anos de
+              idade</span
+            >
           </div>
         </q-card-section>
         <q-separator />
 
         <q-card-section>
-          <div class="text-h5 text-center">Editar Epsódio</div>
+          <div class="text-h5 text-center">Editar Episódio</div>
         </q-card-section>
         <q-separator />
         <q-card-section class="scroll" style="max-height: 80vh">
@@ -29,12 +32,12 @@
               <div class="q-mt-lg">
                 <div class="row q-mt-md">
                   <DateFieldReadOnly
-                    label="Data inicio"
+                    label="Data Início"
                     class="col q-ml-md"
                     v-model="startdateformated"
                   />
                   <TextFieldReadOnly
-                    label="Notas de Inicio [Referência]"
+                    label="Notas de Início [Referência]"
                     class="col q-ml-md"
                     ref="code"
                     v-model="episode.startnotes"
@@ -93,6 +96,8 @@ const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
 const patient = inject('patient');
 const episode = inject('episode');
+const update = inject('update');
+const close = inject('close');
 // alert(start_date_formated)
 
 /*
@@ -120,7 +125,7 @@ const allClinics = computed(() => {
 const startdateformated = computed({
   get() {
     if (episode.value.startdate === null) return null;
-    return moment(new Date(episode.value.startdate)).format('DD-MM-YYYY');
+    return useUtils.getDateFormatDDMMYYYY(episode.value.startdate);
   },
 });
 

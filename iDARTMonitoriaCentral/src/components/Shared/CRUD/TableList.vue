@@ -241,7 +241,28 @@ const exportTable = () => {
     )
     .join('\r\n');
 
-  const status = exportFile(props.title.concat('.csv'), content, 'text/csv');
+  const blob = new Blob(['\uFEFF' + content], {
+    type: 'text/csv; charset=utf-18',
+  });
+
+  const status = exportFile(props.title.concat('.csv'), blob);
+
+  // const status = exportFile(props.title.concat('.csv'), content, {
+  //   encoding: 'utf-16',
+  //   mimeType: 'text/csv;charset=utf-16;',
+  // });
+
+  // const status = exportFile(
+  //   props.title.concat('.csv'),
+  //   content,
+  //   'data:text/csv;charset=utf-16'
+  // );
+
+  // const status = exportFile('file2.csv', 'éà; ça; 12\nà@€; çï; 13', {
+  //   encoding: 'ISO-8859-1',
+  //   mimeType: 'text/csv;charset=ISO-8859-1',
+  // });
+
   if (status !== true) {
     $q.notify({
       message: 'O navegador recusou o download...',

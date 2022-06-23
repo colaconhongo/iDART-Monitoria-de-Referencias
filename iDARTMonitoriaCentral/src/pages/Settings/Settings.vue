@@ -110,19 +110,21 @@ const facility = reactive(ref());
 const pharmacy = reactive(ref());
 
 onActivated(() => {
-  if (SessionStorage.getItem('district') !== undefined) {
+  if (SessionStorage.getItem('district') !== null) {
     district.value = SessionStorage.getItem('district');
   }
-  if (SessionStorage.getItem('pharmacy') !== undefined) {
+  if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
 });
 
 onDeactivated(() => {
-  if (district.value != null || district.value != undefined)
+  if (district.value !== null && district.value !== undefined) {
     SessionStorage.set('district', district.value);
-  if (pharmacy.value != null || pharmacy.value != undefined)
+  }
+  if (pharmacy.value !== null && pharmacy.value !== undefined) {
     SessionStorage.set('pharmacy', pharmacy.value);
+  }
 });
 
 /*
@@ -139,7 +141,7 @@ const alldistrictsFromProvince = computed(() => {
 const allPhamacyFromFacility = computed(() => {
   if (district.value != null || district.value != undefined) {
     return clinicService.getAllPharmacyFromDistrict(district.value.name);
-  }
+  } else return [];
 });
 
 provide('allProvincias', allProvincias);

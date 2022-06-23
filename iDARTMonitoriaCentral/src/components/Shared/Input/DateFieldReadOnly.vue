@@ -29,21 +29,19 @@
     readonly
   >
     <template v-slot:append>
-      <q-icon name="event" class="cursor-pointer" :value="props.date">
-        <q-popup-proxy
-          ref="qDateProxy"
-          transition-show="scale"
-          transition-hide="scale"
+      <q-popup-proxy
+        ref="qDateProxy"
+        transition-show="scale"
+        transition-hide="scale"
+      >
+        <q-date
+          :modelValue="date"
+          v-model="props.value"
+          @input="(event) => $emit('update:date', $event.target.value)"
+          disable
         >
-          <q-date
-            :modelValue="date"
-            v-model="props.value"
-            @input="(event) => $emit('update:date', $event.target.value)"
-            disable
-          >
-          </q-date>
-        </q-popup-proxy>
-      </q-icon>
+        </q-date>
+      </q-popup-proxy>
     </template>
   </q-input>
 </template>

@@ -276,7 +276,11 @@ const exportTable = () => {
     )
     .join('\r\n');
 
-  const status = exportFile(props.title.concat('.csv'), content, 'text/csv');
+  const blob = new Blob(['\uFEFF' + content], {
+    type: 'text/csv; charset=utf-18',
+  });
+
+  const status = exportFile(props.title.concat('.csv'), blob);
   if (status !== true) {
     $q.notify({
       message: 'O navegador recusou o download...',

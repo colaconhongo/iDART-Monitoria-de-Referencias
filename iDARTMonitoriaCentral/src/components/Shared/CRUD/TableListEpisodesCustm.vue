@@ -93,7 +93,7 @@
               no-caps
               round
               size="sm"
-              v-if="props.row.stopdate == null"
+              v-if="props.row.stopdate == null && props.row.syncstatus === 'P'"
               @click="editar(props.row)"
             >
               <q-tooltip
@@ -217,7 +217,11 @@ const exportTable = () => {
     )
     .join('\r\n');
 
-  const status = exportFile(props.title.concat('.csv'), content, 'text/csv');
+  const blob = new Blob(['\uFEFF' + content], {
+    type: 'text/csv; charset=utf-18',
+  });
+
+  const status = exportFile(props.title.concat('.csv'), blob);
   if (status !== true) {
     $q.notify({
       message: 'O navegador recusou o download...',

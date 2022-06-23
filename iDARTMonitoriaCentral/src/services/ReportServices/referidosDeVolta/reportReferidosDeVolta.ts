@@ -6,10 +6,9 @@ import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
 
-
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
-const title = 'Lista de Pacientes Referidos para outra Farmácia';
+const title = 'Lista de Pacientes que Regressaram à Unidade Sanitária';
 const reportName = 'PacientesReferidosDeVolta';
 const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
@@ -21,7 +20,8 @@ export default {
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingPDF: object
   ) {
     const doc = new jsPDF({
       orientation: 'l',
@@ -30,8 +30,10 @@ export default {
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
+    loadingPDF.value = true;
     const image = new Image();
-    image.src = '/src/assets/MoHLogo.png';
+    // image.src = '/src/assets/MoHLogo.png';
+    image.src = 'data:image/png;base64,' + MOHIMAGELOG;
     const width = doc.internal.pageSize.getWidth();
     /*
       Fill Table
@@ -75,6 +77,20 @@ export default {
         });
         doc.setFontSize(10);
         doc.text('Província: ' + province, width / 15, 57);
+        params.value.district !== null && params.value.district !== undefined
+          ? doc.text(
+              'Distrito: ' + params.value.district.name,
+              width / 3 - 15,
+              57
+            )
+          : '';
+        params.value.clinic !== null && params.value.clinic !== undefined
+          ? doc.text(
+              'Farmácia: ' + params.value.clinic.clinicname,
+              width / 2 + 30,
+              57
+            )
+          : '';
         doc.text('Data Início: ' + startDate, width / 2 + 98, 49);
         doc.text('Data Fim: ' + endDate, width / 2 + 98, 57);
         // doc.line(0, 35, 400, 50);
@@ -83,16 +99,23 @@ export default {
       head: [cols],
       body: data,
     });
-    params.value.loading.loading.hide();
-    return doc.save('PacientesReferidosDeVolta.pdf');
+
+    loadingPDF.value = false;
+    return doc.save(fileName.concat('.pdf'));
   },
   async downloadExcel(
     facility: string,
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingXLS: object
   ) {
+    facility =
+      params.value.clinic !== null && params.value.clinic !== undefined
+        ? params.value.clinic.clinicname
+        : '';
+    loadingXLS.value = true;
     const rows = await reportService.getReturnedReferedPatient(params);
     const data = this.createArrayOfArrayRow(rows);
 
@@ -184,7 +207,10 @@ export default {
     cellTitle.value = title;
     cellPharmParamValue.value = facility;
     cellProvinceParamValue.value = province;
-    cellDistrictParamValue.value = '';
+    cellDistrictParamValue.value =
+      params.value.district !== null && params.value.district !== undefined
+        ? params.value.district.name
+        : '';
     cellStartDateParamValue.value = startDate;
     cellEndDateParamValue.value = endDate;
     cellPharm.value = 'Farmácia';
@@ -326,7 +352,8 @@ export default {
     const fileExtension = '.xlsx';
 
     const blob = new Blob([buffer], { type: fileType });
-  
+
+    loadingXLS.value = false;
     saveAs(blob, fileName + fileExtension);
   },
   createArrayOfArrayRow(rows: any) {
@@ -337,11 +364,17 @@ export default {
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate));
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate));
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
+      );
       createRow.push(rows[row].clinicname);
 
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].returndate));
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].returndate)
+      );
       createRow.push(rows[row].stopreason);
 
       data.push(createRow);

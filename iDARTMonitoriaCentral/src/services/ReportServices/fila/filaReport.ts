@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import reportService from '../reportService';
 import useUtils from 'src/use/useUtils';
+import { MOHIMAGELOG } from 'src/assets/imageBytes';
 
 const title = 'Ficha Individual de Levantamento de ARVs ( FILA)';
 const reportName = 'fila';
@@ -10,7 +11,7 @@ const fileName = reportName.concat(
 );
 
 export default {
-  async downloadPDF(patient: object) {
+  async downloadPDF(patient: object, loadingPDF: object) {
     const doc = new jsPDF({
       orientation: 'l',
       unit: 'mm',
@@ -18,8 +19,10 @@ export default {
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
+    loadingPDF.value = true;
     const image = new Image();
-    image.src = '/src/assets/MoHLogo.png';
+    // image.src = '/src/assets/MoHLogo.png';
+    image.src = 'data:image/png;base64,' + MOHIMAGELOG;
     const width = doc.internal.pageSize.getWidth();
     /*
       Fill Table
@@ -40,14 +43,14 @@ export default {
 
     for (const row in rows) {
       const createRow = [];
-      console.log(rows[row])
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate));
+      console.log(rows[row]);
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate)
+      );
       createRow.push(rows[row].drugname);
       createRow.push(rows[row].qtyinhand.replace(/[{()}]/g, ''));
       createRow.push(rows[row].timesperday);
-      createRow.push(
-        rows[row].dateexpectedstring
-      );
+      createRow.push(rows[row].dateexpectedstring);
 
       data.push(createRow);
     }
@@ -133,7 +136,7 @@ export default {
       head: [cols],
       body: data,
     });
-
+    loadingPDF.value = false;
     return doc.save(fileName.concat('.pdf'));
   },
 
@@ -149,8 +152,12 @@ export default {
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].prescriptiondate)
       );
       createRow.push(rows[row].regime);
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate));
-      createRow.push(useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate));
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+      );
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);

@@ -6,7 +6,6 @@ import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
 
-
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
 const title = 'Relatório de Dispensas por Frasco e Regime';
@@ -21,7 +20,8 @@ export default {
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingPDF: object
   ) {
     const doc = new jsPDF({
       orientation: 'l',
@@ -30,8 +30,10 @@ export default {
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
+    loadingPDF.value = true;
     const image = new Image();
-    image.src = '/src/assets/MoHLogo.png';
+    // image.src = '/src/assets/MoHLogo.png';
+    image.src = 'data:image/png;base64,' + MOHIMAGELOG;
     const width = doc.internal.pageSize.getWidth();
     /*
       Fill Table
@@ -43,7 +45,6 @@ export default {
     ];
     const rows = await reportService.getDispensesByDrugAndRegimen(params);
     const data = this.createArrayOfArrayRow(rows);
-
     autoTable(doc, {
       margin: { top: 60 },
       bodyStyles: {
@@ -67,6 +68,20 @@ export default {
         });
         doc.setFontSize(10);
         doc.text('Província: ' + province, width / 15, 57);
+        params.value.district !== null && params.value.district !== undefined
+          ? doc.text(
+              'Distrito: ' + params.value.district.name,
+              width / 3 - 15,
+              57
+            )
+          : '';
+        params.value.clinic !== null && params.value.clinic !== undefined
+          ? doc.text(
+              'Farmácia: ' + params.value.clinic.clinicname,
+              width / 2 + 30,
+              57
+            )
+          : '';
         doc.text('Data Início: ' + startDate, width / 2 + 98, 49);
         doc.text('Data Fim: ' + endDate, width / 2 + 98, 57);
         // doc.line(0, 35, 400, 50);
@@ -75,7 +90,7 @@ export default {
       head: [cols],
       body: data,
     });
-    params.value.loading.loading.hide();
+    loadingPDF.value = false;
     return doc.save(fileName.concat('.pdf'));
   },
   async downloadExcel(
@@ -83,10 +98,18 @@ export default {
     province: string,
     startDate: string,
     endDate: string,
-    params: Object
+    params: object,
+    loadingXLS: object
   ) {
-    const rows = await reportService.getReferedPatientsReport(params);
+    facility =
+      params.value.clinic !== null && params.value.clinic !== undefined
+        ? params.value.clinic.clinicname
+        : '';
+    loadingXLS.value = true;
+    const rows = await reportService.getDispensesByDrugAndRegimen(params);
     const data = this.createArrayOfArrayRow(rows);
+
+    console.log(rows);
 
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'FGH';
@@ -174,7 +197,10 @@ export default {
     cellTitle.value = title;
     cellPharmParamValue.value = facility;
     cellProvinceParamValue.value = province;
-    cellDistrictParamValue.value = '';
+    cellDistrictParamValue.value =
+      params.value.district !== null && params.value.district !== undefined
+        ? params.value.district.name
+        : '';
     cellStartDateParamValue.value = startDate;
     cellEndDateParamValue.value = endDate;
     cellPharm.value = 'Farmácia';
@@ -223,7 +249,7 @@ export default {
       ext: { width: 144, height: 98 },
     });
 
-    // Cereate Table
+    // Create Table
     worksheet.addTable({
       name: reportName,
       ref: 'A14',
@@ -252,7 +278,7 @@ export default {
     const lastRowNum =
       worksheet.lastRow.number !== undefined ? worksheet.lastRow.number : 0;
     const lastTableRowNum = lastRowNum;
-
+    const table = worksheet.getTable('MyTable');
     //Loop through all table's row
     for (let i = 14; i <= lastTableRowNum; i++) {
       const row = worksheet.getRow(i);
@@ -295,8 +321,8 @@ export default {
     const fileExtension = '.xlsx';
 
     const blob = new Blob([buffer], { type: fileType });
-    params.value.loading.loading.hide();
 
+    loadingXLS.value = false;
     saveAs(blob, fileName + fileExtension);
   },
 
@@ -306,9 +332,7 @@ export default {
     for (const row in rows) {
       const createRow = [];
       createRow.push(rows[row].drugname);
-      createRow.push('');
       createRow.push(rows[row].regimen);
-      createRow.push('');
       createRow.push(rows[row].qty);
 
       data.push(createRow);

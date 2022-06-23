@@ -131,7 +131,13 @@ export default {
               listErrors.push(element.message);
             });
           }
-          alert('Erro no registo', listErrors, null, null, null);
+          alert(
+            'Erro no registo',
+            'Esta farmácia tem pacientes assossiados e não pode ser removida',
+            null,
+            null,
+            null
+          );
         } else if (error.request) {
           alert('Erro no registo', error.request, null, null, null);
         } else {
