@@ -59,7 +59,9 @@ watch(year, () => {
     DispenseService.getDispensesByRegimeByYear(year.value).then(() => {
       patientService.getPatientsByYear(year.value).then(() => {
         loaded.loaded = ref(true);
-        $q.loading.hide();
+        setTimeout(() => {
+          $q.loading.hide();
+        }, 600);
       });
     });
   });
@@ -73,7 +75,9 @@ watch(district, () => {
   });
   // SessionStorage.set('district', district.value)
   loaded.loaded = ref(true);
-  $q.loading.hide();
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
 });
 
 watch(pharmacy, () => {
@@ -84,7 +88,9 @@ watch(pharmacy, () => {
   });
 
   loaded.loaded = ref(true);
-  $q.loading.hide();
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
 });
 
 /*
@@ -131,7 +137,9 @@ onMounted(() => {
         //  if (SessionStorage.getItem('district') !== null) {
         //  district = SessionStorage.getItem('district')
         // }
-        $q.loading.hide();
+        setTimeout(() => {
+          $q.loading.hide();
+        }, 3000);
       });
     });
   });
@@ -149,7 +157,7 @@ onUpdated ==
     });
     setTimeout(() => {
       $q.loading.hide();
-    }, 800);
+    }, 3000);
     ProvinceService.get(0);
     DistrictService.get(0);
     ClinicService.get(0);

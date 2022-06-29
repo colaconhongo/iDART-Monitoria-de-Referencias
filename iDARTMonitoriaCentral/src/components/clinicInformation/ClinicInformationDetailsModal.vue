@@ -4,7 +4,6 @@
       v-model="show_dialog"
       transition-show="flip-up"
       transition-hide="flip-up"
-      persistent
     >
       <q-card style="width: 1500px; max-width: 90vw">
         <q-card-section>
@@ -23,9 +22,7 @@
             >
             |
             <span>
-              {{
-                Mathabs(useUtils.ageCalculator(props.patient.dateofbirth))
-              }}</span
+              {{ useUtils.ageCalculator(props.patient.dateofbirth) }}</span
             >
           </div>
         </q-card-section>
@@ -268,7 +265,7 @@
           <q-btn
             v-close-popup
             color="negative"
-            label="Voltar"
+            label="Fechar"
             type="reset"
             @click="close"
           />
@@ -300,9 +297,6 @@ const props = defineProps({
   close: {
     type: Function,
   },
-  show_dialog: {
-    type: Boolean,
-  },
   clinicInformation: {
     type: Object,
   },
@@ -315,7 +309,7 @@ const props = defineProps({
 Declarations
 */
 const step = reactive(ref(1));
-let show_dialog = inject('show_dialog');
+const show_dialog = inject('show_dialog');
 
 let clinicInformation = reactive(props.clinicInformation);
 
@@ -376,6 +370,6 @@ watch(
 );
 
 const close = () => {
-  show_dialog = false;
+  show_dialog.value = false;
 };
 </script>

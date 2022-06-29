@@ -14,7 +14,7 @@ import clinicInformationService from 'src/services/clinicInformationService/clin
 /*
 Declarations
 */
-const titleList = reactive(ref('Atenção Farmacéutica'));
+const titleList = reactive(ref('Atenção Farmacêutica'));
 const titleAddEdit = reactive(ref('Farmácia'));
 const titleDetails = reactive(ref('Detalhes da Farmácia'));
 const show_dialog = reactive(ref(false));
