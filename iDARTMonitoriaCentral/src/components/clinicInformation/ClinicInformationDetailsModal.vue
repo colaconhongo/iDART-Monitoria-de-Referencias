@@ -101,7 +101,9 @@
                               @click="
                                 () => {
                                   done2 = true;
-                                  step = 3;
+                                  props.patient.sex === 'F'
+                                    ? (step = 3)
+                                    : (step = 4);
                                 }
                               "
                               color="primary"
@@ -114,6 +116,7 @@
                           :name="3"
                           title="Rastreio Gravidez"
                           icon="create_new_folder"
+                          v-if="props.patient.sex === 'F'"
                           :done="step > 3"
                           :header-nav="step > 3"
                         >
@@ -208,7 +211,11 @@
                           <q-stepper-navigation>
                             <q-btn
                               flat
-                              @click="step = 3"
+                              @click="
+                                props.patient.sex === 'F'
+                                  ? (step = 3)
+                                  : (step = 2)
+                              "
                               color="primary"
                               label="Voltar"
                               class="q-ml-sm"
