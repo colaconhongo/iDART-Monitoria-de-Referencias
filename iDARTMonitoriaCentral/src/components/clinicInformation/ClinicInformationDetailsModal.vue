@@ -4,7 +4,6 @@
       v-model="show_dialog"
       transition-show="flip-up"
       transition-hide="flip-up"
-      persistent
     >
       <q-card style="width: 1500px; max-width: 90vw">
         <q-card-section>
@@ -23,9 +22,7 @@
             >
             |
             <span>
-              {{
-                Mathabs(useUtils.ageCalculator(props.patient.dateofbirth))
-              }}</span
+              {{ useUtils.ageCalculator(props.patient.dateofbirth) }}</span
             >
           </div>
         </q-card-section>
@@ -104,7 +101,9 @@
                               @click="
                                 () => {
                                   done2 = true;
-                                  step = 3;
+                                  props.patient.sex === 'F'
+                                    ? (step = 3)
+                                    : (step = 4);
                                 }
                               "
                               color="primary"
@@ -117,6 +116,7 @@
                           :name="3"
                           title="Rastreio Gravidez"
                           icon="create_new_folder"
+                          v-if="props.patient.sex === 'F'"
                           :done="step > 3"
                           :header-nav="step > 3"
                         >
@@ -211,7 +211,11 @@
                           <q-stepper-navigation>
                             <q-btn
                               flat
-                              @click="step = 3"
+                              @click="
+                                props.patient.sex === 'F'
+                                  ? (step = 3)
+                                  : (step = 2)
+                              "
                               color="primary"
                               label="Voltar"
                               class="q-ml-sm"
@@ -268,7 +272,7 @@
           <q-btn
             v-close-popup
             color="negative"
-            label="Voltar"
+            label="Fechar"
             type="reset"
             @click="close"
           />
@@ -300,9 +304,6 @@ const props = defineProps({
   close: {
     type: Function,
   },
-  show_dialog: {
-    type: Boolean,
-  },
   clinicInformation: {
     type: Object,
   },
@@ -315,7 +316,7 @@ const props = defineProps({
 Declarations
 */
 const step = reactive(ref(1));
-let show_dialog = inject('show_dialog');
+const show_dialog = inject('show_dialog');
 
 let clinicInformation = reactive(props.clinicInformation);
 
@@ -376,6 +377,6 @@ watch(
 );
 
 const close = () => {
-  show_dialog = false;
+  show_dialog.value = false;
 };
 </script>

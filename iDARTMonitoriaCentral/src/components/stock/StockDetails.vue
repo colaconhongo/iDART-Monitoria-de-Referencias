@@ -46,7 +46,7 @@
     imports
   */
 
-import { computed, onMounted, inject, ref } from 'vue';
+import { computed, onMounted, inject, ref, onUpdated } from 'vue';
 import { useQuasar, QSpinnerBall } from 'quasar';
 import stockReportService from 'src/services/ReportServices/stock/stockReportService';
 import stockTable from 'src/components/Shared/CRUD/TableList.vue';
@@ -118,17 +118,18 @@ const emit = defineEmits(['goBack']);
 /*
     Mounted Hooks
   */
-onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
+onUpdated ==
+  onMounted(() => {
+    $q.loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+    getStockDetailsFromAPI();
   });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-  getStockDetailsFromAPI();
-});
 
 /*
     Computed

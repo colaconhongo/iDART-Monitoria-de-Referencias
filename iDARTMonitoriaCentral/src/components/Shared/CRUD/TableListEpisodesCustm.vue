@@ -82,7 +82,10 @@
           </div>
 
           <div v-else>
-            {{ col.value }}
+            <div v-if="col.value !== 'null'">
+              {{ col.value }}
+            </div>
+            <div v-else>Não definido</div>
           </div>
         </q-td>
         <q-td v-if="with_actionsButton" auto-width>

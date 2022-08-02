@@ -50,7 +50,7 @@ const chartOptionsReferredByPharmacy = {
     speed: 1000,
   },
   title: {
-    text: 'Total de Referidos Por Farmácia',
+    text: 'Total de Referências Por Farmácia',
     align: 'center',
     style: {
       color: '#000000',

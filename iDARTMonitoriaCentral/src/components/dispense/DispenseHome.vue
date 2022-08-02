@@ -74,7 +74,7 @@ const columns = [
     name: 'duration',
     align: 'left',
     label: 'Duração (meses)',
-    field: (row) => row.duration,
+    field: (row) => (row.duration !== null ? row.duration / 4 : 0),
     format: (val) => `${val}`,
     sortable: true,
   },

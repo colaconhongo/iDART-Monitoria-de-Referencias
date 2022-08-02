@@ -109,9 +109,6 @@ onMounted(() => {
     spinnerColor: 'grey-4',
     spinner: QSpinnerBall,
   });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
   getAllClinicInformationFromAPI(0);
 });
 
@@ -137,6 +134,9 @@ const getAllClinicInformationFromAPI = (offset) => {
   if (offset >= 0) {
     clinicInformationService.get(offset);
   }
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
 };
 
 const visualizar = (clinicInformationEntity) => {
