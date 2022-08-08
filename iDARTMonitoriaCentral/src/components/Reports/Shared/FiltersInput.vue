@@ -116,7 +116,6 @@
                           </template>
                         </q-input>
                     </div-->
-
       <MonthlyPeriod class="col" v-if="isMonthlSearch" />
 
       <QuarterlyPeriod class="col" v-if="isSTrimestralSearch" />
@@ -410,6 +409,8 @@ const determineDateInterval = () => {
       'YYYY-MM-DD'
     );
   }
+
+  console.log('parametros', params);
 };
 
 const onPeriodoChange = (val) => {
