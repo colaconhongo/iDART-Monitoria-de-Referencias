@@ -6,7 +6,7 @@
       :options="yearsToShow"
       outlined
       dense
-      @change="updateYear"
+      @blur="updateYear"
     />
     <!--q-input
       class="col q-mr-md"

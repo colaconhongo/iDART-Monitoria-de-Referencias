@@ -46,6 +46,7 @@ export default {
       'Data do Último Levant.',
       'Farmácia de Referência',
       'Data de Retorno a US',
+      'Unidade Sanitária',
       'Notas',
     ];
     const rows = await reportService.getReturnedReferedPatient(params);
@@ -159,6 +160,7 @@ export default {
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
+    const colI = worksheet.getColumn('I');
 
     // Format Table Cells
     // Alignment Format
@@ -241,6 +243,7 @@ export default {
     colF.width = 15;
     colG.width = 15;
     colH.width = 30;
+    colI.width = 30;
 
     // Add Style
     cellTitle.font =
@@ -293,6 +296,11 @@ export default {
         },
         {
           name: 'Data de retorno a US',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Unidade Sanitária',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -365,16 +373,23 @@ export default {
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+        rows[row].referaldate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+          : '-'
       );
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
+        rows[row].lastpickupdate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
+          : '-'
       );
       createRow.push(rows[row].clinicname);
 
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].returndate)
+        rows[row].returndate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].returndate)
+          : '-'
       );
+      createRow.push(rows[row].mainclinicname);
       createRow.push(rows[row].stopreason);
 
       data.push(createRow);

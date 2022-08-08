@@ -26,7 +26,7 @@ export default {
     const doc = new jsPDF({
       orientation: 'l',
       unit: 'mm',
-      format: 'a4',
+      format: [210, 337],
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
@@ -48,6 +48,7 @@ export default {
       'Data Levant.',
       'Data Prox. Levant.',
       'Farmácia',
+      'Unidade Sanitária',
     ];
     const rows = await reportService.getActivePatients(params);
     const data = this.createArrayOfArrayRow(rows);
@@ -67,7 +68,7 @@ export default {
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
       );
       createRow.push(rows[row].clinicname);
-
+      createRow.push(rows[row].mainclinicname);
       data.push(createRow);
     }
     autoTable(doc, {
@@ -77,6 +78,12 @@ export default {
         1: { cellWidth: 55 },
         2: { cellWidth: 20 },
         3: { cellWidth: 26 },
+        4: { cellWidth: 26 },
+        5: { cellWidth: 26 },
+        6: { cellWidth: 26 },
+        7: { cellWidth: 26 },
+        8: { cellWidth: 26 },
+        9: { cellWidth: 26 },
       },
       bodyStyles: {
         halign: 'center',
@@ -329,6 +336,11 @@ export default {
           totalsRowFunction: 'none',
           filterButton: false,
         },
+        {
+          name: 'Unidade Sanitária',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
       ],
       rows: data,
     });
@@ -402,6 +414,7 @@ export default {
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
       );
       createRow.push(rows[row].clinicname);
+      createRow.push(rows[row].mainclinicname);
 
       data.push(createRow);
     }

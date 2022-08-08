@@ -371,14 +371,22 @@ export default {
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].prescriptiondate)
+        rows[row].prescriptiondate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(
+              rows[row].prescriptiondate
+            )
+          : '-'
       );
       createRow.push(rows[row].regime);
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+        rows[row].nextpickupdate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+          : '-'
       );
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+        rows[row].referaldate != null
+          ? useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].referaldate)
+          : '-'
       );
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].facilityname);

@@ -8,7 +8,7 @@ import useUtils from 'src/use/useUtils';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
-const title = 'Lista de Pacientes de Pacientes Faltosos ao Levantamento';
+const title = 'Lista de Pacientes Faltosos ao Levantamento';
 const reportName = 'PacientesFaltososAoLevantamento';
 const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
@@ -45,6 +45,7 @@ export default {
       'Data em que Faltou ao Levantamento',
       'Data em que Identificou o Abandono ao TARV [>59 dias faltosos]',
       'Farmácia de Referência',
+      'Unidade Sanitária',
       'Chamada Efectuada',
     ];
     const rows = await reportService.getPatientsWithMissDispenses(params);
@@ -52,10 +53,10 @@ export default {
 
     autoTable(doc, {
       margin: { top: 60 },
-      columnStyles: {
-        0: { cellWidth: 50 },
-        1: { cellWidth: 50 },
-      },
+      // columnStyles: {
+      //   0: { cellWidth: 50 },
+      //   1: { cellWidth: 50 },
+      // },
       bodyStyles: {
         halign: 'center',
       },
@@ -172,6 +173,7 @@ export default {
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
+    const colI = worksheet.getColumn('I');
 
     // Format Table Cells
     // Alignment Format
@@ -254,6 +256,7 @@ export default {
     colF.width = 40;
     colG.width = 40;
     colH.width = 30;
+    colI.width = 30;
 
     // Add Style
     cellTitle.font =
@@ -304,9 +307,13 @@ export default {
           totalsRowFunction: 'none',
           filterButton: false,
         },
-
         {
           name: 'Farmácia de Referência',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Unidade Sanitária',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -390,7 +397,7 @@ export default {
           : '-'
       );
       createRow.push(rows[row].clinicname);
-
+      createRow.push(rows[row].mainclinicname);
       createRow.push(rows[row].contact);
       data.push(createRow);
     }
