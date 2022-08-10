@@ -39,6 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
+      'ORD',
       'NID',
       'Nome',
       'Data do Último Levanatmento',
@@ -153,13 +154,13 @@ export default {
     const cellPharm = worksheet.getCell('A11');
     const cellDistrict = worksheet.getCell('A12');
     const cellProvince = worksheet.getCell('D12');
-    const cellStartDate = worksheet.getCell('G11');
-    const cellEndDate = worksheet.getCell('G12');
+    const cellStartDate = worksheet.getCell('H11');
+    const cellEndDate = worksheet.getCell('H12');
     const cellPharmParamValue = worksheet.getCell('B11');
     const cellDistrictParamValue = worksheet.getCell('B12');
     const cellProvinceParamValue = worksheet.getCell('E12');
-    const cellStartDateParamValue = worksheet.getCell('H11');
-    const cellEndDateParamValue = worksheet.getCell('H12');
+    const cellStartDateParamValue = worksheet.getCell('I11');
+    const cellEndDateParamValue = worksheet.getCell('I12');
 
     // Get Rows
     const headerRow = worksheet.getRow(14);
@@ -236,11 +237,11 @@ export default {
 
     // merge a range of cells
     worksheet.mergeCells('A1:A7');
-    worksheet.mergeCells('A9:H10');
-    worksheet.mergeCells('B11:F11');
+    worksheet.mergeCells('A9:I10');
+    worksheet.mergeCells('B11:G11');
     worksheet.mergeCells('B12:C12');
-    worksheet.mergeCells('E12:F12');
-    worksheet.mergeCells('A13:H13');
+    worksheet.mergeCells('E12:G12');
+    worksheet.mergeCells('A13:I13');
 
     // add width size to Columns
     // add height size to Rows
@@ -290,7 +291,8 @@ export default {
       },
 
       columns: [
-        { name: 'NID', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'NID', totalsRowLabel: 'none:', filterButton: false },
         { name: 'Nome', totalsRowLabel: 'none:', filterButton: false },
         {
           name: 'Data do Último Levantamento',
@@ -378,9 +380,11 @@ export default {
   },
   createArrayOfArrayRow(rows: any) {
     const data = [];
+    let ord = 1;
 
     for (const row in rows) {
       const createRow = [];
+      createRow.push(ord);
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
       createRow.push(
@@ -400,6 +404,7 @@ export default {
       createRow.push(rows[row].mainclinicname);
       createRow.push(rows[row].contact);
       data.push(createRow);
+      ord += 1;
     }
 
     return data;

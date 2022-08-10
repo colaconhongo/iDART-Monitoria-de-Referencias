@@ -39,6 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
+      'ORD',
       'NID',
       'Nome',
       'Tipo TARV',
@@ -134,17 +135,18 @@ export default {
     });
     // Get Cells
     const cellRepublica = worksheet.getCell('A8');
+
     const cellTitle = worksheet.getCell('A9');
     const cellPharm = worksheet.getCell('A11');
     const cellDistrict = worksheet.getCell('A12');
-    const cellProvince = worksheet.getCell('D12');
-    const cellStartDate = worksheet.getCell('G11');
-    const cellEndDate = worksheet.getCell('G12');
+    const cellProvince = worksheet.getCell('E12');
+    const cellStartDate = worksheet.getCell('H11');
+    const cellEndDate = worksheet.getCell('H12');
     const cellPharmParamValue = worksheet.getCell('B11');
     const cellDistrictParamValue = worksheet.getCell('B12');
-    const cellProvinceParamValue = worksheet.getCell('E12');
-    const cellStartDateParamValue = worksheet.getCell('H11');
-    const cellEndDateParamValue = worksheet.getCell('H12');
+    const cellProvinceParamValue = worksheet.getCell('G12');
+    const cellStartDateParamValue = worksheet.getCell('I11');
+    const cellEndDateParamValue = worksheet.getCell('I12');
 
     // Get Rows
     const headerRow = worksheet.getRow(14);
@@ -158,6 +160,7 @@ export default {
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
     const colH = worksheet.getColumn('H');
+    const colI = worksheet.getColumn('I');
 
     // Format Table Cells
     // Alignment Format
@@ -220,9 +223,9 @@ export default {
 
     // merge a range of cells
     worksheet.mergeCells('A1:A7');
-    worksheet.mergeCells('A9:H10');
-    worksheet.mergeCells('B11:F11');
-    worksheet.mergeCells('B12:C12');
+    worksheet.mergeCells('A9:I10');
+    worksheet.mergeCells('B11:G11');
+    worksheet.mergeCells('B12:D12');
     worksheet.mergeCells('E12:F12');
     worksheet.mergeCells('A13:H13');
 
@@ -240,6 +243,7 @@ export default {
     colF.width = 15;
     colG.width = 15;
     colH.width = 30;
+    colI.width = 30;
 
     // Add Style
     cellTitle.font =
@@ -272,7 +276,8 @@ export default {
         showRowStripes: false,
       },
       columns: [
-        { name: 'NID', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'NID', totalsRowFunction: 'none', filterButton: false },
         { name: 'Nome', totalsRowFunction: 'none', filterButton: false },
         { name: 'Tipo TARV', totalsRowFunction: 'none', filterButton: false },
         {
@@ -357,9 +362,11 @@ export default {
   },
   createArrayOfArrayRow(rows: any) {
     const data = [];
+    let ord = 1;
 
     for (const row in rows) {
       const createRow = [];
+      createRow.push(ord);
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].tipotarv);
@@ -374,6 +381,8 @@ export default {
       createRow.push(rows[row].clinicname);
 
       data.push(createRow);
+
+      ord += 1;
     }
 
     return data;

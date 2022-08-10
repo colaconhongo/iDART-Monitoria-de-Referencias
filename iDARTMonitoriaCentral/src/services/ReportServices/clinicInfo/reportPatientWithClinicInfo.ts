@@ -39,6 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
+      'ORD',
       'NID',
       'Nome',
       'Idade',
@@ -153,6 +154,7 @@ export default {
     const colE = worksheet.getColumn('E');
     const colF = worksheet.getColumn('F');
     const colG = worksheet.getColumn('G');
+    const colH = worksheet.getColumn('H');
 
     // Format Table Cells
     // Alignment Format
@@ -234,6 +236,7 @@ export default {
     colE.width = 20;
     colF.width = 15;
     colG.width = 15;
+    colH.width = 15;
 
     // Add Style
     cellTitle.font =
@@ -266,7 +269,8 @@ export default {
         showRowStripes: false,
       },
       columns: [
-        { name: 'NID', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'NID', totalsRowLabel: 'none:', filterButton: false },
         { name: 'Nome', totalsRowFunction: 'none', filterButton: false },
         { name: 'Idade', totalsRowFunction: 'none', filterButton: false },
         {
@@ -347,9 +351,11 @@ export default {
 
   createArrayOfArrayRow(rows: any) {
     const data = [];
+    let ord = 1;
 
     for (const row in rows) {
       const createRow = [];
+      createRow.push(ord);
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
       createRow.push(rows[row].age);
@@ -362,6 +368,7 @@ export default {
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].facilityname);
       data.push(createRow);
+      ord += 1;
     }
 
     return data;

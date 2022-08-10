@@ -39,6 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
+      'ORD',
       'Medicamento',
       'Regime Terapêutico',
       'Quantidade de Dispensas',
@@ -225,8 +226,8 @@ export default {
     colB.width = 30;
     colC.width = 15;
     colD.width = 15;
-    colE.width = 10;
-    colF.width = 10;
+    colE.width = 20;
+    colF.width = 20;
 
     // Add Style
     cellTitle.font =
@@ -259,7 +260,8 @@ export default {
         showRowStripes: false,
       },
       columns: [
-        { name: 'Medicamento', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'Medicamento', totalsRowLabel: 'none:', filterButton: false },
         {
           name: 'Regime Terapêutico',
           totalsRowFunction: 'none',
@@ -328,14 +330,17 @@ export default {
 
   createArrayOfArrayRow(rows: any) {
     const data = [];
+    let ord = 1;
 
     for (const row in rows) {
       const createRow = [];
+      createRow.push(ord);
       createRow.push(rows[row].drugname);
       createRow.push(rows[row].regimen);
       createRow.push(rows[row].qty);
 
       data.push(createRow);
+      ord += 1;
     }
 
     return data;
