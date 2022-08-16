@@ -41,6 +41,10 @@
             <div class="text-h4 q-mb-md"></div>
             <regimen />
           </q-tab-panel>
+          <q-tab-panel name="user">
+            <div class="text-h4 q-mb-md"></div>
+            <user />
+          </q-tab-panel>
         </q-tab-panels>
       </template>
     </q-splitter>
@@ -62,6 +66,7 @@ import clinics from '../Clinic/Clinic.vue';
 import clinic_sector from '../ClinicSector/ClinicSector.vue';
 import drugs from '../Drug/Drug.vue';
 import regimen from '../Regimen/Regimen.vue';
+import user from '../user/User.vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -161,6 +166,7 @@ const tabs = [
   { name: 'clinic_sector', icon: 'local_pharmacy', label: t('clinicSector') },
   { name: 'drugs', icon: 'medication', label: t('drug') },
   { name: 'regimen', icon: 'healing', label: t('regimen') },
+  { name: 'user', icon: 'manage_accounts', label: t('Utilizadores') },
 ];
 </script>
 <style></style>
