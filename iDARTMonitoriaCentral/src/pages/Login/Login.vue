@@ -52,7 +52,7 @@
                   style="font-size: 26px"
                   class="row text-center column text-gray text-subtitle1 ellipsis"
                 >
-                  Pacientes Referios
+                  Pacientes Referidos
                 </div>
               </div>
             </q-card-section>
@@ -156,7 +156,7 @@
                   <q-img src="../../assets/logo_graphic.png" />
                 </q-avatar>
               </div>
-              <div class="row justify-center">Versão v.1.0.0</div>
+              <div class="row justify-center">Versão v.1.1.0</div>
             </q-card-section>
           </q-card>
         </transition>
