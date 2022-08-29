@@ -47,7 +47,10 @@ const columns = [
     name: 'us',
     align: 'left',
     label: 'Unidade Sanitária',
-    field: (row) => row.us,
+    field: (row) =>
+      row.us === null || row.us === undefined || row.us === 'null'
+        ? 'Não definido '
+        : row.us,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -55,15 +58,25 @@ const columns = [
     name: 'startreason',
     align: 'left',
     label: 'Motivo',
-    field: (row) => row.startreason,
+    field: (row) =>
+      row.startreason === null ||
+      row.startreason === undefined ||
+      row.startreason === 'null'
+        ? 'Não definido '
+        : row.startreason,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
     name: 'startnotes',
     align: 'left',
-    label: 'Nota',
-    field: (row) => row.startnotes,
+    label: 'Notas',
+    field: (row) =>
+      row.startnotes === null ||
+      row.startnotes === undefined ||
+      row.startnotes === 'null'
+        ? 'Não definido '
+        : row.startnotes,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -75,7 +88,6 @@ const columns = [
     format: (val) => `${val}`,
     sortable: true,
   },
-
   {
     name: 'syncstatus',
     align: 'left',

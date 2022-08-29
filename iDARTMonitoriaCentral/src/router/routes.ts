@@ -17,12 +17,13 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: MainLayout,
     beforeEnter(to, from, next) {
-      const authUser = localStorage.getItem('user');
-      if (authUser === null || String(authUser).includes('null')) {
-        next('/Login');
-      } else {
-        next();
-      }
+      next();
+      // const authUser = localStorage.getItem('user');
+      // if (authUser === null || String(authUser).includes('null')) {
+      //   next('/Login');
+      // } else {
+      //   next();
+      // }
     },
     children: [
       {
@@ -34,7 +35,7 @@ const routes: RouteRecordRaw[] = [
         component: provinceIndex,
       },
       {
-        path: '/settings',
+        path: '/Settings',
         component: Settings,
       },
       {
