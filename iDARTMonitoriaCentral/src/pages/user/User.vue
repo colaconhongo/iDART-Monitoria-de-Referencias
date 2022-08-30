@@ -23,6 +23,7 @@ import { provide, inject, reactive, ref } from 'vue';
 import SecUsersService from 'src/services/secUsersService/SecUsersService';
 import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useI18n } from 'vue-i18n';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 
 /*
 Declarations
@@ -41,6 +42,7 @@ const { t } = useI18n();
 
 const details_dialog = reactive(ref(false));
 let createOrEditFlag = reactive(ref(false));
+let confirmPassword = reactive(ref(''));
 
 provide('title', titleAddEdit);
 provide('show_dialog', show_dialog);
@@ -73,37 +75,47 @@ const createUser = () => {
 };
 
 const createOrUpdate = () => {
-  params.pass_user = newPass.value;
-  params.role_user = 'authenticator';
-  params.username_user = user.value.username;
-  submitting.value = true;
-  console.log('Parametros:', params);
-  if (editedIndex.value != 1) {
-    params.operation_type_user = 'U';
-    SecUsersService.post(params)
-      .then(() => {
-        submitting.value = false;
-        close();
-      })
-      .catch(() => {
-        submitting.value = false;
-      });
+  if (confirmPassword.value == newPass.value) {
+    params.pass_user = newPass.value;
+    params.role_user = 'authenticator';
+    params.username_user = user.value.username;
+    submitting.value = true;
+    console.log('Parametros:', params);
+    if (editedIndex.value != 1) {
+      params.operation_type_user = 'U';
+      SecUsersService.post(params)
+        .then(() => {
+          submitting.value = false;
+          close();
+        })
+        .catch(() => {
+          submitting.value = false;
+        });
+    } else {
+      delete user.value['username'];
+      params.operation_type_user = 'C';
+      SecUsersService.post(params)
+        .then(() => {
+          submitting.value = false;
+          close();
+        })
+        .catch(() => {
+          submitting.value = false;
+        });
+    }
   } else {
-    delete user.value['username'];
-    params.operation_type_user = 'C';
-    SecUsersService.post(params)
-      .then(() => {
-        submitting.value = false;
-        close();
-      })
-      .catch(() => {
-        submitting.value = false;
-      });
+    alert(
+      'Erro!',
+      'O campo nova senha e confirmar a senha devem ser iguais',
+      null,
+      null,
+      null
+    );
   }
 };
 
 const editUser = (userRow) => {
-  createOrEditFlag.value = true;
+  createOrEditFlag.value = false;
   titleAddEdit.value = t('edit').concat(' ').concat('Utilizador');
   user.value = userRow;
   //activeEditDialog.value = true;
@@ -124,26 +136,40 @@ const removeUser = (userRow) => {
   params.username_user = user.value.username;
   params.operation_type_user = 'D';
 
-  confirm(
-    t('confirmation'),
-    'Deseja apagar o utilizador '.concat(user.value.username).concat('?')
-  )
-    .onOk(() => {
-      SecUsersService.post(params)
-        .then(() => {
-          submitting.value = false;
-          close();
-        })
-        .catch(() => {
-          submitting.value = false;
-        });
-    })
-    .onCancel(() => {
-      close();
-    })
-    .onDismiss(() => {
-      close();
-    });
+  const logedUser = localStorage.getItem('user');
+
+  if (logedUser != params.username_user) {
+    confirm(
+      t('confirmation'),
+      'Deseja apagar o utilizador '.concat(user.value.username).concat('?')
+    )
+      .onOk(() => {
+        SecUsersService.post(params)
+          .then(() => {
+            submitting.value = false;
+            close();
+          })
+          .catch(() => {
+            submitting.value = false;
+          });
+      })
+      .onCancel(() => {
+        close();
+      })
+      .onDismiss(() => {
+        close();
+      });
+  } else {
+    alert(
+      'Erro!',
+      'O utilizador '
+        .concat(user.value.username)
+        .concat(' não pode ser removido porque está logado.'),
+      null,
+      null,
+      null
+    );
+  }
 };
 
 const close = () => {
@@ -154,6 +180,7 @@ const close = () => {
   user.value = [];
   editedIndex.value = -1;
   newPass.value = '';
+  confirmPassword.value = '';
 };
 
 provide('title', titleAddEdit);
@@ -170,4 +197,5 @@ provide('close', close);
 provide('createOrUpdate', createOrUpdate);
 provide('newPass', newPass);
 provide('createOrEditFlag', createOrEditFlag);
+provide('confirmPassword', confirmPassword);
 </script>
