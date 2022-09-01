@@ -58,6 +58,27 @@
                       />
                     </template>
                   </q-input>
+
+                  <q-input
+                    label="Confirmar Senha "
+                    outlined
+                    ref="ref"
+                    class="col q-ml-md"
+                    v-model="confirmPassword"
+                    :type="isPwd ? 'password' : 'text'"
+                    @input="
+                      (event) => $emit('update:value', event.target.value)
+                    "
+                    lazy-rules
+                  >
+                    <template v-slot:append>
+                      <q-icon
+                        :name="isPwd ? 'visibility_off' : 'visibility'"
+                        class="cursor-pointer"
+                        @click="isPwd = !isPwd"
+                      />
+                    </template>
+                  </q-input>
                 </div>
               </div>
             </div>
@@ -103,6 +124,7 @@ const isPwd = ref(true);
 
 const close = inject('close');
 const newPassword = inject('newPass');
+const confirmPassword = inject('confirmPassword');
 const title = inject('title');
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
