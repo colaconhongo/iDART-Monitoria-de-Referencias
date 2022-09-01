@@ -120,7 +120,7 @@ export default {
     loadingXLS.value = true;
     const rows = await reportService.getReturnedReferedPatient(params);
     const data = this.createArrayOfArrayRow(rows);
-
+    console.log('GGGGGGGG', rows);
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'FGH';
     workbook.lastModifiedBy = 'FGH';
