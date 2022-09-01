@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const instance = axios.create({
   baseURL: 'http://dev.fgh.org.mz:3910/',
@@ -51,6 +54,7 @@ instance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 403 || error.response.status === 401) {
+      router.push({ path: '/' });
       originalRequest._retry = true;
       return axios
         .post('http://dev.fgh.org.mz:3110/rpc/login', {

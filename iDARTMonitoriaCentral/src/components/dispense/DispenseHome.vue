@@ -65,16 +65,24 @@ const columns = [
   {
     name: 'qtyinhand',
     align: 'left',
-    label: 'Quantidade (Frasco)',
-    field: (row) => row.qtyinhand,
+    label: 'Quantidade',
+    field: (row) =>
+      parseInt(row.qtyinhand.match(/\(([^)]+)\)/)[1]) < 10
+        ? parseInt(row.qtyinhand.match(/\(([^)]+)\)/)[1]) + ' Frasco(s)'
+        : parseInt(row.qtyinhand.match(/\(([^)]+)\)/)[1]) + ' Comprimidos',
     format: (val) => `${val}`,
     sortable: true,
   },
   {
     name: 'duration',
     align: 'left',
-    label: 'Duração (meses)',
-    field: (row) => (row.duration !== null ? row.duration / 4 : 0),
+    label: 'Duração',
+    field: (row) =>
+      row.duration !== null
+        ? row.duration / 4 < 1
+          ? row.duration + ' Semana(s)'
+          : row.duration / 4 + ' Mes(es)'
+        : 0,
     format: (val) => `${val}`,
     sortable: true,
   },

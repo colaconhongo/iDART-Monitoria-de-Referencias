@@ -74,14 +74,14 @@
             <!--Enviado-->
           </div>
           <div v-else-if="col.value === 'L' && col.name === 'syncstatus'">
-            <label style="color: orange">
+            <label style="color: darkslategrey">
               <q-icon name="cloud_download" size="md"></q-icon>
               <q-tooltip>Dispensa enviada da US</q-tooltip>
               <!--Actualizado--></label
             >
           </div>
           <div v-else-if="col.value === 'P' && col.name === 'syncstatus'">
-            <label style="color: orange"
+            <label style="color: red"
               ><q-icon name="warning" size="md"></q-icon>
               <q-tooltip>Pendente</q-tooltip>
               <!--Pendente-->
