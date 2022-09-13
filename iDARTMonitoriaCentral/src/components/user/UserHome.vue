@@ -6,12 +6,14 @@
       :with_downloadButton="true"
       :rows="allSecUsers"
       :title="props.title"
-      :with_actionRemoveButton="true"
+      :with_actionRemoveButton="false"
       :with_actionEditButton="true"
       :with_actionDetailButton="true"
       :editar="editUser"
       :visualizar="viewUser"
       :remover="removeUser"
+      :with_activeButton="true"
+      :promptToConfirm="promptToConfirm"
     />
   </q-page>
 </template>
@@ -20,7 +22,7 @@
 import { useQuasar, QSpinnerBall } from 'quasar';
 import SecUsersService from 'src/services/secUsersService/SecUsersService';
 import { computed, inject, onMounted, reactive, ref } from 'vue';
-import listUser from 'src/components/Shared/CRUD/TableList.vue';
+import listUser from 'src/components/Shared/CRUD/TableListActiveButton.vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -36,6 +38,7 @@ const viewUser = inject('viewUser');
 const newPass = inject('newPass');
 const editUser = inject('editUser');
 const removeUser = inject('removeUser');
+const promptToConfirm = inject('promptToConfirm');
 const title = inject('titleList');
 const $q = new useQuasar();
 const { t } = useI18n();
@@ -57,6 +60,14 @@ const columns = [
     label: t('nameUser'),
     align: 'left',
     field: (row) => row.role + ' ' + row.apelido,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'active',
+    align: 'left',
+    label: t('active'),
+    field: (row) => (row.role === 'authenticator' ? t('true') : t('false')),
     format: (val) => `${val}`,
     sortable: true,
   },

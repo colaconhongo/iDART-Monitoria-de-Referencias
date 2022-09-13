@@ -5,7 +5,7 @@ export default class SecUsers extends Model {
   static primaryKey = 'username';
   static fields(): ModelFields {
     return {
-      userId: this.uid(),
+      userid: this.uid(),
       username: this.attr(''),
       nome: this.attr(''),
       apelido: this.attr(''),
