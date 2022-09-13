@@ -74,6 +74,48 @@ const createUser = () => {
   editedIndex.value = 1;
 };
 
+const updateUser = (userRow) => {
+  const username = userRow.username;
+  SecUsersService.patch(username, userRow);
+};
+const promptToConfirm = (userRow) => {
+  let active = userRow.role === 'authenticator';
+
+  confirm(
+    t('confirmation'),
+    active
+      ? 'Deseja Inactivar o '.concat(t('user')).concat('?')
+      : 'Deseja Activar o '.concat(t('user')).concat('?')
+  )
+    .onOk(() => {
+      const logedUser = localStorage.getItem('user');
+      if (logedUser != userRow.username) {
+        if (active) {
+          userRow.role = 'anon';
+        } else if (!active) {
+          userRow.role = 'authenticator';
+        }
+        updateUser(userRow);
+      } else {
+        alert(
+          'Erro!',
+          'O utilizador '
+            .concat(userRow.username)
+            .concat(' não pode ser alterado o seu estado.'),
+          null,
+          null,
+          null
+        );
+      }
+    })
+    .onCancel(() => {
+      close();
+    })
+    .onDismiss(() => {
+      close();
+    });
+};
+
 const createOrUpdate = () => {
   if (confirmPassword.value == newPass.value) {
     params.user_firstname = user.value.nome;
@@ -85,7 +127,6 @@ const createOrUpdate = () => {
     params.role_user = 'authenticator';
     params.username_user = user.value.username;
     submitting.value = true;
-    console.log('Parametros:', params);
 
     if (editedIndex.value != 1) {
       params.operation_type_user = 'U';
@@ -202,4 +243,5 @@ provide('createOrUpdate', createOrUpdate);
 provide('newPass', newPass);
 provide('createOrEditFlag', createOrEditFlag);
 provide('confirmPassword', confirmPassword);
+provide('promptToConfirm', promptToConfirm);
 </script>

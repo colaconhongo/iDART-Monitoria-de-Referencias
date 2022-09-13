@@ -61,11 +61,18 @@ export default {
         });
     }
   },
-  patch(id: number, params: string) {
+  patch(username: string, params: string) {
     return api()
-      .patch('sec_users/' + id, params)
+      .patch('sec_users?username=eq.' + username, params)
       .then((resp) => {
-        sec_users.save(resp.data);
+        sec_users.save(JSON.parse(resp.config.data));
+        alert(
+          'Sucesso!',
+          'O Registo foi alterado com sucesso',
+          null,
+          null,
+          null
+        );
       });
   },
   delete(id: number) {
@@ -81,5 +88,8 @@ export default {
   },
   getAllSecUsers() {
     return sec_users.all();
+  },
+  getSecUsersByUserName(username: string) {
+    return sec_users.query().where('sec_users', username).get();
   },
 };

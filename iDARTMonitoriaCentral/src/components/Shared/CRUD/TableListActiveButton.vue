@@ -80,7 +80,9 @@
               @click.stop="promptToConfirm(props.row)"
             >
               <q-tooltip :class="getTooltipClass(props.row)">{{
-                props.row.active ? 'Inactivar' : 'Activar'
+                props.row.active || props.row.role === 'authenticator'
+                  ? 'Inactivar'
+                  : 'Activar'
               }}</q-tooltip>
             </q-btn>
             <q-btn
@@ -229,21 +231,21 @@ const props = defineProps({
   Methods
 */
 const getIconActive = (entity) => {
-  if (entity.active) {
+  if (entity.active || entity.role === 'authenticator') {
     return 'stop_circle';
   } else if (!entity.active) {
     return 'play_circle';
   }
 };
 const getColorActive = (entity) => {
-  if (entity.active) {
+  if (entity.active || entity.role === 'authenticator') {
     return 'red';
   } else if (!entity.active) {
     return 'green';
   }
 };
 const getTooltipClass = (entity) => {
-  if (entity.active) {
+  if (entity.active || entity.role === 'authenticator') {
     return 'bg-red-5';
   } else if (!entity.active) {
     return 'bg-green-5';
