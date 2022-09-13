@@ -8,8 +8,9 @@
       :title="props.title"
       :with_actionRemoveButton="true"
       :with_actionEditButton="true"
-      :with_actionDetailButton="false"
+      :with_actionDetailButton="true"
       :editar="editUser"
+      :visualizar="viewUser"
       :remover="removeUser"
     />
   </q-page>
@@ -18,7 +19,7 @@
 <script setup>
 import { useQuasar, QSpinnerBall } from 'quasar';
 import SecUsersService from 'src/services/secUsersService/SecUsersService';
-import { computed, inject, onMounted, reactive, ref, watch } from 'vue';
+import { computed, inject, onMounted, reactive, ref } from 'vue';
 import listUser from 'src/components/Shared/CRUD/TableList.vue';
 import { useI18n } from 'vue-i18n';
 
@@ -37,23 +38,25 @@ const editUser = inject('editUser');
 const removeUser = inject('removeUser');
 const title = inject('titleList');
 const $q = new useQuasar();
+const { t } = useI18n();
 const mode = reactive(ref('list'));
 
 const columns = [
   {
     name: 'username',
     required: true,
-    label: 'Username',
+    label: t('Username'),
     align: 'left',
     field: (row) => row.username,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'role',
+    name: 'nome',
+    required: true,
+    label: t('nameUser'),
     align: 'left',
-    label: 'Role',
-    field: (row) => row.role,
+    field: (row) => row.role + ' ' + row.apelido,
     format: (val) => `${val}`,
     sortable: true,
   },
