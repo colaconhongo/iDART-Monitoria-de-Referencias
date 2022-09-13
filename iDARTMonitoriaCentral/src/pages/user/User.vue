@@ -2,11 +2,7 @@
   <q-page class="q-pa-sm q-gutter-sm">
     <UserHome :is="activeUserHome" v-model:title="titleList" />
     <UserDetailsVue :is="activeDetails" v-model:title="titleDetails" />
-    <CreateEditUser
-      :is="true"
-      v-model:createOrUpdate="createOrUpdate"
-      v-model:close="close"
-    />
+    <CreateEditUser />
 
     <div class="absolute-bottom">
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -19,7 +15,7 @@
 import UserHome from 'src/components/user/UserHome.vue';
 import UserDetailsVue from 'src/components/user/UserDetails.vue';
 import CreateEditUser from 'src/components/user/UserCreateEditModal.vue';
-import { provide, inject, reactive, ref } from 'vue';
+import { provide, reactive, ref } from 'vue';
 import SecUsersService from 'src/services/secUsersService/SecUsersService';
 import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useI18n } from 'vue-i18n';
@@ -46,7 +42,6 @@ let confirmPassword = reactive(ref(''));
 
 provide('title', titleAddEdit);
 provide('show_dialog', show_dialog);
-// provide('clinic', clinic);
 provide('submitting', submitting);
 const newPass = reactive(ref(''));
 
@@ -58,6 +53,11 @@ let params = {
   username_user: '',
   pass_user: '',
   role_user: '',
+  user_firstname: '',
+  user_lastname: '',
+  user_email: '',
+  user_uuid: '',
+  user_contact: '',
   operation_type_user: '',
 };
 
@@ -76,11 +76,17 @@ const createUser = () => {
 
 const createOrUpdate = () => {
   if (confirmPassword.value == newPass.value) {
+    params.user_firstname = user.value.nome;
+    params.user_lastname = user.value.apelido;
+    params.user_email = user.value.email;
+    params.user_uuid = user.value.userId;
+    params.user_contact = user.value.contacto;
     params.pass_user = newPass.value;
     params.role_user = 'authenticator';
     params.username_user = user.value.username;
     submitting.value = true;
     console.log('Parametros:', params);
+
     if (editedIndex.value != 1) {
       params.operation_type_user = 'U';
       SecUsersService.post(params)
@@ -115,12 +121,10 @@ const createOrUpdate = () => {
 };
 
 const editUser = (userRow) => {
-  createOrEditFlag.value = false;
+  createOrEditFlag.value = true;
   titleAddEdit.value = t('edit').concat(' ').concat('Utilizador');
   user.value = userRow;
-  //activeEditDialog.value = true;
   show_dialog.value = true;
-  //editedIndex.value = 0;
   console.log(newPass.value);
 };
 

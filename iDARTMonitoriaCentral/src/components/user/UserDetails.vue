@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
+    {{ user }}
     <ViewUser
       v-model:title="titleDetails"
       v-model:details_dialog="details_dialog"
@@ -21,5 +22,5 @@ const details_dialog = inject('details_dialog');
 const titleDetails = inject('titleDetails');
 const user = inject('user');
 const close = inject('close');
-const excludeAttribute = ref(['id', 'uuid', 'userdetails_id']);
+const excludeAttribute = ref(['id', 'userId', 'pass']);
 </script>

@@ -51,6 +51,17 @@ export default {
   dateofbirth: 'Idade',
   sex: 'Sexo',
 
+  // User
+  Utilizadores: 'Utilizadores',
+  Username: 'Utilizador',
+  username: 'Utilizador',
+  nameUser: 'Nome do Utilizador',
+  nome: 'Nome do Utilizador',
+  apelido: 'Apelido',
+  contacto: 'Contacto',
+  email: 'Email',
+  role: 'Perfil',
+
   // General
   true: 'Sim',
   false: 'Não',
