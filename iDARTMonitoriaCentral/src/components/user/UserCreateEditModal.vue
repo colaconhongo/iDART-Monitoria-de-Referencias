@@ -91,10 +91,11 @@
                     v-model="user.pass"
                     :type="isPwd ? 'password' : 'text'"
                     :disable="createOrEditFlag"
+                    v-if="createOrEditFlag"
                     :rules="[
                       (val) =>
                         (val && val.length > 4) ||
-                        'Por favor introduza uma senha com mais de 4 digitos',
+                        'Por favor introduza uma senha com mais de 4 caracteres',
                     ]"
                   >
                     <template v-slot:append>
@@ -113,7 +114,7 @@
                     class="col q-ml-md"
                     v-model="newPassword"
                     :type="isNewPwd ? 'password' : 'text'"
-                    v-if="createOrEditFlag"
+                    v-if="newUserFlag"
                     @input="
                       (event) => $emit('update:value', event.target.value)
                     "
@@ -121,7 +122,7 @@
                     :rules="[
                       (val) =>
                         (val && val.length > 4) ||
-                        'Por favor introduza uma senha com mais de 4 digitos',
+                        'Por favor introduza uma senha com mais de 4 caracteres',
                     ]"
                   >
                     <template v-slot:append>
@@ -171,12 +172,17 @@
                 <div class="row q-mt-md">
                   <q-input
                     outlined
-                    lazy-rules
                     label="Contacto"
                     class="col q-ml-md"
                     ref="userContactoRef"
                     v-model="user.contacto"
                     :disable="createOrEditFlag"
+                    lazy-rules
+                    :rules="[
+                      (val) =>
+                        (val && val.length >= 9) ||
+                        'Por favor introduza o contacto',
+                    ]"
                   />
                   <q-input
                     outlined
@@ -233,6 +239,7 @@ const title = inject('title');
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
 const createOrEditFlag = inject('createOrEditFlag');
+const newUserFlag = inject('newUserFlag');
 const isPwd = ref(true);
 const isNewPwd = ref(true);
 const isPwdConf = ref(true);
@@ -261,14 +268,17 @@ const validateForm = () => {
     userFirstnameRef.value.validate();
     userLastnameRef.value.validate();
     userNameRef.value.validate();
-    passRef.value.validate();
+    // passRef.value.validate();
     passConfRef.value.validate();
-    userEmailRef.value.validate();
+
+    if (user.value.email.length > 0) {
+      userEmailRef.value.validate();
+    }
     if (
       !userFirstnameRef.value.hasError &&
       !userLastnameRef.value.hasError &&
       !userNameRef.value.hasError &&
-      !passRef.value.hasError &&
+      //!passRef.value.hasError &&
       !passConfRef.value.hasError &&
       !userEmailRef.value.hasError
     ) {

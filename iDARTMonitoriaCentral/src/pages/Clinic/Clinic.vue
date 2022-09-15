@@ -59,9 +59,11 @@ const createClinic = () => {
 
 const createOrUpdate = () => {
   submitting.value = true;
-  if (editedIndex.value != 1) {
+  if (editedIndex.value == 1) {
+    clinic.value.province = localStorage.getItem('province_name');
+    delete clinic.value['id'];
     clinicService
-      .patch(clinic.value.id, clinic.value)
+      .post(clinic.value)
       .then(() => {
         submitting.value = false;
         close();
@@ -70,10 +72,8 @@ const createOrUpdate = () => {
         submitting.value = false;
       });
   } else {
-    delete clinic.value['id'];
-    clinic.value.province = localStorage.getItem('province_name');
     clinicService
-      .post(clinic.value)
+      .patch(clinic.value.uuid, clinic.value)
       .then(() => {
         submitting.value = false;
         close();
@@ -144,4 +144,5 @@ provide('viewClinic', viewClinic);
 provide('deleteClinic', deleteClinic);
 provide('clinic', clinic);
 provide('close', close);
+provide('createOrUpdate', createOrUpdate);
 </script>

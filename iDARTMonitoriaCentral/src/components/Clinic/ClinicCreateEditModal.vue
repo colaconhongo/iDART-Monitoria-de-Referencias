@@ -17,42 +17,66 @@
             <div class="q-mx-lg">
               <div class="q-mt-lg">
                 <div class="row q-mt-md">
-                  <TextField
+                  <q-input
+                    outlined
                     label="Código"
                     class="col q-ml-md"
                     ref="code"
                     v-model="clinic.code"
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 3) ||
+                        'Por favor introduza o código da farmácia',
+                    ]"
                   />
-                  <TextField
+                  <q-input
+                    outlined
                     label="Nome da Farmácia"
                     class="col q-ml-md"
                     ref="clinicname"
                     v-model="clinic.clinicname"
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 3) ||
+                        'Por favor introduza o nome da farmácia',
+                    ]"
                   />
-                  <SelectField
+                  <q-select
+                    outlined
                     label="Tipo de Farmácia"
                     class="col q-ml-md"
+                    ref="facilitytype"
                     v-model="clinic.facilitytype"
                     :options="facilitytypes"
                   />
                 </div>
                 <div class="row q-mt-md">
-                  <SelectField
+                  <q-select
+                    outlined
                     label="Distrito"
                     class="col q-ml-md"
                     v-model="clinic.district"
+                    ref="district"
                     :options="
                       alldistrictsFromProvince.map((district) => district.name)
                     "
                     option-label="name"
                   />
-                  <TextField
+                  <q-input
+                    outlined
                     label="Contacto"
                     class="col q-ml-md"
                     ref="telephone"
                     v-model="clinic.telephone"
+                    lazy-rules
+                    :rules="[
+                      (val) =>
+                        (val && val.length >= 9) ||
+                        'Por favor introduza o contacto',
+                    ]"
                   />
-                  <TextField
+                  <q-input
+                    outlined
                     label="Notas"
                     class="col q-ml-md"
                     ref="notes"
@@ -70,7 +94,7 @@
             color="teal"
             label="Gravar"
             type="submit"
-            @click.stop="createOrUpdate"
+            @click.stop="validateForm"
           />
           <q-btn
             v-close-popup
@@ -86,9 +110,16 @@
 </template>
 <script setup>
 import { computed, inject, ref } from 'vue';
-import TextField from '../Shared/Input/TextField.vue';
-import SelectField from '../Shared/Input/SelectField.vue';
 import districtService from 'src/services/districtService/districtService';
+
+const code = ref(null);
+const clinicname = ref(null);
+const facilitytype = ref(null);
+const district = ref(null);
+const telephone = ref(null);
+const notes = ref(null);
+
+const createOrUpdate = inject('createOrUpdate');
 
 /*
   Props
@@ -128,4 +159,20 @@ const alldistrictsFromProvince = computed(() => {
 /*
   Methods
 */
+
+const validateForm = () => {
+  code.value.validate();
+  clinicname.value.validate();
+  facilitytype.value.validate();
+  district.value.validate();
+
+  if (
+    !code.value.hasError &&
+    !clinicname.value.hasError &&
+    !facilitytype.value.hasError &&
+    !district.value.hasError
+  ) {
+    createOrUpdate();
+  }
+};
 </script>

@@ -17,6 +17,11 @@ export default {
             username: userData.username_user,
             pass: userData.pass_user,
             role: userData.role_user,
+            firstname: userData.user_firstname,
+            lastname: userData.user_lastname,
+            email: userData.user_email,
+            uuid: userData.user_uuid,
+            contact: userData.user_contact,
           };
           //alert(userData);
           sec_users.save(userObj);
