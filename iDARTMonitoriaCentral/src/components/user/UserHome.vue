@@ -7,13 +7,14 @@
       :rows="allSecUsers"
       :title="props.title"
       :with_actionRemoveButton="false"
-      :with_actionEditButton="true"
-      :with_actionDetailButton="true"
+      :with_actionEditButton="false"
+      :with_actionDetailButton="false"
       :editar="editUser"
       :visualizar="viewUser"
       :remover="removeUser"
-      :with_activeButton="true"
+      :with_activeButton="false"
       :promptToConfirm="promptToConfirm"
+      :isActive="isActive"
     />
   </q-page>
 </template>
@@ -59,15 +60,7 @@ const columns = [
     required: true,
     label: t('nameUser'),
     align: 'left',
-    field: (row) => row.role + ' ' + row.apelido,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'active',
-    align: 'left',
-    label: t('active'),
-    field: (row) => (row.role === 'authenticator' ? t('true') : t('false')),
+    field: (row) => row.nome + ' ' + row.apelido,
     format: (val) => `${val}`,
     sortable: true,
   },

@@ -39,11 +39,12 @@ const { t } = useI18n();
 const details_dialog = reactive(ref(false));
 let createOrEditFlag = reactive(ref(false));
 let confirmPassword = reactive(ref(''));
+const newUserFlag = reactive(ref(false));
 
 provide('title', titleAddEdit);
 provide('show_dialog', show_dialog);
 provide('submitting', submitting);
-const newPass = reactive(ref(''));
+let newPass = reactive(ref(''));
 
 /**
  * Declarations
@@ -67,6 +68,7 @@ let params = {
 
 const createUser = () => {
   createOrEditFlag.value = false;
+  newUserFlag.value = true;
   titleAddEdit.value = t('add').concat(' ').concat('Utilizador');
   user.value = reactive(SecUsersService.newInstanceEntity());
   activeEditDialog.value = true;
@@ -121,7 +123,7 @@ const createOrUpdate = () => {
     params.user_firstname = user.value.nome;
     params.user_lastname = user.value.apelido;
     params.user_email = user.value.email;
-    params.user_uuid = user.value.userId;
+    params.user_uuid = user.value.userid;
     params.user_contact = user.value.contacto;
     params.pass_user = newPass.value;
     params.role_user = 'authenticator';
@@ -163,6 +165,7 @@ const createOrUpdate = () => {
 
 const editUser = (userRow) => {
   createOrEditFlag.value = true;
+  newUserFlag.value = true;
   titleAddEdit.value = t('edit').concat(' ').concat('Utilizador');
   user.value = userRow;
   show_dialog.value = true;
@@ -240,8 +243,9 @@ provide('removeUser', removeUser);
 provide('user', user);
 provide('close', close);
 provide('createOrUpdate', createOrUpdate);
-provide('newPass', newPass);
 provide('createOrEditFlag', createOrEditFlag);
+provide('newUserFlag', newUserFlag);
 provide('confirmPassword', confirmPassword);
+provide('newPass', newPass);
 provide('promptToConfirm', promptToConfirm);
 </script>

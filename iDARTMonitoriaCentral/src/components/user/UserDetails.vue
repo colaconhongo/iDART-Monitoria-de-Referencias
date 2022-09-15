@@ -22,5 +22,5 @@ const details_dialog = inject('details_dialog');
 const titleDetails = inject('titleDetails');
 const user = inject('user');
 const close = inject('close');
-const excludeAttribute = ref(['id', 'userId', 'pass']);
+const excludeAttribute = ref(['id', 'userid', 'pass']);
 </script>

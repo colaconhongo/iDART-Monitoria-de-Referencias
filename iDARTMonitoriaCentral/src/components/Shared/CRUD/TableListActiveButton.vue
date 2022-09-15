@@ -109,7 +109,7 @@
               no-caps
               round
               size="sm"
-              v-if="with_actionEditButton"
+              v-if="with_actionEditButton || props.row.role === 'authenticator'"
               @click="editar(props.row)"
             >
               <q-tooltip
@@ -131,7 +131,9 @@
               unelevated
               rounded
               size="sm"
-              v-if="with_actionDetailButton"
+              v-if="
+                with_actionDetailButton || props.row.role === 'authenticator'
+              "
               @click="visualizar(props.row)"
             >
               <q-tooltip

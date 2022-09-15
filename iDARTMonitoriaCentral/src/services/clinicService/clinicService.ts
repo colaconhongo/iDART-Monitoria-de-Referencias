@@ -75,9 +75,9 @@ export default {
         });
     }
   },
-  patch(id: number, params: string) {
+  patch(uid: string, params: string) {
     return api()
-      .patch('clinic?id=eq.' + id, params)
+      .patch('clinic?uuid=eq.' + uid, params)
       .then((resp) => {
         clinic.save(JSON.parse(resp.config.data));
         alert(
@@ -107,11 +107,11 @@ export default {
         }
       });
   },
-  delete(id: number) {
+  delete(uuid: string) {
     return api()
-      .delete('clinic?id=eq.' + id)
+      .delete('clinic?uuid=eq.' + uuid)
       .then((resp) => {
-        clinic.destroy(id);
+        clinic.destroy(uuid);
         alert(
           'Sucesso!',
           'O Registo foi removido com sucesso',
