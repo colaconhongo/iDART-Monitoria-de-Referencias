@@ -35,7 +35,6 @@
                     class="col q-ml-md"
                     ref="userFirstnameRef"
                     v-model="user.nome"
-                    :disable="createOrEditFlag"
                     :rules="[
                       (val) =>
                         (val && val.length >= 2) ||
@@ -49,7 +48,6 @@
                     class="col q-ml-md"
                     ref="userLastnameRef"
                     v-model="user.apelido"
-                    :disable="createOrEditFlag"
                     :rules="[
                       (val) =>
                         (val && val.length >= 2) ||
@@ -65,7 +63,6 @@
                     class="col q-ml-md"
                     ref="userNameRef"
                     v-model="user.username"
-                    :disable="createOrEditFlag"
                     :rules="[
                       (val) =>
                         (val && val.length > 3) ||
@@ -175,14 +172,8 @@
                     label="Contacto"
                     class="col q-ml-md"
                     ref="userContactoRef"
-                    v-model="user.contacto"
                     :disable="createOrEditFlag"
                     lazy-rules
-                    :rules="[
-                      (val) =>
-                        (val && val.length >= 9) ||
-                        'Por favor introduza o contacto',
-                    ]"
                   />
                   <q-input
                     outlined
@@ -192,7 +183,6 @@
                     class="col q-ml-md"
                     ref="userEmailRef"
                     v-model="user.email"
-                    :disable="createOrEditFlag"
                     :rules="[(val) => val.length > 0 || '', isValidEmail]"
                   />
                 </div>
@@ -264,6 +254,18 @@ const isValidEmail = (val) => {
   return emailPattern.test(val) || 'Email Inválido';
 };
 const validateForm = () => {
+  console.log();
+
+  if (
+    user.value.email != null &&
+    user.value.email != undefined &&
+    user.value.email != ''
+  ) {
+    userEmailRef.value.validate();
+  } else {
+    userEmailRef.value.resetValidation();
+  }
+
   if (!createOrEditFlag.value) {
     userFirstnameRef.value.validate();
     userLastnameRef.value.validate();
@@ -271,9 +273,6 @@ const validateForm = () => {
     // passRef.value.validate();
     passConfRef.value.validate();
 
-    if (user.value.email.length > 0) {
-      userEmailRef.value.validate();
-    }
     if (
       !userFirstnameRef.value.hasError &&
       !userLastnameRef.value.hasError &&
@@ -289,8 +288,19 @@ const validateForm = () => {
     userLastnameRef.value.validate();
     userNameRef.value.validate();
     passRef.value.validate();
-    newPassRef.value.validate();
-    passConfRef.value.validate();
+    console.log(newPassword.value);
+    if (
+      newPassword.value != null &&
+      newPassword.value != undefined &&
+      newPassword.value != ''
+    ) {
+      newPassRef.value.validate();
+      passConfRef.value.validate();
+    } else {
+      newPassRef.value.resetValidation();
+      passConfRef.value.resetValidation();
+    }
+
     if (
       !userFirstnameRef.value.hasError &&
       !userLastnameRef.value.hasError &&

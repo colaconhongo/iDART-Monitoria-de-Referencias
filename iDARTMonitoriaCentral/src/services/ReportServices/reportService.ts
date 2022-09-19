@@ -60,7 +60,7 @@ export default {
       });
   },
   getPatientsWithMissDispenses(params) {
-    const url = `rpc/getfaltosos?enddate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+    const url = `rpc/getfaltosos?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()
@@ -70,7 +70,7 @@ export default {
       });
   },
   getActivePatients(params) {
-    const url = `rpc/get_active_patients?enddate=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+    const url = `rpc/get_active_patients?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()

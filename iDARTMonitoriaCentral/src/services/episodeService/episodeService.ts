@@ -105,6 +105,7 @@ export default {
   },
 
   getEpisodesByYear(year: number) {
+    console.log('Abo', year);
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);

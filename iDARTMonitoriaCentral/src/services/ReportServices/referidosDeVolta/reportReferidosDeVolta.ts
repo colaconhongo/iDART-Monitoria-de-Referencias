@@ -120,7 +120,6 @@ export default {
     loadingXLS.value = true;
     const rows = await reportService.getReturnedReferedPatient(params);
     const data = this.createArrayOfArrayRow(rows);
-    console.log('GGGGGGGG', rows);
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'FGH';
     workbook.lastModifiedBy = 'FGH';
@@ -279,7 +278,7 @@ export default {
         showRowStripes: false,
       },
       columns: [
-        { name: 'NORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
         { name: 'NID', totalsRowLabel: 'none:', filterButton: false },
         { name: 'Nome', totalsRowFunction: 'none', filterButton: false },
         { name: 'Idade', totalsRowFunction: 'none', filterButton: false },

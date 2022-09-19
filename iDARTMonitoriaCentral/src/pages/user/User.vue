@@ -119,6 +119,8 @@ const promptToConfirm = (userRow) => {
 };
 
 const createOrUpdate = () => {
+  console.log(newPass.value.length);
+
   if (confirmPassword.value == newPass.value) {
     params.user_firstname = user.value.nome;
     params.user_lastname = user.value.apelido;
