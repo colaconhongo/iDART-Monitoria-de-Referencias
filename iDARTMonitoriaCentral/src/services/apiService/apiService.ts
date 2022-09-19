@@ -54,21 +54,21 @@ instance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 403 || error.response.status === 401) {
-      router.push({ path: '/' });
       originalRequest._retry = true;
-      return axios
-        .post('http://dev.fgh.org.mz:3110/rpc/login', {
-          username: 'postgres',
-          pass: 'postgres',
-        })
-        .then(({ data }) => {
-          localStorage.setItem('token', data[0].token);
-          originalRequest.headers['Bearer'] = [
-            '',
-            localStorage.getItem('token'),
-          ].join(' ');
-          return axios(originalRequest);
-        });
+      router.go(-1);
+      // return axios
+      //   .post('http://dev.fgh.org.mz:3110/rpc/login', {
+      //     username: 'postgres',
+      //     pass: 'postgres',
+      //   })
+      //   .then(({ data }) => {
+      //     localStorage.setItem('token', data[0].token);
+      //     originalRequest.headers['Bearer'] = [
+      //       '',
+      //       localStorage.getItem('token'),
+      //     ].join(' ');
+      //     return axios(originalRequest);
+      //   });
     }
     return Promise.reject(error);
   }

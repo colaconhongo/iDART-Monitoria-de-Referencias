@@ -56,7 +56,7 @@ export default {
   get(offset: number) {
     if (offset >= 0) {
       return api()
-        .get('sec_users?offset=' + offset + '&limit=100')
+        .get('sec_users_vw?offset=' + offset + '&limit=100')
         .then((resp) => {
           sec_users.save(resp.data);
           offset = offset + 100;
@@ -68,7 +68,7 @@ export default {
   },
   patch(username: string, params: string) {
     return api()
-      .patch('sec_users?username=eq.' + username, params)
+      .patch('sec_users_vw?username=eq.' + username, params)
       .then((resp) => {
         sec_users.save(JSON.parse(resp.config.data));
         alert(
@@ -82,7 +82,7 @@ export default {
   },
   delete(id: number) {
     return api()
-      .delete('sec_users/' + id)
+      .delete('sec_users_vw/' + id)
       .then(() => {
         sec_users.destroy(id);
       });
@@ -95,6 +95,6 @@ export default {
     return sec_users.all();
   },
   getSecUsersByUserName(username: string) {
-    return sec_users.query().where('sec_users', username).get();
+    return sec_users.query().where('username', username).get();
   },
 };
