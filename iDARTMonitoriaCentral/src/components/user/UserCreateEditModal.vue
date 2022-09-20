@@ -82,12 +82,11 @@
                   <q-input
                     outlined
                     lazy-rules
-                    label="Senha"
+                    label="Senha actual"
                     class="col q-ml-md"
-                    ref="passRef"
-                    v-model="user.pass"
+                    ref="currentPassRef"
+                    v-model="currentPassword"
                     :type="isPwd ? 'password' : 'text'"
-                    :disable="createOrEditFlag"
                     v-if="createOrEditFlag"
                     :rules="[
                       (val) =>
@@ -217,13 +216,14 @@ const userFirstnameRef = ref(null);
 const userLastnameRef = ref(null);
 const userNameRef = ref(null);
 const userEmailRef = ref(null);
-const passRef = ref(null);
+const currentPassRef = ref(null);
 const passConfRef = ref(null);
 const newPassRef = ref(null);
 const createOrUpdate = inject('createOrUpdate');
 const user = inject('user');
 const close = inject('close');
 const newPassword = inject('newPass');
+const currentPassword = inject('currentPassword');
 const confirmPassword = inject('confirmPassword');
 const title = inject('title');
 const show_dialog = inject('show_dialog');
@@ -267,14 +267,12 @@ const validateForm = () => {
     userFirstnameRef.value.validate();
     userLastnameRef.value.validate();
     userNameRef.value.validate();
-    // passRef.value.validate();
     passConfRef.value.validate();
 
     if (
       !userFirstnameRef.value.hasError &&
       !userLastnameRef.value.hasError &&
       !userNameRef.value.hasError &&
-      //!passRef.value.hasError &&
       !passConfRef.value.hasError &&
       !userEmailRef.value.hasError
     ) {
@@ -284,7 +282,7 @@ const validateForm = () => {
     userFirstnameRef.value.validate();
     userLastnameRef.value.validate();
     userNameRef.value.validate();
-    passRef.value.validate();
+    currentPassRef.value.validate();
     if (
       newPassword.value != null &&
       newPassword.value != undefined &&
@@ -301,7 +299,7 @@ const validateForm = () => {
       !userFirstnameRef.value.hasError &&
       !userLastnameRef.value.hasError &&
       !userNameRef.value.hasError &&
-      !passRef.value.hasError &&
+      !currentPassRef.value.hasError &&
       !passConfRef.value.hasError &&
       !newPassRef.value.hasError &&
       !userEmailRef.value.hasError

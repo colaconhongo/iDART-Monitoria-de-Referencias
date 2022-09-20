@@ -17,6 +17,7 @@ import UserDetailsVue from 'src/components/user/UserDetails.vue';
 import CreateEditUser from 'src/components/user/UserCreateEditModal.vue';
 import { provide, reactive, ref } from 'vue';
 import SecUsersService from 'src/services/secUsersService/SecUsersService';
+import LoginService from 'src/services/loginService/LoginService';
 import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useI18n } from 'vue-i18n';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
@@ -46,6 +47,7 @@ provide('title', titleAddEdit);
 provide('show_dialog', show_dialog);
 provide('submitting', submitting);
 let newPass = reactive(ref(''));
+const currentPassword = reactive(ref(''));
 
 /**
  * Declarations
@@ -140,13 +142,41 @@ const createOrUpdate = () => {
     submitting.value = true;
 
     if (editedIndex.value != 1) {
-      params.operation_type_user = 'U';
-      SecUsersService.post(params)
-        .then(() => {
-          submitting.value = false;
-          close();
+      LoginService.validatePassword({
+        username: user.value.username,
+        pass: currentPassword.value,
+      })
+        .then((response) => {
+          const token = response.data[0].token;
+          if (response != 'undefined' && token.length > 0) {
+            params.operation_type_user = 'U';
+            SecUsersService.post(params)
+              .then(() => {
+                submitting.value = false;
+                close();
+              })
+              .catch(() => {
+                submitting.value = false;
+              });
+          } else {
+            alert(
+              'Erro!',
+              'Introduziu uma senha actual inválida',
+              null,
+              null,
+              null
+            );
+            submitting.value = false;
+          }
         })
         .catch(() => {
+          alert(
+            'Erro!',
+            'Introduziu uma senha actual inválida',
+            null,
+            null,
+            null
+          );
           submitting.value = false;
         });
     } else {
@@ -264,6 +294,7 @@ provide('createOrEditFlag', createOrEditFlag);
 provide('newUserFlag', newUserFlag);
 provide('confirmPassword', confirmPassword);
 provide('newPass', newPass);
+provide('currentPassword', currentPassword);
 provide('promptToConfirm', promptToConfirm);
 provide('localEntity', localEntity);
 </script>

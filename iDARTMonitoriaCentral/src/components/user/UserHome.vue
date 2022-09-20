@@ -37,6 +37,7 @@ Declarations
 */
 const viewUser = inject('viewUser');
 const newPass = inject('newPass');
+const currentPassword = inject('currentPassword');
 const editUser = inject('editUser');
 const removeUser = inject('removeUser');
 const promptToConfirm = inject('promptToConfirm');
