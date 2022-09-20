@@ -83,11 +83,12 @@ export default {
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
+
     return api()
       .get(
-        'sync_temp_dispense?dispensedate=gt.' +
+        'sync_temp_dispense?dispensedate=gte.' +
           startDate +
-          '&dispensedate=lt.' +
+          '&dispensedate=lte.' +
           endDate
       )
       .then((resp) => {
@@ -116,12 +117,12 @@ export default {
       .where((dispense) => {
         return (
           new Date(dispense.dispensedate) >= startDate &&
-          new Date(dispense.dispensedate) <= endDate &&
-          patients.includes(dispense.uuidopenmrs)
+          new Date(dispense.dispensedate) <= endDate // &&  patients.includes(dispense.uuidopenmrs)
         );
       })
       .orderBy('dispensedate', 'desc')
       .get();
+
     return dispenses;
   },
 };
