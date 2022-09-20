@@ -30,6 +30,7 @@ const titleDetails = reactive(ref('Detalhes do Utilizador'));
 const show_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
 const user = reactive(ref([]));
+const localEntity = ref([]);
 const editedIndex = reactive(ref(0));
 const activeUserHome = reactive(ref(true));
 const activeEditDialog = reactive(ref(false));
@@ -77,8 +78,16 @@ const createUser = () => {
 };
 
 const updateUser = (userRow) => {
-  const username = userRow.username;
-  SecUsersService.patch(username, userRow);
+  params.user_firstname = userRow.nome;
+  params.user_lastname = userRow.apelido;
+  params.user_email = userRow.email;
+  params.user_uuid = userRow.userid;
+  params.user_contact = userRow.contacto;
+  params.pass_user = '';
+  params.role_user = userRow.role;
+  params.username_user = userRow.username;
+  params.operation_type_user = 'U';
+  SecUsersService.post(params);
 };
 const promptToConfirm = (userRow) => {
   let active = userRow.role === 'authenticator';
@@ -119,8 +128,6 @@ const promptToConfirm = (userRow) => {
 };
 
 const createOrUpdate = () => {
-  console.log(newPass.value.length);
-
   if (confirmPassword.value == newPass.value) {
     params.user_firstname = user.value.nome;
     params.user_lastname = user.value.apelido;
@@ -143,7 +150,7 @@ const createOrUpdate = () => {
           submitting.value = false;
         });
     } else {
-      delete user.value['username'];
+      //  delete user.value['username'];
       params.operation_type_user = 'C';
       SecUsersService.post(params)
         .then(() => {
@@ -171,7 +178,7 @@ const editUser = (userRow) => {
   titleAddEdit.value = t('edit').concat(' ').concat('Utilizador');
   user.value = userRow;
   show_dialog.value = true;
-  console.log(newPass.value);
+  editedIndex.value = 0;
 };
 
 const viewUser = (userRow) => {
@@ -179,6 +186,14 @@ const viewUser = (userRow) => {
   user.value = userRow;
   activeDetails.value = true;
   details_dialog.value = true;
+
+  localEntity.value.username = user.value.username;
+  localEntity.value.nome = String(user.value.nome)
+    .concat(' ')
+    .concat(user.value.apelido);
+  localEntity.value.contacto = user.value.contacto;
+  localEntity.value.email = user.value.email;
+  localEntity.value.role = user.value.role;
 };
 
 const removeUser = (userRow) => {
@@ -250,4 +265,5 @@ provide('newUserFlag', newUserFlag);
 provide('confirmPassword', confirmPassword);
 provide('newPass', newPass);
 provide('promptToConfirm', promptToConfirm);
+provide('localEntity', localEntity);
 </script>

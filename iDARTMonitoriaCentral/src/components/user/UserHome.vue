@@ -64,6 +64,15 @@ const columns = [
     format: (val) => `${val}`,
     sortable: true,
   },
+  {
+    name: 'role',
+    required: true,
+    label: t('role'),
+    align: 'left',
+    field: (row) => 'Authenticator',
+    format: (val) => `${val}`,
+    sortable: true,
+  },
 ];
 /*
   Mounted Hooks

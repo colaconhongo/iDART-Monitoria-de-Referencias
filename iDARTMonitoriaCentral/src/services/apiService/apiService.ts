@@ -55,7 +55,6 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 403 || error.response.status === 401) {
       originalRequest._retry = true;
-      router.go(-1);
       // return axios
       //   .post('http://dev.fgh.org.mz:3110/rpc/login', {
       //     username: 'postgres',

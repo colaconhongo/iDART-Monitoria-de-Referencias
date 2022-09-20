@@ -8,32 +8,32 @@ const sec_users = useRepo(SecUsers);
 export default {
   // Axios API call
   post(params: string) {
+    console.log('Params', params);
     return api()
       .post('rpc/manage_sec_users', params)
       .then((resp) => {
+        const userData = JSON.parse(resp.config.data);
+        const userObj = {
+          username: userData.username_user,
+          pass: userData.pass_user,
+          role: userData.role_user,
+          nome: userData.user_firstname,
+          apelido: userData.user_lastname,
+          email: userData.user_email,
+          userid: userData.user_uuid,
+          contacto: userData.user_contact,
+        };
         if (params.operation_type_user === 'C') {
-          const userData = JSON.parse(resp.config.data);
-          const userObj = {
-            username: userData.username_user,
-            pass: userData.pass_user,
-            role: userData.role_user,
-            firstname: userData.user_firstname,
-            lastname: userData.user_lastname,
-            email: userData.user_email,
-            uuid: userData.user_uuid,
-            contact: userData.user_contact,
-          };
-          //alert(userData);
           sec_users.save(userObj);
-
           alert(
             'Sucesso!',
-            'O Utilizador foi efectuado com sucesso',
+            'O Utilizador foi gravado com sucesso',
             null,
             null,
             null
           );
         } else if (params.operation_type_user === 'U') {
+          sec_users.save(userObj);
           alert(
             'Sucesso!',
             'O Utilizador foi actualizado com sucesso',
@@ -42,7 +42,7 @@ export default {
             null
           );
         } else if (params.operation_type_user === 'D') {
-          sec_users.destroy(params.username_user);
+          sec_users.destroy(params.uuid);
           alert(
             'Sucesso!',
             'O Utilizador foi removido com sucesso',

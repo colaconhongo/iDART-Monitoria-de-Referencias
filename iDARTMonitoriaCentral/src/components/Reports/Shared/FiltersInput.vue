@@ -409,8 +409,6 @@ const determineDateInterval = () => {
       'YYYY-MM-DD'
     );
   }
-
-  console.log('parametros', params);
 };
 
 const onPeriodoChange = (val) => {

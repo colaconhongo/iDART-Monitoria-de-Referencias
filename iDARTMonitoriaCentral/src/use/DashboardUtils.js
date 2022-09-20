@@ -111,7 +111,8 @@ export default {
     var monthsPresent = [];
     const map = list.reduce((a, b) => {
       // const m = toDateStr(b.stopdate).getMonth()
-      const m = this.getStatisticMonthByDate(b.stopdate);
+      // const m = this.getStatisticMonthByDate(b.stopdate);
+      const m = this.getStatisticMonthByDate(b.startdate);
       a[m] = (a[m] || 0) + 1;
       monthsPresent.push(monthsEng[+m]);
       return a;

@@ -55,12 +55,13 @@ export default {
   Utilizadores: 'Utilizadores',
   Username: 'Utilizador',
   username: 'Utilizador',
+  user: 'Utilizador',
   nameUser: 'Nome do Utilizador',
   nome: 'Nome do Utilizador',
   apelido: 'Apelido',
   contacto: 'Contacto',
   email: 'Email',
-  role: 'Perfil',
+  role: 'Perfil do Utilizador',
 
   // General
   true: 'Sim',
