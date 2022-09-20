@@ -105,15 +105,14 @@ export default {
   },
 
   getEpisodesByYear(year: number) {
-    console.log('Abo', year);
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
     return api()
       .get(
-        'patient_episodes_vw?stopdate=gt.' +
+        'sync_temp_episode?startdate=gt.' +
           startDate +
-          '&stopdate=lt.' +
+          '&startdate=lt.' +
           endDate
       )
       .then((resp) => {
@@ -133,6 +132,7 @@ export default {
     // const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
 
     let clinics = [];
+    const lastEpisodes = [];
 
     clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
       district,
@@ -143,13 +143,29 @@ export default {
       .query()
       .where((sync_temp_episode) => {
         return (
-          new Date(sync_temp_episode.stopdate) >= startDate &&
-          new Date(sync_temp_episode.stopdate) <= endDate &&
+          new Date(sync_temp_episode.startdate) >= startDate &&
+          new Date(sync_temp_episode.startdate) <= endDate &&
           clinics.includes(sync_temp_episode.clinicuuid)
         );
       })
-      .orderBy('stopdate', 'desc')
+      .orderBy('startdate', 'desc')
       .get();
+
+    episodes.forEach((ep) => {
+      if (lastEpisodes.length === 0) {
+        lastEpisodes.push(ep);
+      }
+      console.log(ep.patientuuid);
+      // else {
+      //   for (let index = 0; index < lastEpisodes.length; index++) {
+      //     const element = lastEpisodes[index];
+      //     if (element.patientuuid !== ep.uuidopenmrs) {
+      //       lastEpisodes.push(element);
+      //     }
+      //   }
+      // }
+    });
+
     return episodes;
   },
 };

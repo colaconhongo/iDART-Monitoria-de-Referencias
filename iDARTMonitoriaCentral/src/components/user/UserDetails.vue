@@ -4,7 +4,7 @@
     <ViewUser
       v-model:title="titleDetails"
       v-model:details_dialog="details_dialog"
-      v-model:entity="user"
+      v-model:entity="localEntity"
       v-model:excludeAttribute="excludeAttribute"
       v-model:close="close"
     />
@@ -20,7 +20,11 @@ import { inject, ref } from 'vue';
 
 const details_dialog = inject('details_dialog');
 const titleDetails = inject('titleDetails');
-const user = inject('user');
+const localEntity = inject('localEntity');
 const close = inject('close');
 const excludeAttribute = ref(['id', 'userid', 'pass']);
+
+/*
+  Mounted Hooks
+*/
 </script>

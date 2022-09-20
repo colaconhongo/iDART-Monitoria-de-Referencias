@@ -43,7 +43,6 @@ export default {
 
     for (const row in rows) {
       const createRow = [];
-      console.log(rows[row]);
       createRow.push(
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].pickupdate)
       );

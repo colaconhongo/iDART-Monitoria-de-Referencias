@@ -39,7 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
-      'ORD',
+      'Ordem',
       'Medicamento',
       'Regime Terapêutico',
       'Quantidade de Dispensas',
@@ -109,8 +109,6 @@ export default {
     loadingXLS.value = true;
     const rows = await reportService.getDispensesByDrugAndRegimen(params);
     const data = this.createArrayOfArrayRow(rows);
-
-    console.log(rows);
 
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'FGH';
@@ -260,7 +258,7 @@ export default {
         showRowStripes: false,
       },
       columns: [
-        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'Ordem', totalsRowLabel: 'Totals:', filterButton: false },
         { name: 'Medicamento', totalsRowLabel: 'none:', filterButton: false },
         {
           name: 'Regime Terapêutico',
@@ -330,17 +328,17 @@ export default {
 
   createArrayOfArrayRow(rows: any) {
     const data = [];
-    let ord = 1;
+    let Ordem = 1;
 
     for (const row in rows) {
       const createRow = [];
-      createRow.push(ord);
+      createRow.push(Ordem);
       createRow.push(rows[row].drugname);
       createRow.push(rows[row].regimen);
       createRow.push(rows[row].qty);
 
       data.push(createRow);
-      ord += 1;
+      Ordem += 1;
     }
 
     return data;

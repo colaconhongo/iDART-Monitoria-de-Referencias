@@ -97,8 +97,6 @@ watch(props.loaded, () => {
         pharmacy
       );
 
-    console.log(patients);
-
     let resultPatients1 = groupedMap(patients, 'patientid');
     const mapIter1 = resultPatients1.values();
     for (const item of mapIter1) {

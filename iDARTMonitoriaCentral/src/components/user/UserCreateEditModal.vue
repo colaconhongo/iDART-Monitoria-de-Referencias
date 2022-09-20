@@ -38,7 +38,7 @@
                     :rules="[
                       (val) =>
                         (val && val.length >= 2) ||
-                        'Por favor introduza o nome',
+                        'Por favor introduza o nome do utilizador com pelo menos 3 caracteres',
                     ]"
                   />
                   <q-input
@@ -51,7 +51,7 @@
                     :rules="[
                       (val) =>
                         (val && val.length >= 2) ||
-                        'Por favor introduza o apelido',
+                        'Por favor introduza o apelido do utilizador com pelo menos 3 caracteres',
                     ]"
                   />
                 </div>
@@ -65,8 +65,8 @@
                     v-model="user.username"
                     :rules="[
                       (val) =>
-                        (val && val.length > 3) ||
-                        'Por favor introduza o nome do utilizador',
+                        (val && val.length > 2) ||
+                        'Por favor introduza o nome do utilizador com pelo menos 3 caracteres',
                     ]"
                   />
                   <q-select
@@ -170,9 +170,9 @@
                   <q-input
                     outlined
                     label="Contacto"
+                    v-model="user.contacto"
                     class="col q-ml-md"
                     ref="userContactoRef"
-                    :disable="createOrEditFlag"
                     lazy-rules
                   />
                   <q-input
@@ -248,14 +248,11 @@ const roleOps = ref('Authenticator');
  Methods
  */
 const isValidEmail = (val) => {
-  console.log(val);
   const emailPattern =
     /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
   return emailPattern.test(val) || 'Email Inválido';
 };
 const validateForm = () => {
-  console.log();
-
   if (
     user.value.email != null &&
     user.value.email != undefined &&
@@ -288,7 +285,6 @@ const validateForm = () => {
     userLastnameRef.value.validate();
     userNameRef.value.validate();
     passRef.value.validate();
-    console.log(newPassword.value);
     if (
       newPassword.value != null &&
       newPassword.value != undefined &&

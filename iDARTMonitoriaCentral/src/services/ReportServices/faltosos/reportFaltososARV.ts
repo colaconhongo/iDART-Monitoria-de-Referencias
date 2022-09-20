@@ -39,7 +39,7 @@ export default {
       Fill Table
     */
     const cols = [
-      'ORD',
+      'Ordem',
       'NID',
       'Nome',
       'Data do Último Levanatmento',
@@ -291,7 +291,7 @@ export default {
       },
 
       columns: [
-        { name: 'ORD', totalsRowLabel: 'Totals:', filterButton: false },
+        { name: 'Ordem', totalsRowLabel: 'Totals:', filterButton: false },
         { name: 'NID', totalsRowLabel: 'none:', filterButton: false },
         { name: 'Nome', totalsRowLabel: 'none:', filterButton: false },
         {
@@ -380,11 +380,11 @@ export default {
   },
   createArrayOfArrayRow(rows: any) {
     const data = [];
-    let ord = 1;
+    let Ordem = 1;
 
     for (const row in rows) {
       const createRow = [];
-      createRow.push(ord);
+      createRow.push(Ordem);
       createRow.push(rows[row].patientid);
       createRow.push(rows[row].fullname);
       createRow.push(
@@ -404,7 +404,7 @@ export default {
       createRow.push(rows[row].mainclinicname);
       createRow.push(rows[row].contact);
       data.push(createRow);
-      ord += 1;
+      Ordem += 1;
     }
 
     return data;

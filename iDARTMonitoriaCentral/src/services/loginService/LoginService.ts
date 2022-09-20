@@ -54,7 +54,7 @@ export const login = (params: string) => {
         if (error.response) {
           ShowNotification(
             'announcement',
-            'Username or Password is invalid',
+            'Utilizador sem permissão ou Senha inválida ',
             'negative',
             true,
             3000,
