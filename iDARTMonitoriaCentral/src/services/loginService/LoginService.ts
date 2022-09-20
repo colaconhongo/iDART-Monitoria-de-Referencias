@@ -128,3 +128,19 @@ export const deleteUser = (id: number) => {
       }
     });
 };
+
+export default {
+  validatePassword(params: string) {
+    return api()
+      .post('/rpc/login', params)
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      });
+  },
+};
