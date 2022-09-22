@@ -142,23 +142,35 @@ const createOrUpdate = () => {
     submitting.value = true;
 
     if (editedIndex.value != 1) {
-      LoginService.validatePassword({
-        username: user.value.username,
-        pass: currentPassword.value,
-      })
-        .then((response) => {
-          const token = response.data[0].token;
-          if (response != 'undefined' && token.length > 0) {
-            params.operation_type_user = 'U';
-            SecUsersService.post(params)
-              .then(() => {
-                submitting.value = false;
-                close();
-              })
-              .catch(() => {
-                submitting.value = false;
-              });
-          } else {
+      if (currentPassword.value.length > 0) {
+        LoginService.validatePassword({
+          username: user.value.username,
+          pass: currentPassword.value,
+        })
+          .then((response) => {
+            const token = response.data[0].token;
+            if (response != 'undefined' && token.length > 0) {
+              params.operation_type_user = 'U';
+              SecUsersService.post(params)
+                .then(() => {
+                  submitting.value = false;
+                  close();
+                })
+                .catch(() => {
+                  submitting.value = false;
+                });
+            } else {
+              alert(
+                'Erro!',
+                'Introduziu uma senha actual inválida',
+                null,
+                null,
+                null
+              );
+              submitting.value = false;
+            }
+          })
+          .catch(() => {
             alert(
               'Erro!',
               'Introduziu uma senha actual inválida',
@@ -167,18 +179,18 @@ const createOrUpdate = () => {
               null
             );
             submitting.value = false;
-          }
-        })
-        .catch(() => {
-          alert(
-            'Erro!',
-            'Introduziu uma senha actual inválida',
-            null,
-            null,
-            null
-          );
-          submitting.value = false;
-        });
+          });
+      } else {
+        params.operation_type_user = 'U';
+        SecUsersService.post(params)
+          .then(() => {
+            submitting.value = false;
+            close();
+          })
+          .catch(() => {
+            submitting.value = false;
+          });
+      }
     } else {
       //  delete user.value['username'];
       params.operation_type_user = 'C';
