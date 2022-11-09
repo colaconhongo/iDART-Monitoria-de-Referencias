@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const instance = axios.create({
-  // baseURL: 'http://dev.fgh.org.mz:3910/',
+  baseURL: 'http://dev.fgh.org.mz:3910/',
   // baseURL: 'http://dev.fgh.org.mz:3110',
   // baseURL: 'http://idartmaputo-cid.fgh.org.mz:3011',
   // baseURL: 'http://idartmaputo-prov.fgh.org.mz:3010',
@@ -13,7 +13,7 @@ const instance = axios.create({
   // baseURL: 'http://idartsofala.fgh.org.mz:3007',
   // baseURL: 'http://idartmanica.fgh.org.mz:3006',
   // baseURL: 'http://idarttete.fgh.org.mz:3005',
-  baseURL: 'http://idartzambezia.fgh.org.mz:3004',
+  // baseURL: 'http://idartzambezia.fgh.org.mz:3004',
   // baseURL: 'http://idartnampula.fgh.org.mz:3003',
   // baseURL: 'http://idartcabodelegado.fgh.org.mz:3002',
   // baseURL: 'http://idartniassa.fgh.org.mz:3001',

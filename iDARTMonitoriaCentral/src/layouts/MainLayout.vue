@@ -129,7 +129,7 @@
               style="font-family: 'Gill Sans'; font-size: 15px"
               class="col-3 text-center justify-center"
             >
-              iDART - Monitoria de Dados de Pacientes Referidos @v1.0.0
+              iDART - Monitoria de Dados de Pacientes Referidos @v1.2.0
             </div>
           </div>
         </q-toolbar-title>
