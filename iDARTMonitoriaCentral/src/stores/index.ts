@@ -1,7 +1,7 @@
 import { store } from 'quasar/wrappers';
 import { createPinia } from 'pinia';
-import PiniaORM from 'pinia-orm';
-
+// import PiniaORM from 'pinia-orm';
+import { createORM } from 'pinia-orm'
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -12,7 +12,7 @@ import PiniaORM from 'pinia-orm';
  */
 
 export default store((/* { ssrContext } */) => {
-  const pinia = createPinia().use(PiniaORM.install());
+  const pinia = createPinia().use(createORM());
 
   // You can add Pinia plugins here
   // pinia.use(SomePiniaPlugin)

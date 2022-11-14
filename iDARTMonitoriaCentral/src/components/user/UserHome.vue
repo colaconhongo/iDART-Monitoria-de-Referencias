@@ -25,7 +25,8 @@ import SecUsersService from 'src/services/secUsersService/SecUsersService';
 import { computed, inject, onMounted, reactive, ref } from 'vue';
 import listUser from 'src/components/Shared/CRUD/TableListActiveButton.vue';
 import { useI18n } from 'vue-i18n';
-
+import ProfileService from 'src/services/secUsersService/ProfileService';
+import MenuService from 'src/services/secUsersService/MenuService';
 const props = defineProps({
   title: {
     type: String,
@@ -87,6 +88,8 @@ onMounted(() => {
   setTimeout(() => {
     $q.loading.hide();
   }, 600);
+  getAllMenusFromAPI(0);
+  getAllProfilesFromAPI(0);
   getAllSecUsersFromAPI(0);
 });
 
@@ -100,6 +103,13 @@ const allSecUsers = reactive(
   })
 );
 
+const profiles = reactive(
+    computed(() => {
+      return ProfileService.getAllProfiles();
+    })
+  );
+
+
 /*
   Methods
 */
@@ -112,4 +122,24 @@ const getAllSecUsersFromAPI = (offset) => {
     $q.loading.hide();
   }, 600);
 };
+
+const getAllProfilesFromAPI = (offset) => {
+    if (offset >= 0) {
+      ProfileService.get(offset);
+    }
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+  };
+
+  const getAllMenusFromAPI = (offset) => {
+    if (offset >= 0) {
+      MenuService.get(offset);
+    }
+    setTimeout(() => {
+      $q.loading.hide();
+    }, 600);
+  };
+
+ // provide('profiles', profiles);
 </script>

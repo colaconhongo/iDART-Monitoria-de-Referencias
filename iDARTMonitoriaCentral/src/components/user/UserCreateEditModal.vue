@@ -75,7 +75,7 @@
                     readonly
                     v-model="roleOps"
                     :options="options"
-                    label="Perfil"
+                    label="Role"
                   />
                 </div>
                 <div class="row q-mt-md">
@@ -185,6 +185,26 @@
                     :rules="[(val) => val.length > 0 || '', isValidEmail]"
                   />
                 </div>
+                <div class="q-mt-lg">
+                  <div class="row items-center q-mb-md">
+                    <q-icon name="person_outline" size="sm" />
+                    <span class="q-pl-sm text-subtitle2"
+                      >Perfis a Associar</span
+                    >
+                  </div>
+                  <q-separator color="grey-13" size="1px" />
+                </div>
+                  <q-table
+                     title="Perfis"
+                     :rows="profiles"
+                     :columns="columns"
+                     row-key="description"
+                     selection="multiple"
+                     v-model:selected="user.profiles"
+                       v-if="!onlyView"
+                     rows-per-page-options="8"
+                   >
+                  </q-table>
               </div>
             </div>
           </q-form>
@@ -192,26 +212,29 @@
         <q-separator />
         <q-card-actions align="right">
           <q-btn
-            :loading="submitting"
-            color="teal"
-            label="Gravar"
-            type="submit"
-            @click.stop="validateForm"
-          />
-          <q-btn
             v-close-popup
             color="negative"
             label="Cancelar"
             type="reset"
             @click="close"
           />
+          <q-btn
+          :loading="submitting"
+          color="teal"
+          label="Gravar"
+          type="submit"
+          @click.stop="validateForm"
+        />
         </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
 </template>
 <script setup>
-import { inject, ref } from 'vue';
+import ProfileService from 'src/services/secUsersService/ProfileService';
+import { inject, ref, computed, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 const userFirstnameRef = ref(null);
 const userLastnameRef = ref(null);
 const userNameRef = ref(null);
@@ -235,10 +258,24 @@ const isNewPwd = ref(true);
 const isPwdConf = ref(true);
 const options = ref([]);
 const roleOps = ref('Authenticator');
+const { t } = useI18n();
 
 /*
   Props
 */
+
+const columns = [
+    {
+      name: 'description',
+      required: true,
+      label: t('description'),
+      align: 'left',
+      field: (row) => row.description,
+      format: (val) => `${val}`,
+      sortable: true,
+    }
+  ];
+
 
 /*
   Provides
@@ -253,6 +290,16 @@ const isValidEmail = (val) => {
   return emailPattern.test(val) || 'Email Inválido';
 };
 const validateForm = () => {
+
+  if (user.value.profiles.length <= 0) alert(
+              'Erro!',
+              'Tem de Selecionar Pelo menos 1 Perfil',
+              null,
+              null,
+              null
+            );
+
+
   if (
     user.value.email != null &&
     user.value.email != undefined &&
@@ -308,4 +355,10 @@ const validateForm = () => {
     }
   }
 };
+
+const profiles = reactive(
+    computed(() => {
+      return ProfileService.getAllProfiles();
+    })
+  );
 </script>

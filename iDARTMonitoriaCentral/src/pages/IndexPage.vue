@@ -14,6 +14,7 @@
           push
           glossy
           @click="$router.push('/dashboard')"
+          v-if="menusVisible('Dashboard')"
         >
           <div class="row"></div>
           <q-icon size="80px" name="pie_chart" />
@@ -33,6 +34,7 @@
           push
           rounded
           @click="$router.push('/patients')"
+          v-if="menusVisible('Pacientes')"
         >
           <div class="row"></div>
           <q-icon size="80px" name="person_search" />
@@ -52,6 +54,7 @@
           glossy
           rounded
           @click="$router.push('/stock')"
+          v-if="menusVisible('Stock')"
         >
           <div class="row"></div>
           <q-icon size="95px" name="medication" />
@@ -73,6 +76,7 @@
           rounded
           push
           @click="$router.push('/reports')"
+          v-if="menusVisible('Relatorios')"
         >
           <div class="row"></div>
           <q-icon size="80px" name="list_alt" />
@@ -92,6 +96,7 @@
           push
           rounded
           @click="$router.push('/settings')"
+          v-if="menusVisible('Parametro')"
         >
           <div class="row"></div>
           <q-icon size="80px" name="settings" />
@@ -111,6 +116,9 @@ import { useQuasar, QSpinnerBall } from 'quasar';
 import districtService from 'src/services/districtService/districtService';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
+import menuService from 'src/services/secUsersService/MenuService';
+import profileService from 'src/services/secUsersService/ProfileService';
+import secUsersService from 'src/services/secUsersService/SecUsersService';
 import { onMounted, onUpdated } from 'vue';
 
 /*
@@ -128,13 +136,23 @@ onUpdated ==
       spinnerColor: 'grey-4',
       spinner: QSpinnerBall,
     });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
+    $q.loading.hide();
+  //  menuService.get(0);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
   });
+
+  const menusVisible = (name) => {
+        const menus = localStorage.getItem('role_menus')
+        if(menus !== null && menus.length > 0) {
+        if (!menus.includes(name)) {
+               return false
+        } else {
+          return true
+        }
+      }
+  }
 </script>
 <style scoped>
 @keyframes rotating {

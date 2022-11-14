@@ -31,6 +31,7 @@
               name="dashboard"
               icon="pie_chart"
               label="Dashboard"
+              v-if="menusVisible('Dashboard')"
             />
             <q-route-tab
               exact
@@ -38,6 +39,7 @@
               name="patients"
               icon="person_search"
               label="Pacientes"
+              v-if="menusVisible('Pacientes')"
             />
             <!--<q-route-tab
               exact
@@ -52,6 +54,7 @@
               name="stock"
               icon="medication"
               label="Stock"
+              v-if="menusVisible('Stock')"
             />
             <q-route-tab
               exact
@@ -59,6 +62,7 @@
               name="reports"
               icon="list_alt"
               label="Relatórios"
+              v-if="menusVisible('Relatorios')"
             />
             <q-route-tab
               exact
@@ -66,6 +70,7 @@
               name="settings"
               icon="settings"
               label="Parâmetro"
+              v-if="this.menusVisible('Parametro')"
             />
           </q-tabs>
           <q-btn-dropdown
@@ -153,5 +158,17 @@ export default defineComponent({
     };
   },
   components: {},
+  methods: {
+     menusVisible (name) {
+        const menus = localStorage.getItem('role_menus')
+        if(menus !== null && menus.length > 0) {
+          if (!menus.includes(name)) {
+               return false
+        } else {
+          return true
+        }
+        } 
+  }
+  }
 });
 </script>
