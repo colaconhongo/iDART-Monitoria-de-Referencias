@@ -62,6 +62,8 @@ export default {
   contacto: 'Contacto',
   email: 'Email',
   role: 'Perfil do Utilizador',
+  Perfis: 'Perfis',
+  description: 'Descrição',
 
   // General
   true: 'Sim',

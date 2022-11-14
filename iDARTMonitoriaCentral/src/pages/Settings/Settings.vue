@@ -45,6 +45,10 @@
             <div class="text-h4 q-mb-md"></div>
             <user />
           </q-tab-panel>
+          <q-tab-panel name="profile">
+            <div class="text-h4 q-mb-md"></div>
+            <profile />
+          </q-tab-panel>
         </q-tab-panels>
       </template>
     </q-splitter>
@@ -67,6 +71,7 @@ import clinic_sector from '../ClinicSector/ClinicSector.vue';
 import drugs from '../Drug/Drug.vue';
 import regimen from '../Regimen/Regimen.vue';
 import user from '../user/User.vue';
+import profile from '../user/Profiles.vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
@@ -167,6 +172,7 @@ const tabs = [
   { name: 'drugs', icon: 'medication', label: t('drug') },
   { name: 'regimen', icon: 'healing', label: t('regimen') },
   { name: 'user', icon: 'manage_accounts', label: t('Utilizadores') },
+  { name: 'profile', icon: 'admin_panel_settings', label: t('Perfis') },
 ];
 </script>
 <style></style>

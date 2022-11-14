@@ -62,6 +62,7 @@ let params = {
   user_email: '',
   user_uuid: '',
   user_contact: '',
+  profile_description: [],
   operation_type_user: '',
 };
 
@@ -88,8 +89,14 @@ const updateUser = (userRow) => {
   params.pass_user = '';
   params.role_user = userRow.role;
   params.username_user = userRow.username;
+  params.profile_description = []
+  userRow.value.profiles.forEach(element => {
+      params.profile_description.push(element.description)
+     });
+       const menus2 = JSON.stringify(params.profile_description).replace(/\[/g, '{').replace(/]/g, '}')
+       params.profile_description = menus2
   params.operation_type_user = 'U';
-  SecUsersService.post(params);
+  SecUsersService.post(params,userRow.value.profiles);
 };
 const promptToConfirm = (userRow) => {
   let active = userRow.role === 'authenticator';
@@ -139,6 +146,12 @@ const createOrUpdate = () => {
     params.pass_user = newPass.value;
     params.role_user = 'authenticator';
     params.username_user = user.value.username;
+    params.profile_description = []
+    user.value.profiles.forEach(element => {
+      params.profile_description.push(element.description)
+     });
+       const menus2 = JSON.stringify(params.profile_description).replace(/\[/g, '{').replace(/]/g, '}')
+       params.profile_description = menus2
     submitting.value = true;
 
     if (editedIndex.value != 1) {
@@ -194,7 +207,7 @@ const createOrUpdate = () => {
     } else {
       //  delete user.value['username'];
       params.operation_type_user = 'C';
-      SecUsersService.post(params)
+      SecUsersService.post(params, user.value.profiles)
         .then(() => {
           submitting.value = false;
           close();

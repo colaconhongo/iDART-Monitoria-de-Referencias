@@ -171,6 +171,9 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '../../services/loginService/LoginService';
 import ProvinceService from 'src/services/provinceService/provinceService';
+import menuService from 'src/services/secUsersService/MenuService';
+import profileService from 'src/services/secUsersService/ProfileService';
+import secUsersService from 'src/services/secUsersService/SecUsersService';
 
 /*
   Declaration
@@ -211,14 +214,56 @@ const processForm = () => {
       localStorage.setItem('refresh_token', response.data[0].token);
       localStorage.setItem('province_id', provincia.value.id);
       localStorage.setItem('province_name', provincia.value.name);
-
-      router.push({ path: '/' });
+     
+      addUserAcess();
+     
     } else {
       router.push({ path: '/login' });
     }
     submitting.value = false;
   });
 };
+
+const addUserAcess = () => {
+  menuService.get(0).then(menus => {
+      profileService.get(0).then(profiles => {
+      secUsersService.get(0).then(secUsers => {
+      const secUser = secUsersService.getSecUsersByUserName(localStorage.getItem('user'))
+   console.log(secUser[0])
+   const profilesDescription = []
+   console.log(localStorage.getItem('user'))
+   if(localStorage.getItem('user') !== 'postgres') {
+    secUser[0].profiles.forEach(element => {
+    console.log(element)
+     profilesDescription.push(element.description)
+   })
+   console.log(profilesDescription)
+   const profilesFromStorage = profileService.getWhereInDescription(profilesDescription)
+   console.log(profilesFromStorage)
+   const menuSet = new Set();
+   profilesFromStorage.forEach(element => {
+    element.menus.forEach(menu => {
+      menuSet.add(menu.description)
+    })
+   })
+   const roles_menus = []
+   for (let item of menuSet) roles_menus.push(item);
+   localStorage.setItem('role_menus', roles_menus)
+   console.log(menuSet)
+   } else {
+    const menuAll = []
+   const menus = menuService.getAllFromStorage()
+      menus.forEach(menu => {
+      menuAll.push(menu.description)
+    })
+    localStorage.setItem('role_menus', menuAll)
+   }
+  
+    //  $q.loading.hide();
+    router.push({ path: '/' });
+    }) })
+  })
+}
 </script>
 
 <style>
