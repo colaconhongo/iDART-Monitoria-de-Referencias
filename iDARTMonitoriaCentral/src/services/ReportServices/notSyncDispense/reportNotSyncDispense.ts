@@ -48,6 +48,7 @@ export default {
       'Data Levant.',
       'Data Prox. Levant.',
       'Farmácia',
+      'Unidade Sanitária',
       'Estado',
     ];
     const rows = await reportService.getNotSyncDispenses(params);
@@ -137,13 +138,13 @@ export default {
     const cellPharm = worksheet.getCell('A11');
     const cellDistrict = worksheet.getCell('A12');
     const cellProvince = worksheet.getCell('D12');
-    const cellStartDate = worksheet.getCell('I11');
-    const cellEndDate = worksheet.getCell('I12');
+    const cellStartDate = worksheet.getCell('J11');
+    const cellEndDate = worksheet.getCell('J12');
     const cellPharmParamValue = worksheet.getCell('B11');
     const cellDistrictParamValue = worksheet.getCell('B12');
     const cellProvinceParamValue = worksheet.getCell('E12');
-    const cellStartDateParamValue = worksheet.getCell('J11');
-    const cellEndDateParamValue = worksheet.getCell('J12');
+    const cellStartDateParamValue = worksheet.getCell('K11');
+    const cellEndDateParamValue = worksheet.getCell('K12');
 
     // Get Rows
     const headerRow = worksheet.getRow(14);
@@ -159,6 +160,7 @@ export default {
     const colH = worksheet.getColumn('H');
     const colI = worksheet.getColumn('I');
     const colJ = worksheet.getColumn('J');
+    const colK = worksheet.getColumn('K');
 
     // Format Table Cells
     // Alignment Format
@@ -221,10 +223,10 @@ export default {
 
     // merge a range of cells
     worksheet.mergeCells('A1:A7');
-    worksheet.mergeCells('A9:J10');
-    worksheet.mergeCells('B11:H11');
+    worksheet.mergeCells('A9:K10');
+    worksheet.mergeCells('B11:I11');
     worksheet.mergeCells('B12:C12');
-    worksheet.mergeCells('E12:H12');
+    worksheet.mergeCells('E12:I12');
     worksheet.mergeCells('A13:J13');
 
     // add width size to Columns
@@ -235,7 +237,7 @@ export default {
     // add width size to Columns
     colA.width = 30;
     colB.width = 30;
-    colC.width = 10;
+    colC.width = 30;
     colD.width = 15;
     colE.width = 20;
     colF.width = 15;
@@ -243,6 +245,7 @@ export default {
     colH.width = 15;
     colI.width = 15;
     colJ.width = 15;
+    colK.width = 15;
 
     // Add Style
     cellTitle.font =
@@ -305,7 +308,12 @@ export default {
           filterButton: false,
         },
         {
-          name: 'Estado.',
+          name: 'Unidade Sanitária',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Estado',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -385,6 +393,7 @@ export default {
         useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
       );
       createRow.push(rows[row].clinicname);
+      createRow.push(rows[row].mainclinicname);
       createRow.push('Não Sincronizado');
 
       data.push(createRow);

@@ -329,7 +329,9 @@ const validateForm = () => {
     userFirstnameRef.value.validate();
     userLastnameRef.value.validate();
     userNameRef.value.validate();
-    currentPassRef.value.validate();
+    if (currentPassword.value.length > 0) {
+      currentPassRef.value.validate();
+    }
     if (
       newPassword.value != null &&
       newPassword.value != undefined &&
@@ -337,9 +339,11 @@ const validateForm = () => {
     ) {
       newPassRef.value.validate();
       passConfRef.value.validate();
+      currentPassRef.value.validate();
     } else {
       newPassRef.value.resetValidation();
       passConfRef.value.resetValidation();
+      currentPassRef.value.resetValidation();
     }
 
     if (
