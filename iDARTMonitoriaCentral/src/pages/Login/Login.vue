@@ -216,11 +216,11 @@ const processForm = () => {
       localStorage.setItem('province_name', provincia.value.name);
      
       addUserAcess();
-     
+      
     } else {
       router.push({ path: '/login' });
     }
-    submitting.value = false;
+     submitting.value = false;
   });
 };
 
