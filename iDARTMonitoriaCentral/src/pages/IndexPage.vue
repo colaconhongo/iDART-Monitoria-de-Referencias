@@ -119,6 +119,7 @@ import clinicService from 'src/services/clinicService/clinicService';
 import menuService from 'src/services/secUsersService/MenuService';
 import profileService from 'src/services/secUsersService/ProfileService';
 import secUsersService from 'src/services/secUsersService/SecUsersService';
+import menusAcessUtils from 'src/use/menusAcessUtils';
 import { onMounted, onUpdated } from 'vue';
 
 /*
@@ -144,15 +145,8 @@ onUpdated ==
   });
 
   const menusVisible = (name) => {
-        const menus = localStorage.getItem('role_menus')
-        if(menus !== null && menus.length > 0) {
-        if (!menus.includes(name)) {
-               return false
-        } else {
-          return true
-        }
+    return menusAcessUtils.menusVisible(name)
       }
-  }
 </script>
 <style scoped>
 @keyframes rotating {

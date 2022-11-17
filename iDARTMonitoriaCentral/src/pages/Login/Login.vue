@@ -221,7 +221,7 @@ const processForm = () => {
     } else {
       router.push({ path: '/login' });
     }
-    submitting.value = false;
+     submitting.value = false;
   });
 };
 
