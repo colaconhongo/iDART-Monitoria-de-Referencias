@@ -37,12 +37,12 @@ const props = defineProps({
 Declarations
 */
 const viewUser = inject('viewUser');
-const newPass = inject('newPass');
-const currentPassword = inject('currentPassword');
+// const newPass = inject('newPass');
+// const currentPassword = inject('currentPassword');
 const editUser = inject('editUser');
 const removeUser = inject('removeUser');
 const promptToConfirm = inject('promptToConfirm');
-const title = inject('titleList');
+// const title = inject('titleList');
 const $q = new useQuasar();
 const { t } = useI18n();
 const mode = reactive(ref('list'));
@@ -71,7 +71,10 @@ const columns = [
     required: true,
     label: t('role'),
     align: 'left',
-    field: (row) => 'Authenticator',
+    field: (row) =>
+      row.profiles.length > 0
+        ? row.profiles.flatMap((perfil) => '- ' + perfil.description + ' -')
+        : t('unassociated'),
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -103,12 +106,11 @@ const allSecUsers = reactive(
   })
 );
 
-const profiles = reactive(
-    computed(() => {
-      return ProfileService.getAllProfiles();
-    })
-  );
-
+// const profiles = reactive(
+//   computed(() => {
+//     return ProfileService.getAllProfiles();
+//   })
+// );
 
 /*
   Methods
@@ -124,22 +126,22 @@ const getAllSecUsersFromAPI = (offset) => {
 };
 
 const getAllProfilesFromAPI = (offset) => {
-    if (offset >= 0) {
-      ProfileService.get(offset);
-    }
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
-  };
+  if (offset >= 0) {
+    ProfileService.get(offset);
+  }
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
+};
 
-  const getAllMenusFromAPI = (offset) => {
-    if (offset >= 0) {
-      MenuService.get(offset);
-    }
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
-  };
+const getAllMenusFromAPI = (offset) => {
+  if (offset >= 0) {
+    MenuService.get(offset);
+  }
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
+};
 
- // provide('profiles', profiles);
+// provide('profiles', profiles);
 </script>

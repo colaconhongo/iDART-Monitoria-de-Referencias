@@ -31,6 +31,7 @@
                   <q-input
                     outlined
                     lazy-rules
+                    dense
                     label="Nome"
                     class="col q-ml-md"
                     ref="userFirstnameRef"
@@ -44,6 +45,7 @@
                   <q-input
                     outlined
                     lazy-rules
+                    dense
                     label="Apelido"
                     class="col q-ml-md"
                     ref="userLastnameRef"
@@ -59,6 +61,7 @@
                   <q-input
                     outlined
                     lazy-rules
+                    dense
                     label="Utilizador"
                     class="col q-ml-md"
                     ref="userNameRef"
@@ -69,19 +72,21 @@
                         'Por favor introduza o nome do utilizador com pelo menos 3 caracteres',
                     ]"
                   />
-                  <q-select
+                  <!--q-select
                     outlined
                     class="col q-ml-md"
                     readonly
+                    dense
                     v-model="roleOps"
                     :options="options"
                     label="Role"
-                  />
+                  /-->
                 </div>
                 <div class="row q-mt-md">
                   <q-input
                     outlined
                     lazy-rules
+                    dense
                     label="Senha actual"
                     class="col q-ml-md"
                     ref="currentPassRef"
@@ -106,6 +111,7 @@
                   <q-input
                     label="Nova Senha"
                     outlined
+                    dense
                     ref="newPassRef"
                     class="col q-ml-md"
                     v-model="newPassword"
@@ -133,6 +139,7 @@
                   <q-input
                     label="Confirmar Senha "
                     outlined
+                    dense
                     ref="passConfRef"
                     class="col q-ml-md"
                     v-model="confirmPassword"
@@ -168,6 +175,7 @@
                 <div class="row q-mt-md">
                   <q-input
                     outlined
+                    dense
                     label="Contacto"
                     v-model="user.contacto"
                     class="col q-ml-md"
@@ -177,6 +185,7 @@
                   <q-input
                     outlined
                     lazy-rules
+                    dense
                     type="email"
                     label="Email"
                     class="col q-ml-md"
@@ -194,17 +203,18 @@
                   </div>
                   <q-separator color="grey-13" size="1px" />
                 </div>
-                  <q-table
-                     title="Perfis"
-                     :rows="profiles"
-                     :columns="columns"
-                     row-key="description"
-                     selection="multiple"
-                     v-model:selected="user.profiles"
-                       v-if="!onlyView"
-                     rows-per-page-options="8"
-                   >
-                  </q-table>
+                <q-table
+                  title="Perfis"
+                  :rows="profiles"
+                  :columns="columns"
+                  row-key="description"
+                  selection="multiple"
+                  dense
+                  v-model:selected="user.profiles"
+                  v-if="!onlyView"
+                  rows-per-page-options="8"
+                >
+                </q-table>
               </div>
             </div>
           </q-form>
@@ -219,12 +229,12 @@
             @click="close"
           />
           <q-btn
-          :loading="submitting"
-          color="teal"
-          label="Gravar"
-          type="submit"
-          @click.stop="validateForm"
-        />
+            :loading="submitting"
+            color="teal"
+            label="Gravar"
+            type="submit"
+            @click.stop="validateForm"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -256,8 +266,8 @@ const newUserFlag = inject('newUserFlag');
 const isPwd = ref(true);
 const isNewPwd = ref(true);
 const isPwdConf = ref(true);
-const options = ref([]);
-const roleOps = ref('Authenticator');
+// const options = ref([]);
+// const roleOps = ref('Authenticator');
 const { t } = useI18n();
 
 /*
@@ -265,17 +275,16 @@ const { t } = useI18n();
 */
 
 const columns = [
-    {
-      name: 'description',
-      required: true,
-      label: t('description'),
-      align: 'left',
-      field: (row) => row.description,
-      format: (val) => `${val}`,
-      sortable: true,
-    }
-  ];
-
+  {
+    name: 'description',
+    required: true,
+    label: t('description'),
+    align: 'left',
+    field: (row) => row.description,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+];
 
 /*
   Provides
@@ -290,15 +299,8 @@ const isValidEmail = (val) => {
   return emailPattern.test(val) || 'Email Inválido';
 };
 const validateForm = () => {
-
-  if (user.value.profiles.length <= 0) alert(
-              'Erro!',
-              'Tem de Selecionar Pelo menos 1 Perfil',
-              null,
-              null,
-              null
-            );
-
+  if (user.value.profiles.length <= 0)
+    alert('Erro!', 'Tem de Selecionar Pelo menos 1 Perfil', null, null, null);
 
   if (
     user.value.email != null &&
@@ -361,8 +363,8 @@ const validateForm = () => {
 };
 
 const profiles = reactive(
-    computed(() => {
-      return ProfileService.getAllProfiles();
-    })
-  );
+  computed(() => {
+    return ProfileService.getAllActiveProfiles();
+  })
+);
 </script>

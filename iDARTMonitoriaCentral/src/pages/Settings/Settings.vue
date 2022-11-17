@@ -70,7 +70,7 @@ import clinics from '../Clinic/Clinic.vue';
 import clinic_sector from '../ClinicSector/ClinicSector.vue';
 import drugs from '../Drug/Drug.vue';
 import regimen from '../Regimen/Regimen.vue';
-import user from '../user/User.vue';
+import user from '../user/UserSec.vue';
 import profile from '../user/Profiles.vue';
 import Filter from 'src/components/Filter/Filter.vue';
 import provinceService from 'src/services/provinceService/provinceService';

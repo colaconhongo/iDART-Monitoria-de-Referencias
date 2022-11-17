@@ -68,13 +68,14 @@
   </q-dialog>
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /*
   Declaration
 */
 const { t } = useI18n();
+const details_dialog = inject('details_dialog');
 /*
   Props
   */
@@ -84,10 +85,10 @@ const props = defineProps({
     type: String,
     default: 'Sem Titúlo',
   },
-  details_dialog: {
-    type: Boolean,
-    default: false,
-  },
+  // details_dialog: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   entity: {
     type: Object,
   },

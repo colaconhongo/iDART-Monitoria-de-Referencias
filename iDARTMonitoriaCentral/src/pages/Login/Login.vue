@@ -174,6 +174,7 @@ import ProvinceService from 'src/services/provinceService/provinceService';
 import menuService from 'src/services/secUsersService/MenuService';
 import profileService from 'src/services/secUsersService/ProfileService';
 import secUsersService from 'src/services/secUsersService/SecUsersService';
+import { ShowNotification } from '../../components/Shared/Directives/Plugins/Notify/notify';
 
 /*
   Declaration
@@ -185,6 +186,7 @@ const isPwd = ref(true);
 const submitting = ref(false);
 const router = useRouter();
 const provincia = ref([]);
+const accessGranted = ref(true);
 
 /*
   Computed
@@ -214,9 +216,8 @@ const processForm = () => {
       localStorage.setItem('refresh_token', response.data[0].token);
       localStorage.setItem('province_id', provincia.value.id);
       localStorage.setItem('province_name', provincia.value.name);
-     
+
       addUserAcess();
-     
     } else {
       router.push({ path: '/login' });
     }
@@ -225,45 +226,65 @@ const processForm = () => {
 };
 
 const addUserAcess = () => {
-  menuService.get(0).then(menus => {
-      profileService.get(0).then(profiles => {
-      secUsersService.get(0).then(secUsers => {
-      const secUser = secUsersService.getSecUsersByUserName(localStorage.getItem('user'))
-   console.log(secUser[0])
-   const profilesDescription = []
-   console.log(localStorage.getItem('user'))
-   if(localStorage.getItem('user') !== 'postgres') {
-    secUser[0].profiles.forEach(element => {
-    console.log(element)
-     profilesDescription.push(element.description)
-   })
-   console.log(profilesDescription)
-   const profilesFromStorage = profileService.getWhereInDescription(profilesDescription)
-   console.log(profilesFromStorage)
-   const menuSet = new Set();
-   profilesFromStorage.forEach(element => {
-    element.menus.forEach(menu => {
-      menuSet.add(menu.description)
-    })
-   })
-   const roles_menus = []
-   for (let item of menuSet) roles_menus.push(item);
-   localStorage.setItem('role_menus', roles_menus)
-   console.log(menuSet)
-   } else {
-    const menuAll = []
-   const menus = menuService.getAllFromStorage()
-      menus.forEach(menu => {
-      menuAll.push(menu.description)
-    })
-    localStorage.setItem('role_menus', menuAll)
-   }
-  
-    //  $q.loading.hide();
-    router.push({ path: '/' });
-    }) })
-  })
-}
+  menuService.get(0).then((menus) => {
+    profileService.get(0).then((profiles) => {
+      secUsersService.get(0).then((secUsers) => {
+        const secUser = secUsersService.getSecUsersByUserName(
+          localStorage.getItem('user')
+        );
+        const profilesDescription = [];
+        if (localStorage.getItem('user') !== 'postgres') {
+          secUser[0].profiles.forEach((element) => {
+            profilesDescription.push(element.description);
+          });
+          const profilesFromStorage =
+            profileService.getWhereInDescription(profilesDescription);
+
+          if (!profilesFromStorage.length > 0) {
+            accessGranted.value = false;
+          } else {
+            accessGranted.value = true;
+          }
+
+          const menuSet = new Set();
+          profilesFromStorage.forEach((element) => {
+            element.menus.forEach((menu) => {
+              menuSet.add(menu.description);
+            });
+          });
+          const roles_menus = [];
+          for (let item of menuSet) roles_menus.push(item);
+          localStorage.setItem('role_menus', roles_menus);
+        } else {
+          const menuAll = [];
+          const menus = menuService.getAllFromStorage();
+          menus.forEach((menu) => {
+            menuAll.push(menu.description);
+          });
+          localStorage.setItem('role_menus', menuAll);
+        }
+
+        if (accessGranted.value) {
+          router.push({ path: '/' });
+        } else {
+          router.push({ path: '/Logout' });
+
+          ShowNotification(
+            'announcement',
+            'Utilizador sem permissão ou Senha inválida, por favor contacte o Administrador ',
+            'negative',
+            true,
+            4500,
+            'center',
+            'negative',
+            'white',
+            'glossy'
+          );
+        }
+      });
+    });
+  });
+};
 </script>
 
 <style>

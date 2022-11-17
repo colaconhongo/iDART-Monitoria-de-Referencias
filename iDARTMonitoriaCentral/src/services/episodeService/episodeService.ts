@@ -155,15 +155,6 @@ export default {
       if (lastEpisodes.length === 0) {
         lastEpisodes.push(ep);
       }
-      console.log(ep.patientuuid);
-      // else {
-      //   for (let index = 0; index < lastEpisodes.length; index++) {
-      //     const element = lastEpisodes[index];
-      //     if (element.patientuuid !== ep.uuidopenmrs) {
-      //       lastEpisodes.push(element);
-      //     }
-      //   }
-      // }
     });
 
     return episodes;
