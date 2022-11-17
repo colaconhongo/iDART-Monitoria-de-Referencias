@@ -89,14 +89,17 @@ const updateUser = (userRow) => {
   params.pass_user = '';
   params.role_user = userRow.role;
   params.username_user = userRow.username;
-  params.profile_description = []
-  userRow.value.profiles.forEach(element => {
-      params.profile_description.push(element.description)
-     });
-       const menus2 = JSON.stringify(params.profile_description).replace(/\[/g, '{').replace(/]/g, '}')
-       params.profile_description = menus2
+  params.profile_description = [];
+  userRow.profiles.forEach((element) => {
+    params.profile_description.push(element.description);
+  });
+  const menus2 = JSON.stringify(params.profile_description)
+    .replace(/\[/g, '{')
+    .replace(/]/g, '}');
+  params.profile_description = menus2;
   params.operation_type_user = 'U';
-  SecUsersService.post(params,userRow.value.profiles);
+  user.value = userRow;
+  SecUsersService.post(params, user.value.profiles);
 };
 const promptToConfirm = (userRow) => {
   let active = userRow.role === 'authenticator';
@@ -146,12 +149,14 @@ const createOrUpdate = () => {
     params.pass_user = newPass.value;
     params.role_user = 'authenticator';
     params.username_user = user.value.username;
-    params.profile_description = []
-    user.value.profiles.forEach(element => {
-      params.profile_description.push(element.description)
-     });
-       const menus2 = JSON.stringify(params.profile_description).replace(/\[/g, '{').replace(/]/g, '}')
-       params.profile_description = menus2
+    params.profile_description = [];
+    user.value.profiles.forEach((element) => {
+      params.profile_description.push(element.description);
+    });
+    const menus2 = JSON.stringify(params.profile_description)
+      .replace(/\[/g, '{')
+      .replace(/]/g, '}');
+    params.profile_description = menus2;
     submitting.value = true;
 
     if (editedIndex.value != 1) {
@@ -164,7 +169,7 @@ const createOrUpdate = () => {
             const token = response.data[0].token;
             if (response != 'undefined' && token.length > 0) {
               params.operation_type_user = 'U';
-              SecUsersService.post(params)
+              SecUsersService.post(params, user.value.profiles)
                 .then(() => {
                   submitting.value = false;
                   close();
@@ -195,7 +200,7 @@ const createOrUpdate = () => {
           });
       } else {
         params.operation_type_user = 'U';
-        SecUsersService.post(params)
+        SecUsersService.post(params, user.value.profiles)
           .then(() => {
             submitting.value = false;
             close();
@@ -249,6 +254,9 @@ const viewUser = (userRow) => {
   localEntity.value.contacto = user.value.contacto;
   localEntity.value.email = user.value.email;
   localEntity.value.role = user.value.role;
+  localEntity.value.profiles = user.value.profiles.flatMap(
+    (perfil) => perfil.description
+  );
 };
 
 const removeUser = (userRow) => {

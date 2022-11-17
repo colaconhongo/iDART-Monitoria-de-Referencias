@@ -64,6 +64,9 @@ export default {
   role: 'Perfil do Utilizador',
   Perfis: 'Perfis',
   description: 'Descrição',
+  unassociated: 'Sem perfil associado',
+  profiles: 'Perfil do Utilizador',
+  menus: 'Acesso ao Menu',
 
   // General
   true: 'Sim',

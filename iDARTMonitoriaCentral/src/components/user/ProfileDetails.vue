@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    {{ profile }}
     <ViewProfile
       v-model:title="titleDetails"
       v-model:details_dialog="details_dialog"
