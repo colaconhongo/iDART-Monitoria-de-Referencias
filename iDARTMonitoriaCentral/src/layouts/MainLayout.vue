@@ -145,6 +145,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import menusAcessUtils from 'src/use/menusAcessUtils';
 export default defineComponent({
   name: 'MainLayout',
   setup() {
@@ -160,14 +161,7 @@ export default defineComponent({
   components: {},
   methods: {
      menusVisible (name) {
-        const menus = localStorage.getItem('role_menus')
-        if(menus !== null && menus.length > 0) {
-          if (!menus.includes(name)) {
-               return false
-        } else {
-          return true
-        }
-        } 
+      return menusAcessUtils.menusVisible(name)
   }
   }
 });
