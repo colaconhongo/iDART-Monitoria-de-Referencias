@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: MainLayout,
-    beforeEnter(to, from, next) {  
+    beforeEnter(to, from, next) {
       next();
       // const authUser = localStorage.getItem('user');
       // if (authUser === null || String(authUser).includes('null')) {
@@ -34,40 +34,34 @@ const routes: RouteRecordRaw[] = [
         path: '/Settings',
         component: Settings,
         beforeEnter(to, from, next) {
-            if(!menusAcess.menusVisible('Parametros')) 
-            {
-              next('/:catchAll(.*)*'); 
-            }
-            else {
-              next();
-            }
-        }
+          if (!menusAcess.menusVisible('Parametro')) {
+            next('/:catchAll(.*)*');
+          } else {
+            next();
+          }
+        },
       },
       {
         path: '/stock',
         component: stock,
         beforeEnter(to, from, next) {
-          if(!menusAcess.menusVisible('Stock')) 
-          {
-            next('/:catchAll(.*)*'); 
-          }
-          else {
+          if (!menusAcess.menusVisible('Stock')) {
+            next('/:catchAll(.*)*');
+          } else {
             next();
           }
-      }
+        },
       },
       {
         path: '/reports',
         component: report,
         beforeEnter(to, from, next) {
-          if(!menusAcess.menusVisible('Relatorios')) 
-          {
-            next('/:catchAll(.*)*'); 
-          }
-          else {
+          if (!menusAcess.menusVisible('Relatorios')) {
+            next('/:catchAll(.*)*');
+          } else {
             next();
           }
-      }
+        },
       },
       {
         path: '/clinic:id',
@@ -77,27 +71,23 @@ const routes: RouteRecordRaw[] = [
         path: '/dashboard',
         component: Dashboard,
         beforeEnter(to, from, next) {
-          if(!menusAcess.menusVisible('Dashboard')) 
-          {
-            next('/:catchAll(.*)*'); 
-          }
-          else {
+          if (!menusAcess.menusVisible('Dashboard')) {
+            next('/:catchAll(.*)*');
+          } else {
             next();
           }
-        }
+        },
       },
       {
         path: '/patients',
         component: Patients,
         beforeEnter(to, from, next) {
-          if(!menusAcess.menusVisible('Pacientes')) 
-          {
-            next('/:catchAll(.*)*'); 
-          }
-          else {
+          if (!menusAcess.menusVisible('Pacientes')) {
+            next('/:catchAll(.*)*');
+          } else {
             next();
           }
-        }
+        },
       },
     ],
   },

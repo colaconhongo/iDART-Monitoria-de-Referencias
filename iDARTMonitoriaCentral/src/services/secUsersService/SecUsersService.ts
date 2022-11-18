@@ -27,8 +27,6 @@ export default {
           profiles: profileList,
         };
 
-        console.log('User Obj', userObj);
-
         if (params.operation_type_user === 'C') {
           sec_users.save(userObj);
           alert(
@@ -100,11 +98,22 @@ export default {
         });
     }
   },
-  patch(username: string, params: string) {
+  patch(params: string) {
     return api()
-      .patch('sec_users_vw?username=eq.' + username, params)
+      .post('rpc/manage_update_sec_users', params)
       .then((resp) => {
-        sec_users.save(JSON.parse(resp.config.data));
+        const userData = JSON.parse(resp.config.data);
+        const userObj = {
+          username: userData.username_user,
+          pass: userData.pass_user,
+          role: userData.role_user,
+          nome: userData.user_firstname,
+          apelido: userData.user_lastname,
+          email: userData.user_email,
+          userid: userData.user_uuid,
+          contacto: userData.user_contact,
+        };
+        sec_users.save(userObj);
         alert(
           'Sucesso!',
           'O Registo foi alterado com sucesso',

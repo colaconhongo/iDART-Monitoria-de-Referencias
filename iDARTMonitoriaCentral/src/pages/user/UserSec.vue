@@ -99,7 +99,8 @@ const updateUser = (userRow) => {
   params.profile_description = menus2;
   params.operation_type_user = 'U';
   user.value = userRow;
-  SecUsersService.post(params, user.value.profiles);
+
+  SecUsersService.patch(params);
 };
 const promptToConfirm = (userRow) => {
   let active = userRow.role === 'authenticator';
