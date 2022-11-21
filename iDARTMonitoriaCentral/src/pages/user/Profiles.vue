@@ -24,6 +24,7 @@ import { provide, reactive, ref } from 'vue';
 import ProfileService from 'src/services/secUsersService/ProfileService';
 import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useI18n } from 'vue-i18n';
+import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 
 /*
   Declarations
@@ -50,7 +51,7 @@ const newUserFlag = reactive(ref(false));
  */
 
 let params = {
-  profile_id: 0,
+  profiles_id: 0,
   operation_type_user: '',
   profile_description: '',
   active_state: '',
@@ -108,8 +109,12 @@ const createOrUpdate = () => {
       submitting.value = false;
       close();
     })
-    .catch(() => {
+    .catch((error) => {
       submitting.value = false;
+      if (error.request != null) {
+        const arrayErrors = codeRules(JSON.parse(error.request.response));
+        alert('Erro no registo', arrayErrors, null, null, null);
+      }
     });
 };
 
@@ -123,7 +128,7 @@ const editProfile = (profileRow) => {
 };
 
 const addDataParamsProfile = (profileRow) => {
-  params.profile_id = profileRow.value.id;
+  params.profiles_id = profileRow.value.id;
   params.profile_description = profileRow.value.description;
   params.active_state = true;
   params.menu_codes = [];
@@ -138,7 +143,7 @@ const addDataParamsProfile = (profileRow) => {
 };
 
 const addParamsToInactivateProfile = (profileRow) => {
-  params.profile_id = profileRow.id;
+  params.profiles_id = profileRow.id;
   params.profile_description = profileRow.description;
   params.active_state = profileRow.active;
   params.menu_codes = [];
@@ -172,6 +177,12 @@ const close = () => {
   activeEditDialog.value = false;
   profile.value = [];
   editedIndex.value = -1;
+};
+
+const codeRules = (val) => {
+  if (val.code == 23505) {
+    return t(val.code);
+  }
 };
 
 provide('title', titleAddEdit);

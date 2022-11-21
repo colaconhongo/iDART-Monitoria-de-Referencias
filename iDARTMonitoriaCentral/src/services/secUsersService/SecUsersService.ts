@@ -76,6 +76,7 @@ export default {
             secUser.email = secUserProfile[0].email;
             secUser.role = secUserProfile[0].role;
             secUser.pass = secUserProfile[0].pass;
+
             secUserProfile.forEach((profileUser) => {
               if (profileUser.profile_description !== null) {
                 const profile = ProfileService.getFromDescription(
@@ -94,6 +95,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          }
+        })
+        .catch((error) => {
+          if (error.request != null) {
+            const arrayErrors = JSON.parse(error.request.response);
+            alert('Erro no Login', arrayErrors.details, null, null, null);
           }
         });
     }

@@ -5,7 +5,7 @@ import SecUserProfile from './secUserProfile';
 export default class SecUsers extends Model {
   static entity = 'secUsers';
   static primaryKey = 'userid';
-  static fields(): ModelFields {
+  static fields() {
     return {
       userid: this.uid(),
       username: this.attr(''),
@@ -15,7 +15,12 @@ export default class SecUsers extends Model {
       email: this.attr(''),
       role: this.attr(''),
       pass: this.attr(''),
-      profiles: this.belongsToMany(Profile, SecUserProfile, 'userid', 'profile_id')
+      profiles: this.belongsToMany(
+        Profile,
+        SecUserProfile,
+        'userid',
+        'profile_id'
+      ),
     };
   }
 }

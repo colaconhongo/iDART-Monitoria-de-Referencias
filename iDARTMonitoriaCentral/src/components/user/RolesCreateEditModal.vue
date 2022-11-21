@@ -30,7 +30,6 @@
                   class="col q-ml-md"
                   ref="descriptionRef"
                   v-model="profile.description"
-                  :rules="[(val) => codeRules(val)]"
                 />
               </div>
               <div class="q-pa-md">
@@ -135,18 +134,6 @@ const databaseCodes = () => {
     databaseDescriptions.value.push(element.description);
   });
   // return databaseDescriptions
-};
-
-const codeRules = (val) => {
-  if (
-    profile.value.description.length !== 0 &&
-    profile.value.id === profile.value.id
-  ) {
-    return (
-      !databaseDescriptions.value.includes(val) ||
-      'A descricao indicada ja existe'
-    );
-  }
 };
 
 /*

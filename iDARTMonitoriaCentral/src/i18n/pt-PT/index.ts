@@ -77,4 +77,7 @@ export default {
   edit: 'Actualizar',
   view: 'Detalhes',
   year: 'Ano',
+
+  // ------------ ERROR CODE --------
+  23505: 'A descricão indicada ja existe',
 };

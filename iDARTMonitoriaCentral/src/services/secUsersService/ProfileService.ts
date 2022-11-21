@@ -4,8 +4,10 @@ import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog'
 import Profile from 'src/stores/models/secUsers/profile';
 import MenuService from './MenuService';
 import Menu from 'src/stores/models/secUsers/menu';
+import RoleMenu from 'src/stores/models/secUsers/profileMenu';
 
 const profiles = useRepo(Profile);
+const roleMenu = useRepo(RoleMenu);
 
 export default {
   // Axios API call
@@ -15,7 +17,7 @@ export default {
       .then((resp) => {
         const profileData = JSON.parse(resp.config.data);
         const roleObj = {
-          id: profileData.profile_id,
+          id: profileData.profiles_id,
           description: profileData.profile_description,
           active: true,
           menus: menus,
@@ -30,6 +32,7 @@ export default {
             null
           );
         } else if (params.operation_type_user === 'U') {
+          roleMenu.query().where('profile_id', roleObj.id).delete();
           profiles.save(roleObj);
           alert(
             'Sucesso!',
