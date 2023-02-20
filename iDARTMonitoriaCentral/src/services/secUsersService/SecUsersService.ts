@@ -27,8 +27,6 @@ export default {
           profiles: profileList,
         };
 
-        console.log('User Obj', userObj);
-
         if (params.operation_type_user === 'C') {
           sec_users.save(userObj);
           alert(
@@ -78,6 +76,7 @@ export default {
             secUser.email = secUserProfile[0].email;
             secUser.role = secUserProfile[0].role;
             secUser.pass = secUserProfile[0].pass;
+
             secUserProfile.forEach((profileUser) => {
               if (profileUser.profile_description !== null) {
                 const profile = ProfileService.getFromDescription(
@@ -97,14 +96,31 @@ export default {
           if (resp.data.length > 0) {
             this.get(offset);
           }
+        })
+        .catch((error) => {
+          if (error.request != null) {
+            const arrayErrors = JSON.parse(error.request.response);
+            alert('Erro no Login', arrayErrors.details, null, null, null);
+          }
         });
     }
   },
-  patch(username: string, params: string) {
+  patch(params: string) {
     return api()
-      .patch('sec_users_vw?username=eq.' + username, params)
+      .post('rpc/manage_update_sec_users', params)
       .then((resp) => {
-        sec_users.save(JSON.parse(resp.config.data));
+        const userData = JSON.parse(resp.config.data);
+        const userObj = {
+          username: userData.username_user,
+          pass: userData.pass_user,
+          role: userData.role_user,
+          nome: userData.user_firstname,
+          apelido: userData.user_lastname,
+          email: userData.user_email,
+          userid: userData.user_uuid,
+          contacto: userData.user_contact,
+        };
+        sec_users.save(userObj);
         alert(
           'Sucesso!',
           'O Registo foi alterado com sucesso',

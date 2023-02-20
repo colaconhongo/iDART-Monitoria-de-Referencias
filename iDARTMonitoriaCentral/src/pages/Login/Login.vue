@@ -221,69 +221,131 @@ const processForm = () => {
     } else {
       router.push({ path: '/login' });
     }
-     submitting.value = false;
+    submitting.value = false;
   });
 };
 
 const addUserAcess = () => {
-  menuService.get(0).then((menus) => {
-    profileService.get(0).then((profiles) => {
-      secUsersService.get(0).then((secUsers) => {
-        const secUser = secUsersService.getSecUsersByUserName(
-          localStorage.getItem('user')
-        );
-        const profilesDescription = [];
-        if (localStorage.getItem('user') !== 'postgres') {
-          secUser[0].profiles.forEach((element) => {
-            profilesDescription.push(element.description);
-          });
-          const profilesFromStorage =
-            profileService.getWhereInDescription(profilesDescription);
+  menuService
+    .get(0)
+    .then((menus) => {
+      profileService
+        .get(0)
+        .then((profiles) => {
+          secUsersService
+            .get(0)
+            .then((secUsers) => {
+              console.log('User logado', secUsers);
 
-          if (!profilesFromStorage.length > 0) {
-            accessGranted.value = false;
-          } else {
-            accessGranted.value = true;
-          }
+              const secUser = secUsersService.getSecUsersByUserName(
+                localStorage.getItem('user')
+              );
+              const profilesDescription = [];
+              if (localStorage.getItem('user') !== 'postgres') {
+                secUser[0].profiles.forEach((element) => {
+                  profilesDescription.push(element.description);
+                });
+                const profilesFromStorage =
+                  profileService.getWhereInDescription(profilesDescription);
 
-          const menuSet = new Set();
-          profilesFromStorage.forEach((element) => {
-            element.menus.forEach((menu) => {
-              menuSet.add(menu.description);
+                if (!profilesFromStorage.length > 0) {
+                  accessGranted.value = false;
+                } else {
+                  accessGranted.value = true;
+                }
+
+                const menuSet = new Set();
+                profilesFromStorage.forEach((element) => {
+                  element.menus.forEach((menu) => {
+                    menuSet.add(menu.description);
+                  });
+                });
+                const roles_menus = [];
+                for (let item of menuSet) roles_menus.push(item);
+                localStorage.setItem('role_menus', roles_menus);
+              } else {
+                const menuAll = [];
+                const menus = menuService.getAllFromStorage();
+                menus.forEach((menu) => {
+                  menuAll.push(menu.description);
+                });
+                localStorage.setItem('role_menus', menuAll);
+              }
+
+              if (accessGranted.value) {
+                router.push({ path: '/' });
+              } else {
+                router.push({ path: '/Logout' });
+
+                ShowNotification(
+                  'announcement',
+                  'Utilizador sem permissão ou Senha inválida, por favor contacte o Administrador ',
+                  'negative',
+                  true,
+                  4500,
+                  'center',
+                  'negative',
+                  'white',
+                  'glossy'
+                );
+              }
+            })
+            .catch((error) => {
+              if (error.request != null) {
+                const arrayErrors = JSON.parse(error.request.response);
+                const listErrors = [];
+                if (arrayErrors.total == null) {
+                  listErrors.push(arrayErrors.message);
+                } else {
+                  arrayErrors._embedded.errors.forEach((element) => {
+                    listErrors.push(element.message);
+                  });
+                }
+                alert('Erro no registo 1', listErrors, null, null, null);
+              } else if (error.request) {
+                alert('Erro no registo 1', error.request, null, null, null);
+              } else {
+                alert('Erro no registo 1', error.message, null, null, null);
+              }
             });
-          });
-          const roles_menus = [];
-          for (let item of menuSet) roles_menus.push(item);
-          localStorage.setItem('role_menus', roles_menus);
+        })
+        .catch((error) => {
+          if (error.request != null) {
+            const arrayErrors = JSON.parse(error.request.response);
+            const listErrors = [];
+            if (arrayErrors.total == null) {
+              listErrors.push(arrayErrors.message);
+            } else {
+              arrayErrors._embedded.errors.forEach((element) => {
+                listErrors.push(element.message);
+              });
+            }
+            alert('Erro no registo 2', listErrors, null, null, null);
+          } else if (error.request) {
+            alert('Erro no registo 2', error.request, null, null, null);
+          } else {
+            alert('Erro no registo 2', error.message, null, null, null);
+          }
+        });
+    })
+    .catch((error) => {
+      if (error.request != null) {
+        const arrayErrors = JSON.parse(error.request.response);
+        const listErrors = [];
+        if (arrayErrors.total == null) {
+          listErrors.push(arrayErrors.message);
         } else {
-          const menuAll = [];
-          const menus = menuService.getAllFromStorage();
-          menus.forEach((menu) => {
-            menuAll.push(menu.description);
+          arrayErrors._embedded.errors.forEach((element) => {
+            listErrors.push(element.message);
           });
-          localStorage.setItem('role_menus', menuAll);
         }
-
-        if (accessGranted.value) {
-          router.push({ path: '/' });
-        } else {
-          router.push({ path: '/Logout' });
-
-          ShowNotification(
-            'announcement',
-            'Utilizador sem permissão ou Senha inválida, por favor contacte o Administrador ',
-            'negative',
-            true,
-            4500,
-            'center',
-            'negative',
-            'white',
-            'glossy'
-          );
-        }
-      });
+        alert('Erro no registo 3', listErrors, null, null, null);
+      } else if (error.request) {
+        alert('Erro no registo 3', error.request, null, null, null);
+      } else {
+        alert('Erro no registo 3', error.message, null, null, null);
+      }
     });
-  });
 };
 </script>
 
