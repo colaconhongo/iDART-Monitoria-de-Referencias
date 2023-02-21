@@ -171,7 +171,6 @@ export default {
       })
       .orderBy('prescriptiondate', 'desc')
       .get();
-    console.log('Patients: ', patients);
     return patients;
   },
 
