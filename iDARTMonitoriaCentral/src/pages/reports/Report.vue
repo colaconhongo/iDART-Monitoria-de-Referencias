@@ -48,6 +48,8 @@ import DispenseByDrugAndRegimen from 'src/components/Reports/DispenseByDrugAndRe
 import PatientWithScreeningList from 'src/components/Reports/PatientWithScreeningList.vue';
 import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
+import ActivePatientDDDModel from 'src/components/Reports/Research/ActivePatientDDDModel.vue';
+import EnrolledPatientIndicator from 'src/components/Reports/Research/EnrolledPatientIndicator.vue';
 import DashboardUtils from '../../use/DashboardUtils';
 import { SessionStorage } from 'quasar';
 import Filter from 'src/components/Filter/Filter.vue';
@@ -98,6 +100,8 @@ const reportComps = {
   DispenseByDrugAndRegimen,
   PatientWithScreeningList,
   NotSyncDispenses,
+  ActivePatientDDDModel,
+  EnrolledPatientIndicator,
 };
 
 const district = reactive(ref());
