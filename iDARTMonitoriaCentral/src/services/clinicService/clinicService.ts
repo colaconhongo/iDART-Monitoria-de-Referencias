@@ -1,6 +1,7 @@
-import { useRepo } from 'pinia-orm';
+import { Query, useRepo } from 'pinia-orm';
 import Clinic from 'src/stores/models/clinic/clinic';
 import api from '../apiService/apiService';
+import patientService from '../patientService/patientService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 import District from 'src/stores/models/district/district';
 import { timeStamp } from 'console';
@@ -183,6 +184,9 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+  getPharmaciesByUuidList(uuidList: []) {
+    return clinic.query().whereIn('uuid', uuidList).get();
+  },
   getClinicByID(uuid: string) {
     return clinic.query().where('uuid', uuid).get();
   },
@@ -211,7 +215,7 @@ export default {
       .get();
   },
 
-  getPharmByUUid(uuid) {
+  getPharmByUUid(uuid: string) {
     return clinic.query().where('uuid', uuid).get();
   },
 

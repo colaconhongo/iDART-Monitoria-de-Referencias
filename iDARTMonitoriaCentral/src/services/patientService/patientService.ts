@@ -3,6 +3,7 @@ import Episode from 'src/stores/models/episode/episode';
 import Patient from 'src/stores/models/patient/patient';
 import api from '../apiService/apiService';
 import moment from 'moment';
+import clinicService from 'src/services/clinicService/clinicService';
 import ClinicService from 'src/services/clinicService/clinicService';
 import clinicSectorService from '../clinicSectorService/clinicSectorService';
 import District from 'src/stores/models/district/district';
@@ -128,6 +129,20 @@ export default {
       });
   },
 
+  getPharmaciesIdsByUS(usUuid: string) {
+    // usUuid = 'c9c8c8bb-67b3-41f7-948a-c58ae02dca46'; // Depois remover esta linha
+    const result = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return patient.mainclinicuuid === usUuid;
+      })
+      .groupBy('clinicuuid')
+      .get();
+    const resultPharmaciesIds = Object.keys(result);
+
+    return resultPharmaciesIds;
+  },
+
   getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
     year: number,
     district: District,
@@ -156,6 +171,7 @@ export default {
       })
       .orderBy('prescriptiondate', 'desc')
       .get();
+    console.log('Patients: ', patients);
     return patients;
   },
 

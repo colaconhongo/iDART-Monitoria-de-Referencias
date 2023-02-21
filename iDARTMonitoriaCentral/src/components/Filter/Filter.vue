@@ -24,6 +24,18 @@
       @clear="clearDistrict()"
     />
     <SelectField
+      :label="usLabel"
+      class="col q-ml-md"
+      v-model="us"
+      :options="allUSFromDistrict"
+      option-label="clinicname"
+      option-value="id"
+      filled
+      clearable
+      dense
+      @clear="clearUs()"
+    />
+    <SelectField
       :label="pharmacyLabel"
       class="col q-ml-md"
       v-model="pharmacy"
@@ -59,6 +71,7 @@ const { t } = useI18n();
 const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const pharmacyLabel = ref('Farmácia');
+const usLabel = ref('Unidade Sanirária de Proveniência');
 const yearLabel = ref(t('year'));
 
 const props = defineProps(['isDashboard']);
@@ -69,12 +82,14 @@ const props = defineProps(['isDashboard']);
 const province = inject('province');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
 const year = inject('year');
 const yearsToShow = inject('yearsToShow');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');
 const allPhamacyFromFacility = inject('allPhamacyFromFacility');
+const allUSFromDistrict = inject('allUSFromDistrict');
 
 const clearDistrict = () => {
   SessionStorage.remove('district');
@@ -84,6 +99,10 @@ const clearDistrict = () => {
 const clearPharmacy = () => {
   SessionStorage.remove('pharmacy');
   // pharmacy.value = null;
+};
+
+const clearUs = () => {
+  SessionStorage.remove('us');
 };
 </script>
 
