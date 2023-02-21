@@ -22,7 +22,7 @@
     "jspdf-autotable": "^3.5.25",
     "moment": "^2.29.3",
     "pinia": "^2.0.23",
-    "pinia-orm": "^1.0.4",
+    "pinia-orm": "^1.5.1",
     "quasar": "^2.6.0",
     "randomcolor": "^0.6.2",
     "react-reportbro-designer": "^1.0.4",
