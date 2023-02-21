@@ -38,6 +38,7 @@ import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatien
 
 let district = ref();
 let pharmacy = ref();
+let us = ref();
 let year = ref(new Date().getFullYear());
 const $q = useQuasar();
 const isDashboard = ref(true);
@@ -93,6 +94,19 @@ watch(pharmacy, () => {
   }, 600);
 });
 
+watch(us, () => {
+  $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+
+  loaded.loaded = ref(true);
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
+});
+
 /*
   Computed
 */
@@ -106,7 +120,24 @@ const districtsByProvince = computed(() => {
 
 const DDPharmByDistrict = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return ClinicService.getAllPharmacyFromDistrict(district.value.name);
+    let pharmaciesResult;
+    if (us.value != null || us.value != undefined) {
+      // Query com filtro por US
+      const lst = patientService.getPharmaciesIdsByUS(us.value.uuid);
+      pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
+    } else {
+      // Query com filtro por Distrito apenas
+      pharmaciesResult = ClinicService.getAllPharmacyFromDistrict(
+        district.value.name
+      );
+    }
+    return pharmaciesResult;
+  } else return [];
+});
+
+const USByDistrict = computed(() => {
+  if (district.value != null || district.value != undefined) {
+    return ClinicService.getAllUSFromDistrict(district.value.name);
   } else return [];
 });
 
@@ -174,6 +205,9 @@ onActivated(() => {
   if (SessionStorage.getItem('district') !== null) {
     district.value = SessionStorage.getItem('district');
   }
+  if (SessionStorage.getItem('us') !== null) {
+    us.value = SessionStorage.getItem('us');
+  }
   if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
@@ -182,6 +216,8 @@ onActivated(() => {
 onDeactivated(() => {
   if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
+  if (us.value !== null && us.value !== undefined)
+    SessionStorage.set('us', us.value);
   if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
@@ -189,9 +225,11 @@ onDeactivated(() => {
 provide('total', total);
 provide('district', district);
 provide('pharmacy', pharmacy);
+provide('us', us);
 provide('allProvincias', allProvincias);
 provide('province', provincia);
 provide('alldistrictsFromProvince', districtsByProvince);
+provide('allUSFromDistrict', USByDistrict);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);

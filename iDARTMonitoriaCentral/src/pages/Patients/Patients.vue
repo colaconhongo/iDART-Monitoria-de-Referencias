@@ -41,6 +41,10 @@ const localPatient = reactive(ref([]));
 const activePatientList = reactive(ref(true));
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
+let us = ref();
+let loaded = reactive({
+  loaded: false,
+});
 
 const allProvincias = computed(() => {
   return ProvinceService.getAllFromStorage();
@@ -52,7 +56,18 @@ const districtsByProvince = computed(() => {
 
 const DDPharmByDistrict = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return ClinicService.getAllPharmacyFromDistrict(district.value.name);
+    let pharmaciesResult;
+    if (us.value != null || us.value != undefined) {
+      // Query com filtro por US
+      const lst = PatientService.getPharmaciesIdsByUS(us.value.uuid);
+      pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
+    } else {
+      // Query com filtro por Distrito apenas
+      pharmaciesResult = ClinicService.getAllPharmacyFromDistrict(
+        district.value.name
+      );
+    }
+    return pharmaciesResult;
   }
   return null;
 });
@@ -102,6 +117,9 @@ onActivated(() => {
   if (SessionStorage.getItem('district') !== null) {
     district.value = SessionStorage.getItem('district');
   }
+  if (SessionStorage.getItem('us') !== null) {
+    us.value = SessionStorage.getItem('us');
+  }
   if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
@@ -110,6 +128,8 @@ onActivated(() => {
 onDeactivated(() => {
   if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
+  if (us.value !== null && us.value !== undefined)
+    SessionStorage.set('us', us.value);
   if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
 });
@@ -117,6 +137,12 @@ onDeactivated(() => {
 const goBack = () => {
   activePatientList.value = true;
 };
+
+const USByDistrict = computed(() => {
+  if (district.value != null || district.value != undefined) {
+    return ClinicService.getAllUSFromDistrict(district.value.name);
+  } else return [];
+});
 
 provide('titleList', titleList);
 provide('viewPatient', viewPatient);
@@ -129,7 +155,22 @@ provide('district', district);
 provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
+provide('allUSFromDistrict', USByDistrict);
+provide('us', us);
 provide('goBack', goBack);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
+
+watch(us, () => {
+  $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+
+  loaded.loaded = ref(true);
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
+});
 </script>

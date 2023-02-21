@@ -19,6 +19,8 @@ import provinceService from 'src/services/provinceService/provinceService';
 import clinicService from 'src/services/clinicService/clinicService';
 import DistrictService from 'src/services/districtService/districtService';
 import DashboardUtils from '../../use/DashboardUtils';
+import ClinicService from 'src/services/clinicService/clinicService';
+import PatientService from 'src/services/patientService/patientService';
 
 import {
   onMounted,
@@ -39,6 +41,10 @@ const stockData = reactive(ref([]));
 let selectRecord = reactive(ref({}));
 const district = reactive(ref());
 const pharmacy = reactive(ref());
+let us = ref();
+let loaded = reactive({
+  loaded: false,
+});
 
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
@@ -55,8 +61,20 @@ const districtsByProvince = computed(() => {
 
 const DDPharmByDistrict = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return clinicService.getAllPharmacyFromDistrict(district.value.name);
-  } else return [];
+    let pharmaciesResult;
+    if (us.value != null || us.value != undefined) {
+      // Query com filtro por US
+      const lst = PatientService.getPharmaciesIdsByUS(us.value.uuid);
+      pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
+    } else {
+      // Query com filtro por Distrito apenas
+      pharmaciesResult = ClinicService.getAllPharmacyFromDistrict(
+        district.value.name
+      );
+    }
+    return pharmaciesResult;
+  }
+  return null;
 });
 
 /*
@@ -123,6 +141,9 @@ onActivated(() => {
   if (SessionStorage.getItem('district') !== null) {
     district.value = SessionStorage.getItem('district');
   }
+  if (SessionStorage.getItem('us') !== null) {
+    us.value = SessionStorage.getItem('us');
+  }
   if (SessionStorage.getItem('pharmacy') !== null) {
     pharmacy.value = SessionStorage.getItem('pharmacy');
   }
@@ -131,8 +152,16 @@ onActivated(() => {
 onDeactivated(() => {
   if (district.value !== null && district.value !== undefined)
     SessionStorage.set('district', district.value);
+  if (us.value !== null && us.value !== undefined)
+    SessionStorage.set('us', us.value);
   if (pharmacy.value !== null && pharmacy.value !== undefined)
     SessionStorage.set('pharmacy', pharmacy.value);
+});
+
+const USByDistrict = computed(() => {
+  if (district.value != null || district.value != undefined) {
+    return ClinicService.getAllUSFromDistrict(district.value.name);
+  } else return [];
 });
 
 provide('allFacilityFromDistrict', allFacilityFromDistrict);
@@ -144,6 +173,8 @@ provide('allProvincias', allProvincias);
 provide('province', provincia);
 provide('district', district);
 provide('alldistrictsFromProvince', districtsByProvince);
+provide('allUSFromDistrict', USByDistrict);
+provide('us', us);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
