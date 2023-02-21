@@ -101,6 +101,9 @@ export default {
   getPatientByUUidFromStorage(uuid: string) {
     return sync_temp_patients.query().where('uuidopenmrs', uuid).first();
   },
+  getPatientGroupByClinicName() {
+    return sync_temp_patients.groupBy('mainclinicname').get();
+  },
   getAllPatientWithPrescriptionDate() {
     return sync_temp_patients
       .query()

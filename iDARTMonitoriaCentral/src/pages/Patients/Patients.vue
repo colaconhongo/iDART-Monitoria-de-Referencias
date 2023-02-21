@@ -18,7 +18,6 @@ import {
   onDeactivated,
   onUpdated,
   onMounted,
-  watch,
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
@@ -33,7 +32,6 @@ import clinicService from 'src/services/clinicService/clinicService';
 import PatientService from 'src/services/patientService/patientService';
 
 const $q = useQuasar();
-
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 const titleList = reactive(ref('Pacientes'));
@@ -100,7 +98,7 @@ onUpdated ==
     });
     setTimeout(() => {
       $q.loading.hide();
-    }, 600);
+    }, 1000);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
