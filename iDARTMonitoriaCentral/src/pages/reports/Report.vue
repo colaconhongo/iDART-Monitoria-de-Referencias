@@ -49,6 +49,7 @@ import PatientWithScreeningList from 'src/components/Reports/PatientWithScreenin
 import NotSyncDispenses from 'src/components/Reports/NotSyncDispenses.vue';
 import ActivePatientList from 'src/components/Reports/ActivePatientList.vue';
 import ActivePatientDDDModel from 'src/components/Reports/Research/ActivePatientDDDModel.vue';
+import InactivePatientDDDModel from 'src/components/Reports/Research/InactivePatientDDDModel.vue';
 import EnrolledPatientIndicator from 'src/components/Reports/Research/EnrolledPatientIndicator.vue';
 import DashboardUtils from '../../use/DashboardUtils';
 import { SessionStorage } from 'quasar';
@@ -107,6 +108,7 @@ const reportComps = {
   PatientWithScreeningList,
   NotSyncDispenses,
   ActivePatientDDDModel,
+  InactivePatientDDDModel,
   EnrolledPatientIndicator,
 };
 
@@ -120,6 +122,7 @@ const pharmacy = reactive(ref());
 const changeTab = (tabName) => {
   const uidValue = 'report' + uid();
   const comp = { id: uidValue, name: tabName };
+  console.log(comp);
   components.push(comp);
 };
 

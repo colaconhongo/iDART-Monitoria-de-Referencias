@@ -79,6 +79,16 @@ export default {
         return resp.data;
       });
   },
+  getInactivePatients(params) {
+    const url = `rpc/get_active_patients?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
+    return api()
+      .get(url)
+      .then((resp) => {
+        return resp.data;
+      });
+  },
   getNotSyncDispenses(params) {
     return api()
       .get(

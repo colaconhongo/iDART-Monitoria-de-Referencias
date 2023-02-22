@@ -81,7 +81,7 @@ const menuResearch = ref([
   },
   {
     description: 'Listar pacientes inactivos na farmácia (Modelo DDD)',
-    tabName: '',
+    tabName: 'InactivePatientDDDModel',
   },
   {
     description: 'Número de pacientes Inscritos em DDD',
