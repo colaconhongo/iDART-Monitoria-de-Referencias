@@ -18,6 +18,7 @@ import {
   onDeactivated,
   onUpdated,
   onMounted,
+  watch,
 } from 'vue';
 import PatientList from 'src/components/patients/PatientList.vue';
 import PatientView from 'src/components/patients/PatientView.vue';
@@ -104,6 +105,18 @@ onUpdated ==
     clinicService.get(0);
   });
 
+watch(us, () => {
+  $q.loading.show({
+    message: 'Carregando ...',
+    spinnerColor: 'grey-4',
+    spinner: QSpinnerBall,
+  });
+
+  loaded.loaded = ref(true);
+  setTimeout(() => {
+    $q.loading.hide();
+  }, 600);
+});
 /*
   Computed
 */
@@ -158,17 +171,4 @@ provide('us', us);
 provide('goBack', goBack);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
-
-watch(us, () => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-
-  loaded.loaded = ref(true);
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-});
 </script>
