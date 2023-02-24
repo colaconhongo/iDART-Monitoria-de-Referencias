@@ -26,7 +26,7 @@ export default {
     const doc = new jsPDF({
       orientation: 'l',
       unit: 'mm',
-      format: [210, 337],
+      format: [210, 390],
       putOnlyUsedFonts: true,
       floatPrecision: 'smart', // or "smart", default is 16
     });
@@ -41,54 +41,39 @@ export default {
     const cols = [
       'Ordem',
       'NID',
-      'Nome',
-      'Idade',
-      'Contacto',
-      'Linha Terapeutica',
-      'Regime Terapeutico',
-      'Data Levant.',
-      'Data Prox. Levant.',
+      'Data Referência',
+      'Mêses no MDD',
+      'Ultima Data Levant. US',
+      'Data Prox. Levant. US',
+      'Primeiro Levant. FP',
+      'Prox. Levant. FP',
+      'Dias de Atraso ao 1º Levant',
+      'Data Prox. Levant. no Período',
       'Farmácia',
       'Unidade Sanitária',
+      'Província',
+      'Distrito',
     ];
-    const rows = await reportService.getActivePatients(params);
+    const rows = await reportService.getActivePatientsInDDM(params);
     const data = this.createArrayOfArrayRow(rows);
 
-    let Ordem = 1;
-
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(Ordem);
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(rows[row].contact);
-      createRow.push(rows[row].linhanome);
-      createRow.push(rows[row].regime);
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
-      );
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
-      );
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].mainclinicname);
-      data.push(createRow);
-      Ordem += 1;
-    }
     autoTable(doc, {
       margin: { top: 60 },
       columnStyles: {
         0: { cellWidth: 18 },
         1: { cellWidth: 35 },
-        2: { cellWidth: 30 },
+        2: { cellWidth: 25 },
         3: { cellWidth: 15 },
         4: { cellWidth: 25 },
-        5: { cellWidth: 30 },
-        6: { cellWidth: 30 },
-        7: { cellWidth: 30 },
-        8: { cellWidth: 30 },
-        9: { cellWidth: 30 },
+        5: { cellWidth: 25 },
+        6: { cellWidth: 25 },
+        7: { cellWidth: 25 },
+        8: { cellWidth: 20 },
+        9: { cellWidth: 25 },
+        10: { cellWidth: 30 },
+        11: { cellWidth: 30 },
+        12: { cellWidth: 30 },
+        13: { cellWidth: 30 },
       },
       bodyStyles: {
         halign: 'center',
@@ -106,7 +91,7 @@ export default {
         doc.text('MINISTÉRIO DA SAÚDE', data.settings.margin.left + 7, 40);
         doc.text('SERVIÇO NACIONAL DE SAÚDE', data.settings.margin.left, 45);
         doc.setFontSize(16);
-        doc.text('Pacientes Inscritos em DDD (Modelo DDD)', width / 2, 40, {
+        doc.text('Pacientes Activos em DDD (Modelo DDD)', width / 2, 40, {
           align: 'center',
         });
         doc.setFontSize(10);
@@ -149,7 +134,7 @@ export default {
         ? params.value.clinic.clinicname
         : '';
     loadingXLS.value = true;
-    const rows = await reportService.getActivePatients(params);
+    const rows = await reportService.getActivePatientsInDDM(params);
     const data = this.createArrayOfArrayRow(rows);
 
     const workbook = new ExcelJS.Workbook();
@@ -172,13 +157,13 @@ export default {
     const cellPharm = worksheet.getCell('A11');
     const cellDistrict = worksheet.getCell('A12');
     const cellProvince = worksheet.getCell('E12');
-    const cellStartDate = worksheet.getCell('J11');
-    const cellEndDate = worksheet.getCell('J12');
+    const cellStartDate = worksheet.getCell('M11');
+    const cellEndDate = worksheet.getCell('M12');
     const cellPharmParamValue = worksheet.getCell('B11');
     const cellDistrictParamValue = worksheet.getCell('B12');
     const cellProvinceParamValue = worksheet.getCell('F12');
-    const cellStartDateParamValue = worksheet.getCell('K11');
-    const cellEndDateParamValue = worksheet.getCell('K12');
+    const cellStartDateParamValue = worksheet.getCell('N11');
+    const cellEndDateParamValue = worksheet.getCell('N12');
 
     // Get Rows
     const headerRow = worksheet.getRow(15);
@@ -195,6 +180,10 @@ export default {
     const colI = worksheet.getColumn('I');
     const colJ = worksheet.getColumn('J');
     const colK = worksheet.getColumn('K');
+    const colL = worksheet.getColumn('L');
+    const colM = worksheet.getColumn('M');
+    const colN = worksheet.getColumn('N');
+    const colO = worksheet.getColumn('O');
 
     // Format Table Cells
     // Alignment Format
@@ -257,11 +246,15 @@ export default {
 
     // merge a range of cells
     worksheet.mergeCells('A1:A7');
-    worksheet.mergeCells('A9:K10');
-    worksheet.mergeCells('B11:I11');
+    worksheet.mergeCells('A9:N10');
+    worksheet.mergeCells('B11:L11');
     worksheet.mergeCells('B12:D12');
-    worksheet.mergeCells('F12:I12');
-    worksheet.mergeCells('A13:K13');
+    worksheet.mergeCells('F12:L12');
+    worksheet.mergeCells('A13:N13');
+    // worksheet.mergeCells('A13:L13');
+    // worksheet.mergeCells('A13:M13');
+    // worksheet.mergeCells('A13:N13');
+    // worksheet.mergeCells('A13:O13');
 
     // add width size to Columns
     // add height size to Rows
@@ -280,6 +273,10 @@ export default {
     colI.width = 15;
     colJ.width = 15;
     colK.width = 15;
+    colL.width = 15;
+    colM.width = 15;
+    colN.width = 15;
+    colO.width = 15;
 
     // Add Style
     cellTitle.font =
@@ -314,30 +311,43 @@ export default {
       columns: [
         { name: 'Ordem', totalsRowLabel: 'Totals:', filterButton: false },
         { name: 'NID', totalsRowFunction: 'none', filterButton: false },
-        { name: 'Nome', totalsRowFunction: 'none', filterButton: false },
-        { name: 'Idade', totalsRowFunction: 'none', filterButton: false },
         {
-          name: 'Contacto',
+          name: 'Data de Referência',
           totalsRowFunction: 'none',
           filterButton: false,
         },
         {
-          name: 'Linha Terapeutica',
+          name: 'Mêses no MDD',
           totalsRowFunction: 'none',
           filterButton: false,
         },
         {
-          name: 'Regime Terapeutico',
+          name: 'Ultima Data Levant. US',
           totalsRowFunction: 'none',
           filterButton: false,
         },
         {
-          name: 'Data Levant.',
+          name: 'Data Prox. Levant. US',
           totalsRowFunction: 'none',
           filterButton: false,
         },
         {
-          name: 'Data Prox. Levant.',
+          name: 'Primeiro Levant. FP',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Prox. Levant. FP',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Dias de Atraso ao 1º Levant',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Data Prox. Levant. no Período',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -348,6 +358,16 @@ export default {
         },
         {
           name: 'Unidade Sanitária',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Província',
+          totalsRowFunction: 'none',
+          filterButton: false,
+        },
+        {
+          name: 'Distrito',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -414,19 +434,36 @@ export default {
       const createRow = [];
       createRow.push(Ordem);
       createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(rows[row].contact);
-      createRow.push(rows[row].linhanome);
-      createRow.push(rows[row].regime);
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].refdate)
+      );
+      createRow.push(rows[row].numberofmonthsinddd);
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastuspickupdate)
       );
       createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(
+          rows[row].lastusnextpickupdate
+        )
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].firstfppickupdate)
+      );
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(
+          rows[row].firstfpnextpickupdate
+        )
+      );
+      createRow.push(rows[row].missedpickupdays);
+      createRow.push(
+        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(
+          rows[row].expecteddateinreportperiod
+        )
       );
       createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].mainclinicname);
+      createRow.push(rows[row].facilityname);
+      createRow.push(rows[row].province);
+      createRow.push(rows[row].district);
 
       data.push(createRow);
       Ordem += 1;
