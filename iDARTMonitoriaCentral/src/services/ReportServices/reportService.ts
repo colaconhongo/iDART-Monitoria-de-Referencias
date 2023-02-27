@@ -92,6 +92,30 @@ export default {
         return resp.data;
       });
   },
+  getActivePatientsInDDM(params) {
+    const url = `rpc/get_active_patients_in_ddm?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.endDate
+    )}&datainicio=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.startDate
+    )}${this.buildGenericCondition(params)}`;
+    return api()
+      .get(url)
+      .then((resp) => {
+        return resp.data;
+      });
+  },
+  getEnrolledPatientsInDDM(params) {
+    const url = `rpc/get_enrolled_patients_in_mdd?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.endDate
+    )}&datainicio=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.startDate
+    )}${this.buildGenericCondition(params)}`;
+    return api()
+      .get(url)
+      .then((resp) => {
+        return resp.data;
+      });
+  },
   getNotSyncDispenses(params) {
     return api()
       .get(
