@@ -35,7 +35,7 @@
 import { provide, reactive, ref } from 'vue';
 import FiltersInput from 'src/components/Reports/Shared/FiltersInput.vue';
 import Bar from 'src/components/Shared/Bar.vue';
-import reportActivePatients from 'src/services/ReportServices/EnrolledPatientsDDDModel/reportEnrolledPatientsDDDModel';
+import reportEnrolledPatientsDDDModel from 'src/services/ReportServices/EnrolledPatientsDDDModel/reportEnrolledPatientsDDDModel';
 import useUtils from 'src/use/useUtils';
 
 const title = ref('Número de pacientes Inscritos em DDD');
@@ -45,7 +45,7 @@ const loadingXLS = reactive(ref(false));
 
 const generateReport = (params) => {
   if (params.value.fileType === 'PDF') {
-    reportActivePatients.downloadPDF(
+    reportEnrolledPatientsDDDModel.downloadPDF(
       null,
       params.value.province.name,
       useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),
@@ -54,7 +54,7 @@ const generateReport = (params) => {
       loadingPDF
     );
   } else {
-    reportActivePatients.downloadExcel(
+    reportEnrolledPatientsDDDModel.downloadExcel(
       null,
       params.value.province.name,
       useUtils.getDateFormatDDMMYYYYDash(params.value.startDate),

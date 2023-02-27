@@ -6,10 +6,10 @@ import * as ExcelJS from 'exceljs';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
 
-const reportName = 'PacientesActivosEmDDD';
+const reportName = 'PacientesInscritosEmDDD';
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
-const title = 'Listar pacientes activos na farmácia (Modelo DDD)';
+const title = 'Listar pacientes Inscritos na farmácia (Modelo DDD)';
 const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
@@ -40,55 +40,22 @@ export default {
     */
     const cols = [
       'Ordem',
-      'NID',
-      'Nome',
-      'Idade',
-      'Contacto',
-      'Linha Terapeutica',
-      'Regime Terapeutico',
-      'Data Levant.',
-      'Data Prox. Levant.',
+      'Província',
+      'Distrito',
       'Farmácia',
-      'Unidade Sanitária',
+      'Total Inscritos',
     ];
-    const rows = await reportService.getActivePatients(params);
+    const rows = await reportService.getEnrolledPatientsInDDM(params);
     const data = this.createArrayOfArrayRow(rows);
 
-    let Ordem = 1;
-
-    for (const row in rows) {
-      const createRow = [];
-      createRow.push(Ordem);
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(rows[row].contact);
-      createRow.push(rows[row].linhanome);
-      createRow.push(rows[row].regime);
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
-      );
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
-      );
-      createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].mainclinicname);
-      data.push(createRow);
-      Ordem += 1;
-    }
     autoTable(doc, {
       margin: { top: 60 },
       columnStyles: {
-        0: { cellWidth: 18 },
-        1: { cellWidth: 35 },
-        2: { cellWidth: 30 },
-        3: { cellWidth: 15 },
-        4: { cellWidth: 25 },
-        5: { cellWidth: 30 },
-        6: { cellWidth: 30 },
-        7: { cellWidth: 30 },
-        8: { cellWidth: 30 },
-        9: { cellWidth: 30 },
+        0: { cellWidth: 40 },
+        1: { cellWidth: 60 },
+        2: { cellWidth: 60 },
+        3: { cellWidth: 90 },
+        4: { cellWidth: 50 },
       },
       bodyStyles: {
         halign: 'center',
@@ -107,7 +74,7 @@ export default {
         doc.text('SERVIÇO NACIONAL DE SAÚDE', data.settings.margin.left, 45);
         doc.setFontSize(16);
         doc.text(
-          'Listar pacientes activos na farmácia (Modelo DDD)',
+          'Listar pacientes Inscritos na farmácia (Modelo DDD)',
           width / 2,
           40,
           {
@@ -154,7 +121,7 @@ export default {
         ? params.value.clinic.clinicname
         : '';
     loadingXLS.value = true;
-    const rows = await reportService.getActivePatients(params);
+    const rows = await reportService.getEnrolledPatientsInDDM(params);
     const data = this.createArrayOfArrayRow(rows);
 
     const workbook = new ExcelJS.Workbook();
@@ -176,14 +143,14 @@ export default {
     const cellTitle = worksheet.getCell('A9');
     const cellPharm = worksheet.getCell('A11');
     const cellDistrict = worksheet.getCell('A12');
-    const cellProvince = worksheet.getCell('E12');
-    const cellStartDate = worksheet.getCell('J11');
-    const cellEndDate = worksheet.getCell('J12');
+    const cellProvince = worksheet.getCell('C12');
+    const cellStartDate = worksheet.getCell('E11');
+    const cellEndDate = worksheet.getCell('E12');
     const cellPharmParamValue = worksheet.getCell('B11');
     const cellDistrictParamValue = worksheet.getCell('B12');
-    const cellProvinceParamValue = worksheet.getCell('F12');
-    const cellStartDateParamValue = worksheet.getCell('K11');
-    const cellEndDateParamValue = worksheet.getCell('K12');
+    const cellProvinceParamValue = worksheet.getCell('D12');
+    const cellStartDateParamValue = worksheet.getCell('F11');
+    const cellEndDateParamValue = worksheet.getCell('F12');
 
     // Get Rows
     const headerRow = worksheet.getRow(15);
@@ -194,12 +161,6 @@ export default {
     const colC = worksheet.getColumn('C');
     const colD = worksheet.getColumn('D');
     const colE = worksheet.getColumn('E');
-    const colF = worksheet.getColumn('F');
-    const colG = worksheet.getColumn('G');
-    const colH = worksheet.getColumn('H');
-    const colI = worksheet.getColumn('I');
-    const colJ = worksheet.getColumn('J');
-    const colK = worksheet.getColumn('K');
 
     // Format Table Cells
     // Alignment Format
@@ -262,11 +223,7 @@ export default {
 
     // merge a range of cells
     worksheet.mergeCells('A1:A7');
-    worksheet.mergeCells('A9:K10');
-    worksheet.mergeCells('B11:I11');
-    worksheet.mergeCells('B12:D12');
-    worksheet.mergeCells('F12:I12');
-    worksheet.mergeCells('A13:K13');
+    worksheet.mergeCells('A9:F10');
 
     // add width size to Columns
     // add height size to Rows
@@ -274,17 +231,11 @@ export default {
 
     // add height size to Columns
     // add width size to Columns
-    colA.width = 30;
-    colB.width = 20;
-    colC.width = 40;
-    colD.width = 10;
-    colE.width = 20;
-    colF.width = 15;
-    colG.width = 15;
-    colH.width = 15;
-    colI.width = 15;
-    colJ.width = 15;
-    colK.width = 15;
+    colA.width = 15;
+    colB.width = 30;
+    colC.width = 30;
+    colD.width = 30;
+    colE.width = 15;
 
     // Add Style
     cellTitle.font =
@@ -318,41 +269,11 @@ export default {
       },
       columns: [
         { name: 'Ordem', totalsRowLabel: 'Totals:', filterButton: false },
-        { name: 'NID', totalsRowFunction: 'none', filterButton: false },
-        { name: 'Nome', totalsRowFunction: 'none', filterButton: false },
-        { name: 'Idade', totalsRowFunction: 'none', filterButton: false },
+        { name: 'Província', totalsRowFunction: 'none', filterButton: false },
+        { name: 'Distrito', totalsRowFunction: 'none', filterButton: false },
+        { name: 'Farmácia', totalsRowFunction: 'none', filterButton: false },
         {
-          name: 'Contacto',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Linha Terapeutica',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Regime Terapeutico',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Data Levant.',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Data Prox. Levant.',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Farmácia',
-          totalsRowFunction: 'none',
-          filterButton: false,
-        },
-        {
-          name: 'Unidade Sanitária',
+          name: 'Total Inscritos',
           totalsRowFunction: 'none',
           filterButton: false,
         },
@@ -418,20 +339,10 @@ export default {
     for (const row in rows) {
       const createRow = [];
       createRow.push(Ordem);
-      createRow.push(rows[row].patientid);
-      createRow.push(rows[row].fullname);
-      createRow.push(rows[row].age);
-      createRow.push(rows[row].contact);
-      createRow.push(rows[row].linhanome);
-      createRow.push(rows[row].regime);
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].lastpickupdate)
-      );
-      createRow.push(
-        useUtils.getDateFormatDDMMYYYYFromYYYYMMDD(rows[row].nextpickupdate)
-      );
+      createRow.push(rows[row].province);
+      createRow.push(rows[row].district);
       createRow.push(rows[row].clinicname);
-      createRow.push(rows[row].mainclinicname);
+      createRow.push(rows[row].totalenrolled);
 
       data.push(createRow);
       Ordem += 1;
