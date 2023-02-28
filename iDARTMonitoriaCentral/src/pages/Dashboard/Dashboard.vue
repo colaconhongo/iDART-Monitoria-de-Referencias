@@ -35,6 +35,7 @@ import chartReferralByPharmacy from '../../components/Dashboard/BarReportReffere
 import chartDispenseByDrug from '../../components/Dashboard/BarReportDispenseByDrug.vue';
 import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.vue';
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue';
+import PatientService from 'src/services/patientService/patientService';
 
 let district = ref();
 let pharmacy = ref();
@@ -123,7 +124,7 @@ const DDPharmByDistrict = computed(() => {
     let pharmaciesResult;
     if (us.value != null || us.value != undefined) {
       // Query com filtro por US
-      const lst = patientService.getPharmaciesIdsByUS(us.value.uuid);
+      const lst = PatientService.getPharmaciesIdsByUS(us.value.mainclinicuuid);
       pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
     } else {
       // Query com filtro por Distrito apenas
@@ -135,9 +136,9 @@ const DDPharmByDistrict = computed(() => {
   } else return [];
 });
 
-const USByDistrict = computed(() => {
+const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return ClinicService.getAllUSFromDistrict(district.value.name);
+    return PatientService.getUSByPatientsOnDistrict(district.value.name);
   } else return [];
 });
 
@@ -229,7 +230,7 @@ provide('us', us);
 provide('allProvincias', allProvincias);
 provide('province', provincia);
 provide('alldistrictsFromProvince', districtsByProvince);
-provide('allUSFromDistrict', USByDistrict);
+provide('allUSFromDistrict', allUS);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);

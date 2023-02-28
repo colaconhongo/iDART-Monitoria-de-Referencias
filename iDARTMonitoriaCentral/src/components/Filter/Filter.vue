@@ -28,8 +28,8 @@
       class="col q-ml-md"
       v-model="us"
       :options="allUSFromDistrict"
-      option-label="clinicname"
-      option-value="id"
+      option-label="mainclinicname"
+      option-value="mainclinicuuid"
       filled
       clearable
       dense
