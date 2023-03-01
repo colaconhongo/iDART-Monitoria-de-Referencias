@@ -185,7 +185,13 @@ export default {
       .get();
   },
   getPharmaciesByUuidList(uuidList: []) {
-    return clinic.query().whereIn('uuid', uuidList).get();
+    const result = clinic
+      .query()
+      .whereIn('uuid', uuidList)
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+    return result;
   },
   getClinicByID(uuid: string) {
     return clinic.query().where('uuid', uuid).get();

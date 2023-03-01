@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import dist, { useRepo } from 'pinia-orm';
 import Episode from 'src/stores/models/episode/episode';
 import Patient from 'src/stores/models/patient/patient';
@@ -130,7 +131,6 @@ export default {
   },
 
   getPharmaciesIdsByUS(usUuid: string) {
-    // usUuid = 'c9c8c8bb-67b3-41f7-948a-c58ae02dca46'; // Depois remover esta linha
     const result = sync_temp_patients
       .query()
       .where((patient) => {
@@ -138,9 +138,39 @@ export default {
       })
       .groupBy('clinicuuid')
       .get();
+
     const resultPharmaciesIds = Object.keys(result);
 
     return resultPharmaciesIds;
+  },
+
+  getUSByPatientsOnDistrict(district: string) {
+    const result = [];
+
+    let clinics = [];
+    clinics = clinicService.getAllPharmacyFromDistrict(district); // Todas farmacias do distrito
+    clinics = clinics.map((clinic) => clinic.uuid);
+
+    const usResult = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return clinics.includes(patient.clinicuuid);
+      })
+      .groupBy('mainclinicname', 'mainclinicuuid')
+      .get();
+
+    for (const item of Object.keys(usResult)) {
+      const minhaString = item;
+      const partes = minhaString.split(/[\[,]/);
+      const mainclinicname = partes[1].trim();
+      const mainclinicuuid = partes[2].replace(']', '').trim();
+      result.push({
+        mainclinicname: mainclinicname,
+        mainclinicuuid: mainclinicuuid,
+      });
+    }
+
+    return result;
   },
 
   getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
@@ -192,6 +222,38 @@ export default {
       })
       .orderBy('prescriptiondate', 'desc')
       .get();
+
+    if (
+      currPatient.patientid.length > 0 ||
+      currPatient.firstnames.length > 0 ||
+      currPatient.lastname.length > 0
+    ) {
+      patients = patients.filter((patient) => {
+        return this.filterPatient(patient, currPatient);
+      });
+    }
+    return patients;
+  },
+
+  getPatientsByDistrictAndUSFromLocalStorage(
+    usName: string,
+    pharmacy: Clinic,
+    currPatient: Patient
+  ) {
+    let patients = sync_temp_patients
+      .query()
+      .where('mainclinicname', usName)
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+
+    if (pharmacy.value !== null && pharmacy.value !== undefined) {
+      patients = sync_temp_patients
+        .query()
+        .where('mainclinicname', usName)
+        .where('clinicname', pharmacy.value.clinicname)
+        .orderBy('prescriptiondate', 'desc')
+        .get();
+    }
 
     if (
       currPatient.patientid.length > 0 ||

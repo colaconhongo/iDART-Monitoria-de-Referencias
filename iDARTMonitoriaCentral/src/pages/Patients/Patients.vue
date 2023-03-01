@@ -58,7 +58,7 @@ const DDPharmByDistrict = computed(() => {
     let pharmaciesResult;
     if (us.value != null || us.value != undefined) {
       // Query com filtro por US
-      const lst = PatientService.getPharmaciesIdsByUS(us.value.uuid);
+      const lst = PatientService.getPharmaciesIdsByUS(us.value.mainclinicuuid);
       pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
     } else {
       // Query com filtro por Distrito apenas
@@ -137,9 +137,9 @@ const goBack = () => {
   activePatientList.value = true;
 };
 
-const USByDistrict = computed(() => {
+const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return ClinicService.getAllUSFromDistrict(district.value.name);
+    return PatientService.getUSByPatientsOnDistrict(district.value.name);
   } else return [];
 });
 
@@ -154,7 +154,7 @@ provide('district', district);
 provide('pharmacy', pharmacy);
 provide('alldistrictsFromProvince', districtsByProvince);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
-provide('allUSFromDistrict', USByDistrict);
+provide('allUSFromDistrict', allUS);
 provide('us', us);
 provide('goBack', goBack);
 provide('yearsToShow', yearsToShow);

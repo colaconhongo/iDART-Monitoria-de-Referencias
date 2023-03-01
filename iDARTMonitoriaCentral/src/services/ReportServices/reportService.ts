@@ -79,15 +79,12 @@ export default {
         return resp.data;
       });
   },
-  getInactivePatients(params) {
+  getInactivePatientsInDD(params) {
+    const url = `rpc/get_inactive_patients_in_ddm?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
     return api()
-      .get(
-        `returned_refered_patients_vw?returndate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
-          params.value.startDate
-        )}&returndate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
-          params.value.endDate
-        )}${this.buildGenericCondition(params)}`
-      )
+      .get(url)
       .then((resp) => {
         return resp.data;
       });

@@ -30,6 +30,7 @@ import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
 import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
+import { SessionStorage } from 'quasar';
 import Patient from 'src/stores/models/patient/patient';
 import useUtils from 'src/use/useUtils';
 /*
@@ -44,6 +45,7 @@ const viewPatient = inject('viewPatient');
 const title = inject('titleList');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
 
 const columns = [
   {
@@ -117,11 +119,19 @@ onUpdated ==
   Computed
 */
 const allPatients = computed(() => {
-  return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(
-    district,
-    pharmacy,
-    currPatient
-  );
+  if (us.value !== null && us.value !== undefined) {
+    return patientService.getPatientsByDistrictAndUSFromLocalStorage(
+      us.value.mainclinicname,
+      pharmacy,
+      currPatient
+    );
+  } else {
+    return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(
+      district,
+      pharmacy,
+      currPatient
+    );
+  }
 });
 
 /*
