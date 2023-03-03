@@ -9,7 +9,7 @@ import useUtils from 'src/use/useUtils';
 const reportName = 'PacientesActivosEmDDD';
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
-const title = 'Pacientes Inscritos em DDD (Modelo DDD)';
+const title = 'Pacientes Activos em DDD (Modelo DDD)';
 const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
