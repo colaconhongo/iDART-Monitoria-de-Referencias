@@ -9,7 +9,7 @@ import useUtils from 'src/use/useUtils';
 const reportName = 'PacientesInscritosEmDDD';
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
-const title = 'Listar pacientes Inscritos na farmácia (Modelo DDD)';
+const title = 'Total pacientes Inscritos na farmácia (Modelo DDD)';
 const fileName = reportName.concat(
   '_' + useUtils.getDateFormatDDMMYYYY(new Date())
 );
@@ -74,7 +74,7 @@ export default {
         doc.text('SERVIÇO NACIONAL DE SAÚDE', data.settings.margin.left, 45);
         doc.setFontSize(16);
         doc.text(
-          'Listar pacientes Inscritos na farmácia (Modelo DDD)',
+          'Total pacientes Inscritos na farmácia (Modelo DDD)',
           width / 2,
           40,
           {
