@@ -80,7 +80,9 @@ export default {
       });
   },
   getInactivePatientsInDD(params) {
-    const url = `rpc/get_inactive_patients_in_ddm?datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+    const url = `rpc/get_inactive_patients_in_ddm?datainicio=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.startDate
+    )}&datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
     )}${this.buildGenericCondition(params)}`;
     return api()
