@@ -3,6 +3,7 @@ import autoTable from 'jspdf-autotable';
 import reportService from '../reportService';
 import useUtils from 'src/use/useUtils';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
+import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 
 const title = 'Ficha Individual de Levantamento de ARVs ( FILA)';
 const reportName = 'fila';
@@ -136,7 +137,18 @@ export default {
       body: data,
     });
     loadingPDF.value = false;
-    return doc.save(fileName.concat('.pdf'));
+
+    if (data.length > 0) {
+      return doc.save(fileName.concat('.pdf'));
+    } else {
+      alert(
+        'O Relatório está vazio!',
+        'O relatório que pretende gerar não contém dados \n Por favor, verifique os parametros de pesquisa.',
+        null,
+        null,
+        null
+      );
+    }
   },
 
   createArrayOfArrayRow(rows: any) {
