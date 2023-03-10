@@ -5,6 +5,7 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
+import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 
 const reportName = 'PacientesInscritosEmDDD';
 const logoTitle =
@@ -106,7 +107,18 @@ export default {
       body: data,
     });
     loadingPDF.value = false;
-    return doc.save(fileName.concat('.pdf'));
+
+    if (data.length > 0) {
+      return doc.save(fileName.concat('.pdf'));
+    } else {
+      alert(
+        'O Relatório está vazio!',
+        'O relatório que pretende gerar não contém dados \n Por favor, verifique os parametros de pesquisa.',
+        null,
+        null,
+        null
+      );
+    }
   },
   async downloadExcel(
     facility: string,
@@ -330,7 +342,18 @@ export default {
     const blob = new Blob([buffer], { type: fileType });
     loadingXLS.value = false;
 
-    saveAs(blob, fileName + fileExtension);
+    if (data.length > 0) {
+      saveAs(blob, fileName + fileExtension);
+    } else {
+      alert(
+        'O Relatório está vazio!',
+        'O relatório que pretende gerar não contém dados \n Por favor, verifique os parametros de pesquisa.',
+        null,
+        null,
+        null
+      );
+      return;
+    }
   },
   createArrayOfArrayRow(rows: any) {
     const data = [];

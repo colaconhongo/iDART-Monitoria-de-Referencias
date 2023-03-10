@@ -38,7 +38,7 @@ import reportInactivePatients from 'src/services/ReportServices/inactivePatients
 import useUtils from 'src/use/useUtils';
 
 const title = ref('Listar pacientes inactivos na farmácia (Modelo DDD)');
-const description = ref('Pacientes inactivos em DDD há mais de 6 meses');
+const description = ref('Pacientes inactivos em DDD a mais de 6 meses');
 const loadingPDF = reactive(ref(false));
 const loadingXLS = reactive(ref(false));
 

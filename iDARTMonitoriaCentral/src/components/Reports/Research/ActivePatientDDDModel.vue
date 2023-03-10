@@ -38,7 +38,7 @@ import reportActivePatients from 'src/services/ReportServices/activePatientsDDDM
 import useUtils from 'src/use/useUtils';
 
 const title = ref('Listar pacientes activos na farmácia (Modelo DDD)');
-const description = ref('Pacientes activos em DDD ha mais de 6 meses');
+const description = ref('Pacientes activos em DDD a mais de 6 meses');
 const loadingPDF = reactive(ref(false));
 const loadingXLS = reactive(ref(false));
 
