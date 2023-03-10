@@ -156,7 +156,7 @@
                   <q-img src="../../assets/logo_graphic.png" />
                 </q-avatar>
               </div>
-              <div class="row justify-center">Versão v.1.2.0</div>
+              <div class="row justify-center">Versão v.1.3.0-SNAPSHOT</div>
             </q-card-section>
           </q-card>
         </transition>

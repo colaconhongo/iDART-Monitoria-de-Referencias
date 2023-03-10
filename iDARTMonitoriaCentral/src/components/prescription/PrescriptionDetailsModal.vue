@@ -79,7 +79,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: 'Prescrições',
+    default: 'Dispensas',
   },
   patient: {
     type: Object,

@@ -69,7 +69,7 @@
             patient.prescriptiondate === null ||
             patient.prescriptiondate === undefined
               ? 'Não definido '
-              : useUtils.getDateFormatDDMMYYYY(patient.prescriptiondate)
+              : useUtils.getNewDateFormatDDMMYYYY(patient.prescriptiondate)
           }}</span>
         </div>
         <div style="text-align: left">Farmácia de Referência</div>
