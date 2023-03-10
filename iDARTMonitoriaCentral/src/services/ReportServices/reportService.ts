@@ -84,7 +84,7 @@ export default {
       params.value.startDate
     )}&datafim=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.endDate
-    )}${this.buildGenericCondition(params)}`;
+    )}${this.buildGenericFuncCondition(params)}`;
     return api()
       .get(url)
       .then((resp) => {
@@ -96,7 +96,7 @@ export default {
       params.value.endDate
     )}&datainicio=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.startDate
-    )}${this.buildGenericCondition(params)}`;
+    )}${this.buildGenericFuncCondition(params)}`;
     return api()
       .get(url)
       .then((resp) => {
@@ -108,7 +108,7 @@ export default {
       params.value.endDate
     )}&datainicio=${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
       params.value.startDate
-    )}${this.buildGenericCondition(params)}`;
+    )}${this.buildGenericFuncCondition(params)}`;
     return api()
       .get(url)
       .then((resp) => {

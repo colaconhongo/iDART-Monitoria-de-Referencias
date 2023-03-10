@@ -174,4 +174,7 @@ export default {
   getDateFormatDDMMYYYYDash(date) {
     return moment(date, 'DD-MM-YYYY').format('DD/MM/YYYY');
   },
+  getNewDateFormatDDMMYYYY(date) {
+    return moment(date).format('DD-MM-YYYY');
+  },
 };

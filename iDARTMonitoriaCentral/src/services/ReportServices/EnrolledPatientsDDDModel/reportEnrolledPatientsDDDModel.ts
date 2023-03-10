@@ -340,7 +340,7 @@ export default {
       const createRow = [];
       createRow.push(Ordem);
       createRow.push(rows[row].province);
-      createRow.push(rows[row].district);
+      createRow.push(rows[row].clinic_district);
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].totalenrolled);
 

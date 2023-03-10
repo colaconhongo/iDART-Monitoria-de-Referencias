@@ -463,7 +463,7 @@ export default {
       createRow.push(rows[row].clinicname);
       createRow.push(rows[row].facilityname);
       createRow.push(rows[row].province);
-      createRow.push(rows[row].district);
+      createRow.push(rows[row].clinic_district);
 
       data.push(createRow);
       Ordem += 1;
