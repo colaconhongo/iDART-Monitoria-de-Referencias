@@ -42,6 +42,7 @@
 import ListReportMenu from 'src/components/Reports/Menu/ListReportMenu.vue';
 import ReferedPatientsList from 'src/components/Reports/ReferedPatientsList.vue';
 import ReturnedReferedPatient from 'src/components/Reports/ReturnedReferedPatient.vue';
+import ReferedPatientsClinicSectorList from 'src/components/Reports/ReferedPatientsClinicSectorList.vue';
 import PatientsWithMissDispenses from 'src/components/Reports/PatientsWithMissDispenses.vue';
 import PatientDispenseHistory from 'src/components/Reports/PatientDispenseHistory.vue';
 import DispenseByDrugAndRegimen from 'src/components/Reports/DispenseByDrugAndRegimen.vue';
@@ -110,6 +111,7 @@ const reportComps = {
   ActivePatientDDDModel,
   InactivePatientDDDModel,
   EnrolledPatientIndicator,
+  ReferedPatientsClinicSectorList,
 };
 
 const district = reactive(ref());
