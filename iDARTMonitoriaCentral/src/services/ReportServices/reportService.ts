@@ -20,6 +20,18 @@ export default {
         return resp.data;
       });
   },
+  getReferedPatientsClinicSectorReport(params) {
+    const url = `refered_patients_clinic_sector_vw?referaldate=gte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.startDate
+    )}&referaldate=lte.${useUtils.getDateFormatYYYYMMDDFromDDMMYYYY(
+      params.value.endDate
+    )}${this.buildGenericCondition(params)}`;
+    return api()
+      .get(url)
+      .then((resp) => {
+        return resp.data;
+      });
+  },
   getReturnedReferedPatient(params) {
     return api()
       .get(

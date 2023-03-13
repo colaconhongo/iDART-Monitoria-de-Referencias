@@ -48,6 +48,10 @@ const menu = ref([
     tabName: 'ReferedPatientsList',
   },
   {
+    description: 'Lista de Pacientes Referidos para Sectores Clinicos',
+    tabName: 'ReferedPatientsClinicSectorList',
+  },
+  {
     description: 'Lista de Pacientes que Voltaram da Referência',
     tabName: 'ReturnedReferedPatient',
   },
