@@ -85,15 +85,39 @@ const props = defineProps({
 const year = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
+const selectedModel = inject('selectedModel');
+let allDispenses = [];
 
-watch(props.loaded, () => {
+watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
-    const allDispenses =
-      DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        year.value,
-        district,
-        pharmacy
-      );
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            year.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            year.value,
+            district,
+            pharmacy,
+            null
+          );
+      }
+    } else {
+      allDispenses =
+        DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          year.value,
+          district,
+          pharmacy
+        );
+    }
+
     let resultDrugs = groupedMap(allDispenses, 'drugname');
     // dispense by drug
     const keysByDrug = Array.from(resultDrugs.keys());

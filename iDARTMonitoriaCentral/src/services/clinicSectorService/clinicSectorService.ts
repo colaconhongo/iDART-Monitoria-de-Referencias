@@ -139,4 +139,13 @@ export default {
   getAllFromStorage() {
     return clinicsector.all();
   },
+
+  getAllBySectorTypeFromStorage(sectorType_id: number) {
+    return clinicsector.query().where('clinicsectortype', sectorType_id).get();
+  },
+
+  getAllByClinicUuidFromStorage(clinicuuid: String) {
+    return clinicsector.query().where('clinicsectortype', clinicuuid).get();
+  },
+
 };

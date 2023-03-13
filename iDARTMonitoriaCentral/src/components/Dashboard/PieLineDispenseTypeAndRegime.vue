@@ -52,7 +52,8 @@ const monthsX = [
   'DEC',
 ];
 const apexchart = VueApexCharts;
-
+const us = inject('us');
+const selectedModel = inject('selectedModel');
 const chartOptionsRegimeType = {
   // ApexCharts options
   chart: {
@@ -174,18 +175,40 @@ const yearAnnualPeriod = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 
-watch(props.loaded, (newCount) => {
+watch([props.loaded, selectedModel], (newCount) => {
   if (props.loaded) {
     const dispenseToRegime = [];
     const dispenseSemestral = [];
     const dispenseTrimestral = [];
     const dispenseMensal = [];
-    const allDispenses =
-      DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
+    let allDispenses = [];
+
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            null
+          );
+      }
+    } else {
+      allDispenses =
+        DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    }
     let resultDispenses1 = groupedMap(allDispenses, 'patientid');
     const mapIter = resultDispenses1.values();
     for (const item of mapIter) {

@@ -125,4 +125,49 @@ export default {
 
     return dispenses;
   },
+
+  getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic,
+    usUuid: string
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let patients: any[] = [];
+
+    if (usUuid !== null && usUuid !== undefined) {
+      patients =
+        patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          year,
+          district,
+          pharmacy,
+          usUuid
+        );
+    } else {
+      patients =
+        patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          year,
+          district,
+          pharmacy
+        );
+    }
+
+    patients = patients.map((patient) => patient.uuidopenmrs);
+    const dispenses = sync_temp_dispense
+      .query()
+      .where((dispense) => {
+        return (
+          new Date(dispense.dispensedate) >= startDate &&
+          new Date(dispense.dispensedate) <= endDate &&
+          patients.includes(dispense.uuidopenmrs)
+        );
+      })
+      .orderBy('dispensedate', 'desc')
+      .get();
+
+    return dispenses;
+  },
 };

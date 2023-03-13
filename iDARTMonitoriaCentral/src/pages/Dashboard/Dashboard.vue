@@ -2,6 +2,19 @@
   <div class="q-pa-sm q-gutter-md">
     <Filter :isDashboard="isDashboard" />
     <q-bar dense dark class="bg-primary"> </q-bar>
+    <div class="row">
+      <q-space />
+      <q-select
+        class="col-2 q-my-md"
+        dense
+        outlined
+        option-label="description"
+        v-model="selectedModel"
+        :options="dispenseModels"
+        label="Tipo de Modelo de Dispensa"
+      />
+    </div>
+    <q-separator color="grey-13" size="1px" />
     <totalSummary />
     <chartReferralByPharmacy v-model:loaded="loaded" />
     <chartDispenseByDrug v-model:loaded="loaded" />
@@ -47,6 +60,26 @@ const isDashboard = ref(true);
 let loaded = reactive({
   loaded: false,
 });
+
+const selectedModel = reactive(
+  ref({
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  })
+);
+const dispenseModels = ref([
+  {
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  },
+  {
+    id: 1,
+    description: 'Distribuição Comunitária',
+    abbreviation: 'MDC',
+  },
+]);
 
 /*
   Watch
@@ -234,6 +267,8 @@ provide('allUSFromDistrict', allUS);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
+provide('selectedModel', selectedModel);
+provide('dispenseModels', dispenseModels);
 </script>
 
 <style lang="scss" scoped>
