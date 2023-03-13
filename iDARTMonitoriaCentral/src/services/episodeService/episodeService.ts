@@ -6,6 +6,7 @@ import Clinic from 'src/stores/models/clinic/clinic';
 import ClinicService from 'src/services/clinicService/clinicService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 import useUtils from 'src/use/useUtils';
+import clinicSectorService from '../clinicSectorService/clinicSectorService';
 
 const sync_temp_episode = useRepo(Episode);
 
@@ -146,6 +147,82 @@ export default {
           new Date(sync_temp_episode.startdate) >= startDate &&
           new Date(sync_temp_episode.startdate) <= endDate &&
           clinics.includes(sync_temp_episode.clinicuuid)
+        );
+      })
+      .orderBy('startdate', 'desc')
+      .get();
+
+    episodes.forEach((ep) => {
+      if (lastEpisodes.length === 0) {
+        lastEpisodes.push(ep);
+      }
+    });
+
+    return episodes;
+  },
+
+  getDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic,
+    usUuid: string
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+    // const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    // const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
+
+    const lastEpisodes = [];
+
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    const episodes = sync_temp_episode
+      .query()
+      .where((sync_temp_episode) => {
+        return (
+          new Date(sync_temp_episode.startdate) >= startDate &&
+          new Date(sync_temp_episode.startdate) <= endDate &&
+          clinicSectors.includes(sync_temp_episode.clinicuuid) &&
+          sync_temp_episode.usuuid === usUuid
+        );
+      })
+      .orderBy('startdate', 'desc')
+      .get();
+
+    episodes.forEach((ep) => {
+      if (lastEpisodes.length === 0) {
+        lastEpisodes.push(ep);
+      }
+    });
+
+    return episodes;
+  },
+
+  getAllDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+    // const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
+    // const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
+
+    const lastEpisodes = [];
+
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    const episodes = sync_temp_episode
+      .query()
+      .where((sync_temp_episode) => {
+        return (
+          new Date(sync_temp_episode.startdate) >= startDate &&
+          new Date(sync_temp_episode.startdate) <= endDate &&
+          clinicSectors.includes(sync_temp_episode.clinicuuid)
         );
       })
       .orderBy('startdate', 'desc')

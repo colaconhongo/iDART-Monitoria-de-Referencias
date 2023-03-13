@@ -84,15 +84,37 @@ const props = defineProps({
 const yearAnnualPeriod = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
+const selectedModel = inject('selectedModel');
+let patients = [];
 
-watch(props.loaded, () => {
+watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
-    let patients =
-      patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        patients =
+          patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        patients =
+          patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      }
+    } else {
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    }
     let resultPatientsByClinicUuid = groupedMap(patients, 'clinicuuid');
     let resultPatientsByPatientId = groupedMap(patients, 'patientid');
 

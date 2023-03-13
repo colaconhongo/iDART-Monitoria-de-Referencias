@@ -45,6 +45,8 @@ const total = inject('total');
 const yearAnnualPeriod = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
+const selectedModel = inject('selectedModel');
 
 const chartOptions = {
   chart: {
@@ -77,25 +79,60 @@ const chartOptions = {
   },
 };
 
-watch(props.loaded, () => {
+watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
     const patientsToCount = [];
     const patientMale = [];
     const patientFemale = [];
-    const endEpisodes =
-      EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
+    let endEpisodes = [];
+    let patients = [];
+
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        endEpisodes =
+          EpisodeService.getDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+        patients =
+          patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        endEpisodes =
+          EpisodeService.getAllDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+        patients =
+          patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      }
+    } else {
+      endEpisodes =
+        EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    }
     const endEpisodeMonthly =
       DashboardUtils.organizeEpisodesByMonth(endEpisodes);
-    const patients =
-      patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
 
     let resultPatients1 = groupedMap(patients, 'patientid');
     const mapIter1 = resultPatients1.values();
