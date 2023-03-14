@@ -44,7 +44,6 @@ const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
 
-provide('show_dialog', show_dialog);
 const editedIndex = reactive(ref(0));
 const patient = inject('patient');
 
@@ -145,4 +144,7 @@ const visualizar = (prescriptionEntity) => {
   editedIndex.value = 1;
   prescription.value = prescriptionEntity;
 };
+
+provide('show_dialog', show_dialog);
+provide('prescription', prescription);
 </script>

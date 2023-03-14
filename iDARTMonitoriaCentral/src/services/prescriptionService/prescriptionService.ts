@@ -57,4 +57,13 @@ export default {
       .get();
     return list;
   },
+  getPrescriptionsByPrescriptionId(prescriptionid: string, patientid: string) {
+    const list = sync_temp_dispense
+      .query()
+      .where('prescriptionid', prescriptionid)
+      .where('patientid', patientid)
+      .orderBy('pickupdate', 'desc')
+      .get();
+    return list;
+  },
 };
