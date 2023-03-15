@@ -125,30 +125,67 @@ export default {
 
     return dispenses;
   },
-
-  getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+  getDispensesFromLocalStorage(
+    us: string,
     year: number,
     district: District,
-    pharmacy: Clinic,
-    usUuid: string
+    pharmacy: Clinic
+
+    // getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //   year: number,
+    //   district: District,
+    //   pharmacy: Clinic,
+    //   usUuid: string
   ) {
     const yearBefore = year - 1;
     const startDate = new Date('12-21-' + yearBefore);
     const endDate = new Date('12-20-' + year);
 
-    let patients: any[] = [];
-
-    if (usUuid !== null && usUuid !== undefined) {
+    let patients = [];
+    if (
+      pharmacy.value !== null &&
+      pharmacy.value !== undefined &&
+      us !== null &&
+      us !== undefined &&
+      us !== ''
+    ) {
       patients =
-        patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+        patientService.getPatientsByYearAndUSAndDistrictAndPharmacyFromLocalStorage(
+          us,
           year,
           district,
-          pharmacy,
-          usUuid
+          pharmacy
+        );
+    } else if (pharmacy.value !== null && pharmacy.value !== undefined) {
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+          year,
+          district,
+          pharmacy
+        );
+    } else if (us !== null && us !== undefined && us !== '') {
+      patients =
+        patientService.getPatientsByYearAndUSAndDistrictFromLocalStorage(
+          us,
+          year,
+          district
         );
     } else {
       patients =
-        patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          // let patients: any[] = [];
+
+          // if (usUuid !== null && usUuid !== undefined) {
+          //   patients =
+          //     patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //       year,
+          //       district,
+          //       pharmacy,
+          //       usUuid
+          //     );
+          // } else {
+          //   patients =
+          // patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
           year,
           district,
           pharmacy
@@ -163,6 +200,46 @@ export default {
           new Date(dispense.dispensedate) >= startDate &&
           new Date(dispense.dispensedate) <= endDate &&
           patients.includes(dispense.uuidopenmrs)
+        );
+      })
+      .orderBy('dispensedate', 'desc')
+      .get();
+
+    return dispenses;
+  },
+  getDispensesByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+    us: Clinic,
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let patients = [];
+    if (pharmacy.value !== null && pharmacy.value !== undefined) {
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+          year,
+          district,
+          pharmacy
+        );
+    } else {
+      patients =
+        patientService.getPatientsByYearAndUSAndDistrictFromLocalStorage(
+          us,
+          year,
+          district
+        );
+    }
+    patients = patients.map((patient) => patient.uuidopenmrs);
+    const dispenses = sync_temp_dispense
+      .query()
+      .where((dispense) => {
+        return (
+          new Date(dispense.dispensedate) >= startDate &&
+          new Date(dispense.dispensedate) <= endDate // &&  patients.includes(dispense.uuidopenmrs)
         );
       })
       .orderBy('dispensedate', 'desc')

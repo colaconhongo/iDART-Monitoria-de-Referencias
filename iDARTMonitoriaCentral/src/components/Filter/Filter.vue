@@ -34,6 +34,7 @@
       clearable
       dense
       @clear="clearUs()"
+      @update:model-value="onChangeUS"
     />
     <SelectField
       :label="pharmacyLabel"
@@ -99,6 +100,12 @@ const clearDistrict = () => {
 const clearPharmacy = () => {
   SessionStorage.remove('pharmacy');
   // pharmacy.value = null;
+};
+
+const onChangeUS = () => {
+  clearPharmacy();
+  allPhamacyFromFacility.value = [];
+  pharmacy.value = null;
 };
 
 const clearUs = () => {

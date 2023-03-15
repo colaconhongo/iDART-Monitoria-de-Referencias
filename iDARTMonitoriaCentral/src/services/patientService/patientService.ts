@@ -144,6 +144,17 @@ export default {
     return resultPharmaciesIds;
   },
 
+  getPatientsOnMainClinic(mainclinicname: string) {
+    const res = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return patient.mainclinicname === mainclinicname;
+      })
+      .get();
+
+    return res;
+  },
+
   getUSByPatientsOnDistrict(district: string) {
     const result = [];
 
@@ -171,6 +182,103 @@ export default {
     }
 
     return result;
+  },
+  // US, Year, District and pharmacy
+  getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let clinics = [];
+
+    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+      district,
+      pharmacy
+    );
+
+    clinics = clinics.map((clinic) => clinic.uuid);
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinics.includes(patient.clinicuuid)
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    return patients;
+  },
+
+  // Only US, Year, District
+  getPatientsByYearAndUSAndDistrictFromLocalStorage(
+    us: string,
+    year: number,
+    district: District
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let clinics = [];
+
+    clinics = ClinicService.getDDUSDistrictAndPharmFromLocalStorage(
+      district,
+      us
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinics.includes(patient.clinicuuid)
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    return patients;
+  },
+
+  getPatientsByYearAndUSAndDistrictAndPharmacyFromLocalStorage(
+    us: string,
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let clinics = [];
+
+    clinics = ClinicService.getDDUSDistrictAndPharmFromLocalStorage(
+      district,
+      us
+    );
+    clinics = clinics.map((clinic) => clinic.uuid);
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinics.includes(patient.clinicuuid) &&
+          patient.clinicname === pharmacy.value.clinicname
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    return patients;
   },
 
   getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(

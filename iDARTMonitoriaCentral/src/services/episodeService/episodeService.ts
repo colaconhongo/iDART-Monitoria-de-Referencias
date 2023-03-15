@@ -122,6 +122,7 @@ export default {
   },
 
   getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    us,
     year: number,
     district: District,
     pharmacy: Clinic
@@ -135,22 +136,53 @@ export default {
     let clinics = [];
     const lastEpisodes = [];
 
-    clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
-      district,
-      pharmacy
-    );
+    if (us !== '' && us !== null && us !== undefined) {
+      clinics = ClinicService.getDDUSDistrictAndPharmFromLocalStorage(
+        district,
+        us
+      );
+    } else {
+      clinics = ClinicService.getDDPharmByDistrictAndPharmFromLocalStorage(
+        district,
+        pharmacy
+      );
+    }
+
     clinics = clinics.map((clinic) => clinic.uuid);
-    const episodes = sync_temp_episode
-      .query()
-      .where((sync_temp_episode) => {
-        return (
-          new Date(sync_temp_episode.startdate) >= startDate &&
-          new Date(sync_temp_episode.startdate) <= endDate &&
-          clinics.includes(sync_temp_episode.clinicuuid)
-        );
-      })
-      .orderBy('startdate', 'desc')
-      .get();
+
+    let episodes = [];
+    if (
+      us !== '' &&
+      us !== null &&
+      us !== undefined &&
+      pharmacy.value !== null &&
+      pharmacy.value !== undefined
+    ) {
+      episodes = sync_temp_episode
+        .query()
+        .where((sync_temp_episode) => {
+          return (
+            new Date(sync_temp_episode.startdate) >= startDate &&
+            new Date(sync_temp_episode.startdate) <= endDate &&
+            clinics.includes(sync_temp_episode.clinicuuid) &&
+            sync_temp_episode.clinicuuid === pharmacy.value.clinicname
+          );
+        })
+        .orderBy('startdate', 'desc')
+        .get();
+    } else {
+      episodes = sync_temp_episode
+        .query()
+        .where((sync_temp_episode) => {
+          return (
+            new Date(sync_temp_episode.startdate) >= startDate &&
+            new Date(sync_temp_episode.startdate) <= endDate &&
+            clinics.includes(sync_temp_episode.clinicuuid)
+          );
+        })
+        .orderBy('startdate', 'desc')
+        .get();
+    }
 
     episodes.forEach((ep) => {
       if (lastEpisodes.length === 0) {

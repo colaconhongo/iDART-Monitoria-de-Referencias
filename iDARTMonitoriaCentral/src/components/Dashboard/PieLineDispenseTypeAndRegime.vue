@@ -52,7 +52,7 @@ const monthsX = [
   'DEC',
 ];
 const apexchart = VueApexCharts;
-const us = inject('us');
+// const us = inject('us');
 const selectedModel = inject('selectedModel');
 const chartOptionsRegimeType = {
   // ApexCharts options
@@ -174,6 +174,7 @@ const props = defineProps({
 const yearAnnualPeriod = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
 
 watch([props.loaded, selectedModel], (newCount) => {
   if (props.loaded) {
@@ -183,32 +184,54 @@ watch([props.loaded, selectedModel], (newCount) => {
     const dispenseMensal = [];
     let allDispenses = [];
 
-    if (selectedModel.value.id === 1) {
-      if (us.value !== null && us.value !== undefined) {
-        allDispenses =
-          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-            yearAnnualPeriod.value,
-            district,
-            pharmacy,
-            us.value.mainclinicuuid
-          );
-      } else {
-        allDispenses =
-          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-            yearAnnualPeriod.value,
-            district,
-            pharmacy,
-            null
-          );
-      }
+    if (us.value !== null && us.value !== undefined) {
+      allDispenses = DispenseService.getDispensesFromLocalStorage(
+        us.value.mainclinicname,
+        yearAnnualPeriod.value,
+        district,
+        pharmacy
+      );
     } else {
-      allDispenses =
-        DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-          yearAnnualPeriod.value,
-          district,
-          pharmacy
-        );
+      allDispenses = DispenseService.getDispensesFromLocalStorage(
+        '',
+        yearAnnualPeriod.value,
+        district,
+        pharmacy
+      );
     }
+    // const allDispenses =
+    //   DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    //     yearAnnualPeriod.value,
+    //     district,
+    //     pharmacy
+    //   );
+    // if (selectedModel.value.id === 1) {
+    //   if (us.value !== null && us.value !== undefined) {
+    //     allDispenses =
+    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy,
+    //         us.value.mainclinicuuid
+    //       );
+    //   } else {
+    //     allDispenses =
+    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy,
+    //         null
+    //       );
+    //   }
+    // } else {
+    //   allDispenses =
+    //     DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    //       yearAnnualPeriod.value,
+    //       district,
+    //       pharmacy
+    //     );
+    // }
+
     let resultDispenses1 = groupedMap(allDispenses, 'patientid');
     const mapIter = resultDispenses1.values();
     for (const item of mapIter) {
