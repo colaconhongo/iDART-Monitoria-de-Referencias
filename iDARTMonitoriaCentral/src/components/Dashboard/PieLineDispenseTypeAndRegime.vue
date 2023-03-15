@@ -52,7 +52,7 @@ const monthsX = [
   'DEC',
 ];
 const apexchart = VueApexCharts;
-const us = inject('us');
+// const us = inject('us');
 const selectedModel = inject('selectedModel');
 const chartOptionsRegimeType = {
   // ApexCharts options
