@@ -86,11 +86,11 @@ const year = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 const us = inject('us');
+const selectedModel = inject('selectedModel');
+let allDispenses = [];
 
-watch(props.loaded, () => {
+watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
-    let allDispenses = [];
-
     if (us.value !== null && us.value !== undefined) {
       allDispenses = DispenseService.getDispensesFromLocalStorage(
         us.value.mainclinicname,
@@ -107,33 +107,31 @@ watch(props.loaded, () => {
       );
     }
 
-    // if (
-    //   pharmacy.value !== null &&
-    //   pharmacy.value !== undefined &&
-    //   us.value !== null &&
-    //   us.value !== undefined
-    // ) {
-    //   console.log('US selected AND Pharmacy SELECTED', pharmacy);
-    //   allDispenses =
-    //     DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
-    //       us.value,
-    //       year.value,
-    //       district,
-    //       pharmacy
-    //     );
-    // } else if (pharmacy.value !== null && pharmacy.value !== undefined) {
-    //   console.log('US NOT selected AND Pharmacy SELECTED', pharmacy);
+    // if (selectedModel.value.id === 1) {
+    //   if (us.value !== null && us.value !== undefined) {
+    //     allDispenses =
+    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         year.value,
+    //         district,
+    //         pharmacy,
+    //         us.value.mainclinicuuid
+    //       );
+    //   } else {
+    //     allDispenses =
+    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         year.value,
+    //         district,
+    //         pharmacy,
+    //         null
+    //       );
+    //   }
+    // } else {
     //   allDispenses =
     //     DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
     //       year.value,
     //       district,
     //       pharmacy
     //     );
-    // } else if (us.value !== null && us.value !== undefined) {
-    //   console.log('US selected AND Pharmacy NOT SELECTED');
-
-    // } else {
-    //   console.log('US NOT selected AND Pharmacy NOT SELECTED');
     // }
 
     let resultDrugs = groupedMap(allDispenses, 'drugname');

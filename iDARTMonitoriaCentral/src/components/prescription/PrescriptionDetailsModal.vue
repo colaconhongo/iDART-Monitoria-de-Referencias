@@ -26,7 +26,7 @@
                         :columns="columns"
                         :mode="mode"
                         :with_downloadButton="true"
-                        :rows="allPrescription"
+                        :rows="allDispenses"
                         :title="props.title"
                         :with_actionRemoveButton="false"
                         :with_actionEditButton="false"
@@ -64,6 +64,7 @@ import prescriptionService from 'src/services/prescriptionService/prescriptionSe
 import moment from 'moment';
 
 const patient = inject('patient');
+const prescription = inject('prescription');
 /*
   Props
 */
@@ -73,9 +74,6 @@ const props = defineProps({
   },
   show_dialog: {
     type: Boolean,
-  },
-  prescription: {
-    type: Object,
   },
   title: {
     type: String,
@@ -140,9 +138,9 @@ const columns = [
   Methods
 */
 
-const allPrescription = computed(() => {
-  return prescriptionService.getPrescriptionsByPatientId(
-    patient.value.patientid
+const allDispenses = computed(() => {
+  return prescriptionService.getPrescriptionsByPrescriptionId(
+    prescription.value.prescriptionid, patient.value.patientid
   );
 });
 

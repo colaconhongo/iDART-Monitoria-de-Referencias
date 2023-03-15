@@ -312,6 +312,62 @@ export default {
     return patients;
   },
 
+  getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic,
+    usUuid
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinicSectors.includes(patient.clinicuuid) &&
+          patient.mainclinicuuid === usUuid
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    return patients;
+  },
+
+  getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+    year: number,
+    district: District,
+    pharmacy: Clinic
+  ) {
+    const yearBefore = year - 1;
+    const startDate = new Date('12-21-' + yearBefore);
+    const endDate = new Date('12-20-' + year);
+
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    const patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          patient.prescriptiondate !== null &&
+          new Date(patient.prescriptiondate) >= startDate &&
+          new Date(patient.prescriptiondate) <= endDate &&
+          clinicSectors.includes(patient.clinicuuid)
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+    return patients;
+  },
+
   getPatientsByDistrictAndPharmacyFromLocalStorage(
     district: District,
     pharmacy: Clinic,
@@ -362,6 +418,65 @@ export default {
         .orderBy('prescriptiondate', 'desc')
         .get();
     }
+
+    if (
+      currPatient.patientid.length > 0 ||
+      currPatient.firstnames.length > 0 ||
+      currPatient.lastname.length > 0
+    ) {
+      patients = patients.filter((patient) => {
+        return this.filterPatient(patient, currPatient);
+      });
+    }
+    return patients;
+  },
+
+  getDCPatientsByClinicuuidFromLocalStorage(
+    usUuid: string,
+    clinic: Clinic,
+    currPatient: Patient
+  ) {
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    let patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return (
+          clinicSectors.includes(patient.clinicuuid) &&
+          patient.mainclinicuuid === usUuid
+        );
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
+
+    if (
+      currPatient.patientid.length > 0 ||
+      currPatient.firstnames.length > 0 ||
+      currPatient.lastname.length > 0
+    ) {
+      patients = patients.filter((patient) => {
+        return this.filterPatient(patient, currPatient);
+      });
+    }
+    return patients;
+  },
+
+  getAllDCPatientsFromLocalStorage(
+    district: District,
+    pharmacy: Clinic,
+    currPatient: Patient
+  ) {
+    let clinicSectors = clinicSectorService.getAllFromStorage();
+    clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
+
+    let patients = sync_temp_patients
+      .query()
+      .where((patient) => {
+        return clinicSectors.includes(patient.clinicuuid);
+      })
+      .orderBy('prescriptiondate', 'desc')
+      .get();
 
     if (
       currPatient.patientid.length > 0 ||

@@ -130,10 +130,17 @@ export default {
     year: number,
     district: District,
     pharmacy: Clinic
+
+    // getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //   year: number,
+    //   district: District,
+    //   pharmacy: Clinic,
+    //   usUuid: string
   ) {
     const yearBefore = year - 1;
     const startDate = new Date('12-21-' + yearBefore);
     const endDate = new Date('12-20-' + year);
+
     let patients = [];
     if (
       pharmacy.value !== null &&
@@ -166,11 +173,25 @@ export default {
     } else {
       patients =
         patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          // let patients: any[] = [];
+
+          // if (usUuid !== null && usUuid !== undefined) {
+          //   patients =
+          //     patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //       year,
+          //       district,
+          //       pharmacy,
+          //       usUuid
+          //     );
+          // } else {
+          //   patients =
+          // patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
           year,
           district,
           pharmacy
         );
     }
+
     patients = patients.map((patient) => patient.uuidopenmrs);
     const dispenses = sync_temp_dispense
       .query()
