@@ -171,6 +171,25 @@ export default {
       .orderBy('clinicname', 'desc')
       .get();
   },
+  getAllPharmacyFromDistrictAndUS(district: string, mainclinicname: string) {
+    let patientsOnMainClinic =
+      patientService.getPatientsOnMainClinic(mainclinicname);
+    patientsOnMainClinic = patientsOnMainClinic.map(
+      (patient) => patient.clinicuuid
+    );
+    const res = clinic
+      .query()
+      .where((clinic) => {
+        return (
+          clinic.district === district &&
+          patientsOnMainClinic.includes(clinic.uuid)
+        );
+      })
+      .orderBy('facilitytype')
+      .orderBy('clinicname', 'desc')
+      .get();
+    return res;
+  },
   getAllUSFromDistrict(district: string) {
     return clinic
       .query()
@@ -249,6 +268,19 @@ export default {
     } else {
       clinics = this.getAllDDPharm();
     }
+    return clinics;
+  },
+
+  getDDUSDistrictAndPharmFromLocalStorage(
+    district: District,
+    mainclinicname: string
+  ) {
+    let clinics = [];
+    clinics = this.getAllPharmacyFromDistrictAndUS(
+      district.value.name,
+      mainclinicname
+    );
+
     return clinics;
   },
 };

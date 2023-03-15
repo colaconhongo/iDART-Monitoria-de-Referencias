@@ -45,6 +45,7 @@ const total = inject('total');
 const yearAnnualPeriod = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
+const us = inject('us');
 
 const chartOptions = {
   chart: {
@@ -82,12 +83,29 @@ watch(props.loaded, () => {
     const patientsToCount = [];
     const patientMale = [];
     const patientFemale = [];
-    const endEpisodes =
-      EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
+    let endEpisodes = [];
+    if (us.value !== null && us.value !== undefined && us.value !== '') {
+      endEpisodes =
+        EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          us.value.mainclinicname,
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    } else {
+      endEpisodes =
+        EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          '',
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    }
+    // EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    //   yearAnnualPeriod.value,
+    //   district,
+    //   pharmacy
+    // );
     const endEpisodeMonthly =
       DashboardUtils.organizeEpisodesByMonth(endEpisodes);
     const patients =
