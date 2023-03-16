@@ -37,6 +37,7 @@
       @update:model-value="onChangeUS"
     />
     <SelectField
+      v-if="selectedModel.id === 0"
       :label="pharmacyLabel"
       class="col q-ml-md"
       v-model="pharmacy"
@@ -86,6 +87,7 @@ const pharmacy = inject('pharmacy');
 const us = inject('us');
 const year = inject('year');
 const yearsToShow = inject('yearsToShow');
+const selectedModel = inject('selectedModel');
 
 const allProvincias = inject('allProvincias');
 const alldistrictsFromProvince = inject('alldistrictsFromProvince');

@@ -47,6 +47,8 @@ const district = inject('district');
 const pharmacy = inject('pharmacy');
 const us = inject('us');
 
+const selectedModel = inject('selectedModel');
+
 const chartOptions = {
   chart: {
     id: 'vuechart-example',
@@ -78,16 +80,54 @@ const chartOptions = {
   },
 };
 
-watch(props.loaded, () => {
+watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
     const patientsToCount = [];
     const patientMale = [];
     const patientFemale = [];
     let endEpisodes = [];
+    let patients = [];
+
     if (us.value !== null && us.value !== undefined && us.value !== '') {
       endEpisodes =
         EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
           us.value.mainclinicname,
+
+          // let patients = [];
+
+          // if (selectedModel.value.id === 1) {
+          //   if (us.value !== null && us.value !== undefined) {
+          //     endEpisodes =
+          //       EpisodeService.getDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //         yearAnnualPeriod.value,
+          //         district,
+          //         pharmacy,
+          //         us.value.mainclinicuuid
+          //       );
+          //     patients =
+          //       patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //         yearAnnualPeriod.value,
+          //         district,
+          //         pharmacy,
+          //         us.value.mainclinicuuid
+          //       );
+          //   } else {
+          //     endEpisodes =
+          //       EpisodeService.getAllDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //         yearAnnualPeriod.value,
+          //         district,
+          //         pharmacy
+          //       );
+          //     patients =
+          //       patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //         yearAnnualPeriod.value,
+          //         district,
+          //         pharmacy
+          //       );
+          //   }
+          // } else {
+          //   endEpisodes =
+          // EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
           yearAnnualPeriod.value,
           district,
           pharmacy
@@ -96,24 +136,58 @@ watch(props.loaded, () => {
       endEpisodes =
         EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
           '',
+          // patients =
+          //   patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
           yearAnnualPeriod.value,
           district,
           pharmacy
         );
     }
+
+    if (
+      pharmacy.value !== null &&
+      pharmacy.value !== undefined &&
+      us.value !== null &&
+      us.value !== undefined
+    ) {
+      patients =
+        patientService.getPatientsByYearAndUSAndDistrictAndPharmacyFromLocalStorage(
+          us.value.mainclinicname,
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    } else if (pharmacy.value !== null && pharmacy.value !== undefined) {
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    } else if (us.value !== null && us.value !== undefined) {
+      patients =
+        patientService.getPatientsByYearAndUSAndDistrictFromLocalStorage(
+          us.value.mainclinicname,
+          yearAnnualPeriod.value,
+          district
+        );
+    } else {
+      patients =
+        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+          yearAnnualPeriod.value,
+          district,
+          pharmacy
+        );
+    }
+
     // EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
     //   yearAnnualPeriod.value,
     //   district,
     //   pharmacy
     // );
+
     const endEpisodeMonthly =
       DashboardUtils.organizeEpisodesByMonth(endEpisodes);
-    const patients =
-      patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-        yearAnnualPeriod.value,
-        district,
-        pharmacy
-      );
 
     let resultPatients1 = groupedMap(patients, 'patientid');
     const mapIter1 = resultPatients1.values();

@@ -208,6 +208,26 @@ const allUS = computed(() => {
   } else return [];
 });
 
+const selectedModel = reactive(
+  ref({
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  })
+);
+const dispenseModels = ref([
+  {
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  },
+  {
+    id: 1,
+    description: 'Distribuição Comunitária',
+    abbreviation: 'MDC',
+  },
+]);
+
 provide('allProvincias', allProvincias);
 provide('alldistrictsFromProvince', alldistrictsFromProvince);
 provide('allPhamacyFromFacility', allPhamacyFromFacility);
@@ -218,6 +238,7 @@ provide('facility', facility);
 provide('pharmacy', pharmacy);
 provide('allUSFromDistrict', allUS);
 provide('us', us);
+provide('selectedModel', selectedModel);
 
 provide('yearsToShow', yearsToShow);
 provide('year', year);

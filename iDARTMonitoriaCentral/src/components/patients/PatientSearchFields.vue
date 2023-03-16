@@ -1,7 +1,19 @@
 <template>
   <div class="q-mt-lg">
     <div class="text-center">
-      <div class="q-my-md text-subtitle1 14">Procurar Pacientes</div>
+      <div class="q-mt-md text-subtitle1 14">Procurar Pacientes</div>
+      <div class="row">
+        <q-space />
+        <q-select
+          class="col-2 q-my-md"
+          dense
+          outlined
+          option-label="description"
+          v-model="selectedModel"
+          :options="dispenseModels"
+          label="Tipo de Modelo de Dispensa"
+        />
+      </div>
       <q-separator color="grey-13" size="1px" />
     </div>
     <div class="q-mx-xl">
@@ -47,48 +59,11 @@
 </template>
 
 <script setup>
-import { useQuasar, QSpinnerBall } from 'quasar';
-import { computed, inject, onMounted, reactive, ref, watch } from 'vue';
+import { inject } from 'vue';
 import textField from 'src/components/Shared/Input/TextField.vue';
-//import PatientSearchFields from 'src/pages/patients/PatientSearchFields.vue';
-import { useI18n } from 'vue-i18n';
-import Patient from 'src/stores/models/patient/patient';
 
+const selectedModel = inject('selectedModel');
+const dispenseModels = inject('dispenseModels');
 const currPatient = inject('currPatient');
-
-let allPatients = reactive(inject('allPatients'));
-
-/*
-const search = () => allPatients.length > 0 ? allPatients.filter((patient) => {
-          return this.filterPatient(patient)
-        }) : allPatients;
-*/
-/*
-let search = () => {
-   allPatients.value.filter((patient) => {
-          return filterPatient(patient)
-        })
-}
-
-let filterPatient= (patient) => {
-        return stringContains(patient.patientid, currPatient.patientid) || stringContains(patient.firstnames, currPatient.firstnames)  || stringContains(patient.lastname, currPatient.lastname)
-      };
-
- let stringContains= (stringToCheck,stringText) => {
-        if (stringToCheck === '' || stringToCheck === null || stringToCheck === undefined) return false
-        if (stringText === '' || stringText === null || stringText === undefined) return false
-        return stringToCheck.toLowerCase().includes(stringText.toLowerCase())
- }
-
-
- watch(currPatient, () => {
-   const patientsFilter = allPatients.value
-const patientsFilter1 = patientsFilter.filter((patient) => {
-          return filterPatient(patient)
-        })
-        allPatients.value = []
-        allPatients.value.push(patientsFilter1)
-});
-*/
 </script>
 <style></style>

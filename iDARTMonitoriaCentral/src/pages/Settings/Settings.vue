@@ -184,6 +184,26 @@ const allPhamacyFromFacility = computed(() => {
   return null;
 });
 
+const selectedModel = reactive(
+  ref({
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  })
+);
+const dispenseModels = ref([
+  {
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  },
+  {
+    id: 1,
+    description: 'Distribuição Comunitária',
+    abbreviation: 'MDC',
+  },
+]);
+
 provide('allProvincias', allProvincias);
 provide('alldistrictsFromProvince', alldistrictsFromProvince);
 provide('allPhamacyFromFacility', allPhamacyFromFacility);
@@ -197,6 +217,7 @@ provide('us', us);
 
 provide('yearsToShow', yearsToShow);
 provide('year', year);
+provide('selectedModel', selectedModel);
 
 const tabs = [
   { name: 'clinic', icon: 'local_hospital', label: 'Farmácia' },

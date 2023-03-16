@@ -143,6 +143,26 @@ const allUS = computed(() => {
   } else return [];
 });
 
+const selectedModel = reactive(
+  ref({
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  })
+);
+const dispenseModels = ref([
+  {
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  },
+  {
+    id: 1,
+    description: 'Distribuição Comunitária',
+    abbreviation: 'MDC',
+  },
+]);
+
 provide('titleList', titleList);
 provide('viewPatient', viewPatient);
 provide('patient', patient);
@@ -159,6 +179,7 @@ provide('us', us);
 provide('goBack', goBack);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
+provide('selectedModel', selectedModel);
 
 watch(us, () => {
   $q.loading.show({

@@ -30,9 +30,9 @@ import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
 import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
-import { SessionStorage } from 'quasar';
 import Patient from 'src/stores/models/patient/patient';
 import useUtils from 'src/use/useUtils';
+import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 /*
 Declarations
 */
@@ -46,6 +46,25 @@ const title = inject('titleList');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 const us = inject('us');
+const selectedModel = reactive(
+  ref({
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  })
+);
+const dispenseModels = ref([
+  {
+    id: 0,
+    description: 'Dispensa Discentralizada',
+    abbreviation: 'MDD',
+  },
+  {
+    id: 1,
+    description: 'Distribuição Comunitária',
+    abbreviation: 'MDC',
+  },
+]);
 
 const columns = [
   {
@@ -113,24 +132,41 @@ onUpdated ==
       $q.loading.hide();
     }, 600);
     getAllPatientsFromAPI(0);
+    getAllClinicSectorFromAPI(0);
   });
 
 /*
   Computed
 */
 const allPatients = computed(() => {
-  if (us.value !== null && us.value !== undefined) {
-    return patientService.getPatientsByDistrictAndUSFromLocalStorage(
-      us.value.mainclinicname,
-      pharmacy,
-      currPatient
-    );
+  if (selectedModel.value.id === 1) {
+    if (us.value !== null && us.value !== undefined) {
+      return patientService.getDCPatientsByClinicuuidFromLocalStorage(
+        us.value.mainclinicuuid,
+        pharmacy,
+        currPatient
+      );
+    } else {
+      return patientService.getAllDCPatientsFromLocalStorage(
+        district,
+        pharmacy,
+        currPatient
+      );
+    }
   } else {
-    return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(
-      district,
-      pharmacy,
-      currPatient
-    );
+    if (us.value !== null && us.value !== undefined) {
+      return patientService.getPatientsByDistrictAndUSFromLocalStorage(
+        us.value.mainclinicname,
+        pharmacy,
+        currPatient
+      );
+    } else {
+      return patientService.getPatientsByDistrictAndPharmacyFromLocalStorage(
+        district,
+        pharmacy,
+        currPatient
+      );
+    }
   }
 });
 
@@ -144,6 +180,14 @@ const getAllPatientsFromAPI = (offset) => {
   }
 };
 
+const getAllClinicSectorFromAPI = (offset) => {
+  if (offset >= 0) {
+    clinicSectorService.get(offset);
+  }
+};
+
 provide('allPatients', allPatients);
 provide('currPatient', currPatient);
+inject('selectedModel');
+provide('dispenseModels', dispenseModels);
 </script>
