@@ -199,12 +199,7 @@ watch([props.loaded, selectedModel], (newCount) => {
         pharmacy
       );
     }
-    // const allDispenses =
-    //   DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    //     yearAnnualPeriod.value,
-    //     district,
-    //     pharmacy
-    //   );
+
     // if (selectedModel.value.id === 1) {
     //   if (us.value !== null && us.value !== undefined) {
     //     allDispenses =

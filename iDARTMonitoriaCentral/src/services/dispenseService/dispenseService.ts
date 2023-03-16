@@ -125,6 +125,7 @@ export default {
 
     return dispenses;
   },
+
   getDispensesFromLocalStorage(
     us: string,
     year: number,
@@ -185,7 +186,8 @@ export default {
           //     );
           // } else {
           //   patients =
-          // patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+          //     patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+
           year,
           district,
           pharmacy
@@ -207,6 +209,7 @@ export default {
 
     return dispenses;
   },
+
   getDispensesByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
     us: Clinic,
     year: number,

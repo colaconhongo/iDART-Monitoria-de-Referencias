@@ -188,6 +188,6 @@ const getAllClinicSectorFromAPI = (offset) => {
 
 provide('allPatients', allPatients);
 provide('currPatient', currPatient);
-provide('selectedModel', selectedModel);
+inject('selectedModel');
 provide('dispenseModels', dispenseModels);
 </script>

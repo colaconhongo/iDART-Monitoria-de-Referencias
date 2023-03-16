@@ -86,11 +86,19 @@ const year = inject('year');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 const us = inject('us');
+
 const selectedModel = inject('selectedModel');
-let allDispenses = [];
+// let allDispenses = [];
 
 watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
+    let allDispenses = [];
+
+    // const selectedModel = inject('selectedModel');
+    // let allDispenses = [];
+
+    // watch([props.loaded, selectedModel], () => {
+    //   if (props.loaded) {
     if (us.value !== null && us.value !== undefined) {
       allDispenses = DispenseService.getDispensesFromLocalStorage(
         us.value.mainclinicname,
