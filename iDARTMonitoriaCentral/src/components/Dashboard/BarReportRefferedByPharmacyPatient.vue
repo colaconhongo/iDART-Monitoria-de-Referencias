@@ -87,11 +87,17 @@ const pharmacy = inject('pharmacy');
 const us = inject('us');
 
 const selectedModel = inject('selectedModel');
+
 // let patients = [];
 
 watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
     let patients = [];
+
+    // let patients = [];
+
+    // watch([props.loaded, selectedModel], () => {
+    //   if (props.loaded) {
     if (
       pharmacy.value !== null &&
       pharmacy.value !== undefined &&

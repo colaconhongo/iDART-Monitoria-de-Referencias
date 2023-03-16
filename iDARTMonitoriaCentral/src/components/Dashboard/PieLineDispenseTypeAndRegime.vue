@@ -226,6 +226,7 @@ watch([props.loaded, selectedModel], (newCount) => {
     //       pharmacy
     //     );
     // }
+
     let resultDispenses1 = groupedMap(allDispenses, 'patientid');
     const mapIter = resultDispenses1.values();
     for (const item of mapIter) {

@@ -187,6 +187,7 @@ export default {
           // } else {
           //   patients =
           //     patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+
           year,
           district,
           pharmacy

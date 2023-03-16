@@ -5,7 +5,6 @@ import * as ExcelJS from 'exceljs';
 import reportService from '../reportService';
 import { MOHIMAGELOG } from 'src/assets/imageBytes';
 import useUtils from 'src/use/useUtils';
-import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 
 const logoTitle =
   'REPÚBLICA DE MOÇAMBIQUE \n MINISTÉRIO DA SAÚDE \n SERVIÇO NACIONAL DE SAÚDE';
@@ -98,18 +97,7 @@ export default {
       body: data,
     });
     loadingPDF.value = false;
-
-    if (data.length > 0) {
-      return doc.save(fileName.concat('.pdf'));
-    } else {
-      alert(
-        'O Relatório está vazio!',
-        'O relatório que pretende gerar não contém dados \n Por favor, verifique os parametros de pesquisa.',
-        null,
-        null,
-        null
-      );
-    }
+    return doc.save(fileName.concat('.pdf'));
   },
   async downloadExcel(
     facility: string,
@@ -358,18 +346,7 @@ export default {
     const blob = new Blob([buffer], { type: fileType });
 
     loadingXLS.value = false;
-    if (data.length > 0) {
-      saveAs(blob, fileName + fileExtension);
-    } else {
-      alert(
-        'O Relatório está vazio!',
-        'O relatório que pretende gerar não contém dados \n Por favor, verifique os parametros de pesquisa.',
-        null,
-        null,
-        null
-      );
-      return;
-    }
+    saveAs(blob, fileName + fileExtension);
   },
 
   createArrayOfArrayRow(rows: any) {

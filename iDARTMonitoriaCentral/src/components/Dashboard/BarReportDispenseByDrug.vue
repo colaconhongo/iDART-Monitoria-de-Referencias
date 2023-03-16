@@ -94,6 +94,11 @@ watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
     let allDispenses = [];
 
+    // const selectedModel = inject('selectedModel');
+    // let allDispenses = [];
+
+    // watch([props.loaded, selectedModel], () => {
+    //   if (props.loaded) {
     if (us.value !== null && us.value !== undefined) {
       allDispenses = DispenseService.getDispensesFromLocalStorage(
         us.value.mainclinicname,

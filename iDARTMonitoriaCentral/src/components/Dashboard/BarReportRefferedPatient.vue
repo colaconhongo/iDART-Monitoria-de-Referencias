@@ -86,6 +86,7 @@ watch([props.loaded, selectedModel], () => {
     const patientMale = [];
     const patientFemale = [];
     let endEpisodes = [];
+
     let patients = [];
 
     if (us.value !== null && us.value !== undefined && us.value !== '') {
@@ -128,6 +129,7 @@ watch([props.loaded, selectedModel], () => {
           // } else {
           //   endEpisodes =
           // EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+
           yearAnnualPeriod.value,
           district,
           pharmacy
@@ -138,6 +140,7 @@ watch([props.loaded, selectedModel], () => {
           '',
           // patients =
           //   patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+
           yearAnnualPeriod.value,
           district,
           pharmacy
@@ -180,11 +183,53 @@ watch([props.loaded, selectedModel], () => {
         );
     }
 
-    // EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    //   yearAnnualPeriod.value,
-    //   district,
-    //   pharmacy
-    // );
+    // let endEpisodes = [];
+    // let patients = [];
+
+    // if (selectedModel.value.id === 1) {
+    //   if (us.value !== null && us.value !== undefined) {
+    //     endEpisodes =
+    //       EpisodeService.getDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy,
+    //         us.value.mainclinicuuid
+    //       );
+    //     patients =
+    //       patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy,
+    //         us.value.mainclinicuuid
+    //       );
+    //   } else {
+    //     endEpisodes =
+    //       EpisodeService.getAllDCEpisodesByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy
+    //       );
+    //     patients =
+    //       patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+    //         yearAnnualPeriod.value,
+    //         district,
+    //         pharmacy
+    //       );
+    //   }
+    // } else {
+    //   endEpisodes =
+    //     EpisodeService.getEpisodesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    //       yearAnnualPeriod.value,
+    //       district,
+    //       pharmacy
+    //     );
+    //   patients =
+    //     patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+    //       yearAnnualPeriod.value,
+    //       district,
+    //       pharmacy
+    //     );
+    // }
 
     const endEpisodeMonthly =
       DashboardUtils.organizeEpisodesByMonth(endEpisodes);
