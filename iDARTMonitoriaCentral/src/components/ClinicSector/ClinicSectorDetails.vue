@@ -21,5 +21,5 @@ const details_dialog = inject('details_dialog');
 const titleDetails = inject('titleDetails');
 const clinicSector = inject('clinicSector');
 const close = inject('close');
-const excludeAttribute = ref(['id', 'uuid', 'clinicuuid']);
+const excludeAttribute = ref(['id', 'uuid', 'clinicuuid', 'clinicsectortypee']);
 </script>

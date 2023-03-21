@@ -20,6 +20,7 @@ import { reactive, watch, inject } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import ClinicService from 'src/services/clinicService/clinicService';
 import DashboardUtils from '../../use/DashboardUtils';
+import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 const monthsX = [
   'JAN',
   'FEV',
@@ -87,69 +88,63 @@ const pharmacy = inject('pharmacy');
 const us = inject('us');
 
 const selectedModel = inject('selectedModel');
-
-// let patients = [];
+let patients = [];
 
 watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
-    let patients = [];
-
-    // let patients = [];
-
-    // watch([props.loaded, selectedModel], () => {
-    //   if (props.loaded) {
-    if (
-      pharmacy.value !== null &&
-      pharmacy.value !== undefined &&
-      us.value !== null &&
-      us.value !== undefined
-    ) {
-      patients =
-        patientService.getPatientsByYearAndUSAndDistrictAndPharmacyFromLocalStorage(
-          us.value.mainclinicname,
-          yearAnnualPeriod.value,
-          district,
-          pharmacy
-        );
-    } else if (pharmacy.value !== null && pharmacy.value !== undefined) {
-      patients =
-        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
-          yearAnnualPeriod.value,
-          district,
-          pharmacy
-        );
-    } else if (us.value !== null && us.value !== undefined) {
-      patients =
-        patientService.getPatientsByYearAndUSAndDistrictFromLocalStorage(
-          us.value.mainclinicname,
-          yearAnnualPeriod.value,
-          district
-        );
-
-      // if (selectedModel.value.id === 1) {
-      //   if (us.value !== null && us.value !== undefined) {
-      //     patients =
-      //       patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
-      //         yearAnnualPeriod.value,
-      //         district,
-      //         pharmacy,
-      //         us.value.mainclinicuuid
-      //       );
-      //   } else {
-      //     patients =
-      //       patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
-      //         yearAnnualPeriod.value,
-      //         district,
-      //         pharmacy
-      //       );
-      //   }
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        patients =
+          patientService.getDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        patients =
+          patientService.getAllDCPatientsByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      }
     } else {
-      patients =
-        patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-          yearAnnualPeriod.value,
-          district,
-          pharmacy
-        );
+      if (
+        pharmacy.value !== null &&
+        pharmacy.value !== undefined &&
+        us.value !== null &&
+        us.value !== undefined
+      ) {
+        patients =
+          patientService.getPatientsByYearAndUSAndDistrictAndPharmacyFromLocalStorage(
+            us.value.mainclinicname,
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      } else if (pharmacy.value !== null && pharmacy.value !== undefined) {
+        patients =
+          patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyAndUSFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      } else if (us.value !== null && us.value !== undefined) {
+        patients =
+          patientService.getPatientsByYearAndUSAndDistrictFromLocalStorage(
+            us.value.mainclinicname,
+            yearAnnualPeriod.value,
+            district
+          );
+      } else {
+        patients =
+          patientService.getPatientsByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy
+          );
+      }
     }
     let resultPatientsByClinicUuid = groupedMap(patients, 'clinicuuid');
     let resultPatientsByPatientId = groupedMap(patients, 'patientid');
@@ -158,7 +153,12 @@ watch([props.loaded, selectedModel], () => {
     const keysByPharm = Array.from(resultPatientsByClinicUuid.keys());
     series4.series4 = [];
     keysByPharm.forEach((key) => {
-      const pharm = ClinicService.getPharmByUUid(key);
+      let pharm = '';
+      if (selectedModel.value.id === 1) {
+        pharm = clinicSectorService.getByUuidFromStorage(key);
+      } else {
+        pharm = ClinicService.getPharmByUUid(key);
+      }
       const keys = DashboardUtils.organizeRefferedPatientsByMonth(
         resultPatientsByClinicUuid.get(key)
       );
@@ -175,10 +175,17 @@ watch([props.loaded, selectedModel], () => {
         //  item.style = 'background-color:' + color + ';' + 'color: ##ffffff'
         chartOptionsReferredByPharmacy.colors.push(color);
         //series4.series4 = []
-        series4.series4.push({
-          name: pharm[0].clinicname,
-          data: [...regimeType],
-        });
+        if (selectedModel.value.id === 1) {
+          series4.series4.push({
+            name: pharm[0].sectorname,
+            data: [...regimeType],
+          });
+        } else {
+          series4.series4.push({
+            name: pharm[0].clinicname,
+            data: [...regimeType],
+          });
+        }
       }
     });
   }

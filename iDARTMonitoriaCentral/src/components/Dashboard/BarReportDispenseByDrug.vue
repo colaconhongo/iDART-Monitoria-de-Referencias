@@ -94,12 +94,25 @@ watch([props.loaded, selectedModel], () => {
   if (props.loaded) {
     let allDispenses = [];
 
-    // const selectedModel = inject('selectedModel');
-    // let allDispenses = [];
-
-    // watch([props.loaded, selectedModel], () => {
-    //   if (props.loaded) {
-    if (us.value !== null && us.value !== undefined) {
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            year.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            year.value,
+            district,
+            pharmacy,
+            null
+          );
+      }
+    } else if (us.value !== null && us.value !== undefined) {
       allDispenses = DispenseService.getDispensesFromLocalStorage(
         us.value.mainclinicname,
         year.value,
@@ -114,33 +127,6 @@ watch([props.loaded, selectedModel], () => {
         pharmacy
       );
     }
-
-    // if (selectedModel.value.id === 1) {
-    //   if (us.value !== null && us.value !== undefined) {
-    //     allDispenses =
-    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-    //         year.value,
-    //         district,
-    //         pharmacy,
-    //         us.value.mainclinicuuid
-    //       );
-    //   } else {
-    //     allDispenses =
-    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-    //         year.value,
-    //         district,
-    //         pharmacy,
-    //         null
-    //       );
-    //   }
-    // } else {
-    //   allDispenses =
-    //     DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    //       year.value,
-    //       district,
-    //       pharmacy
-    //     );
-    // }
 
     let resultDrugs = groupedMap(allDispenses, 'drugname');
     // dispense by drug

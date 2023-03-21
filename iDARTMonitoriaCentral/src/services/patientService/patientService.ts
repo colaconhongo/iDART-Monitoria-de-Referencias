@@ -352,7 +352,6 @@ export default {
 
     let clinicSectors = clinicSectorService.getAllFromStorage();
     clinicSectors = clinicSectors.map((clinicSector) => clinicSector.uuid);
-
     const patients = sync_temp_patients
       .query()
       .where((patient) => {

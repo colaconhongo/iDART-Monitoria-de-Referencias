@@ -180,6 +180,7 @@ provide('goBack', goBack);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
 provide('selectedModel', selectedModel);
+provide('dispenseModels', dispenseModels);
 
 watch(us, () => {
   $q.loading.show({

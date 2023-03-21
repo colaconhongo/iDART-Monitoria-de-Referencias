@@ -137,15 +137,17 @@ export default {
     return clinicsector.getModel().$newInstance();
   },
   getAllFromStorage() {
-    return clinicsector.all();
+    return clinicsector.query().withAll().get();
   },
 
+  getByUuidFromStorage(clinicsectoruuid: string) {
+    return clinicsector.query().withAll().where('uuid', clinicsectoruuid).get();
+  },
   getAllBySectorTypeFromStorage(sectorType_id: number) {
     return clinicsector.query().where('clinicsectortype', sectorType_id).get();
   },
 
-  getAllByClinicUuidFromStorage(clinicuuid: String) {
-    return clinicsector.query().where('clinicsectortype', clinicuuid).get();
+  getAllByClinicUuidFromStorage(clinicuuid: string) {
+    return clinicsector.query().where('clinic', clinicuuid).get();
   },
-
 };

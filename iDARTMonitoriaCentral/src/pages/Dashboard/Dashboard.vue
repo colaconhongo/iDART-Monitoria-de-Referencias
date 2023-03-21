@@ -49,6 +49,7 @@ import chartDispenseByDrug from '../../components/Dashboard/BarReportDispenseByD
 import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.vue';
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue';
 import PatientService from 'src/services/patientService/patientService';
+import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 
 let district = ref();
 let pharmacy = ref();
@@ -194,6 +195,7 @@ onMounted(() => {
     spinnerColor: 'grey-4',
     spinner: QSpinnerBall,
   });
+
   EpisodeService.getEpisodesByYear(year.value).then(() => {
     DispenseService.getDispensesByRegimeByYear(year.value).then(() => {
       patientService.getPatientsByYear(year.value).then(() => {
@@ -226,6 +228,7 @@ onUpdated ==
     ProvinceService.get(0);
     DistrictService.get(0);
     ClinicService.get(0);
+    clinicSectorService.get(0);
   });
 
 /*

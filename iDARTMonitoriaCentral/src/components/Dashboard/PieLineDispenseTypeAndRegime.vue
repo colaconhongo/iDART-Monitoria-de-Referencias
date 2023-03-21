@@ -184,7 +184,25 @@ watch([props.loaded, selectedModel], (newCount) => {
     const dispenseMensal = [];
     let allDispenses = [];
 
-    if (us.value !== null && us.value !== undefined) {
+    if (selectedModel.value.id === 1) {
+      if (us.value !== null && us.value !== undefined) {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            us.value.mainclinicuuid
+          );
+      } else {
+        allDispenses =
+          DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
+            yearAnnualPeriod.value,
+            district,
+            pharmacy,
+            null
+          );
+      }
+    } else if (us.value !== null && us.value !== undefined) {
       allDispenses = DispenseService.getDispensesFromLocalStorage(
         us.value.mainclinicname,
         yearAnnualPeriod.value,
@@ -199,33 +217,6 @@ watch([props.loaded, selectedModel], (newCount) => {
         pharmacy
       );
     }
-
-    // if (selectedModel.value.id === 1) {
-    //   if (us.value !== null && us.value !== undefined) {
-    //     allDispenses =
-    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-    //         yearAnnualPeriod.value,
-    //         district,
-    //         pharmacy,
-    //         us.value.mainclinicuuid
-    //       );
-    //   } else {
-    //     allDispenses =
-    //       DispenseService.getDCDispensesByYearAndDistrictAndClinicSectorFromLocalStorage(
-    //         yearAnnualPeriod.value,
-    //         district,
-    //         pharmacy,
-    //         null
-    //       );
-    //   }
-    // } else {
-    //   allDispenses =
-    //     DispenseService.getDispensesByYearAndDistrictAndClinicAndPharmacyFromLocalStorage(
-    //       yearAnnualPeriod.value,
-    //       district,
-    //       pharmacy
-    //     );
-    // }
 
     let resultDispenses1 = groupedMap(allDispenses, 'patientid');
     const mapIter = resultDispenses1.values();

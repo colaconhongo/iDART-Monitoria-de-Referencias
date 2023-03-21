@@ -10,6 +10,7 @@ import ClinicSectorDetailsVue from 'src/components/ClinicSector/ClinicSectorDeta
 import { provide, reactive, ref } from 'vue';
 import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 import { useI18n } from 'vue-i18n';
+import clinicService from 'src/services/clinicService/clinicService';
 
 /*
 Declarations
@@ -54,6 +55,11 @@ const editClinicSector = (clinicSectorRow) => {
 const viewClinicSector = (clinicSectorRow) => {
   titleDetails.value = t('view').concat(' ').concat(t('clinicSector'));
   clinicSector.value = clinicSectorRow;
+  clinicSector.value.clinic = clinicService.getClinicByID(
+    clinicSector.value.clinicuuid
+  )[0].clinicname;
+  clinicSector.value.clinicsectortype =
+    clinicSector.value.clinicsectortypee.description;
   activeDetails.value = true;
   details_dialog.value = true;
 };
