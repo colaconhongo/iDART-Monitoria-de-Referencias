@@ -56,7 +56,10 @@ const columns = [
     name: 'clinicsectortype',
     align: 'left',
     label: t('clinicsectortype'),
-    field: (row) => row.clinicsectortype,
+    field: (row) =>
+      row.clinicsectortypee !== null
+        ? row.clinicsectortypee.description
+        : 'Sem info.',
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -64,7 +67,11 @@ const columns = [
     name: 'clinic',
     align: 'left',
     label: t('clinic'),
-    field: (row) => row.clinic,
+    field: (row) =>
+      clinicService.getClinicByID(row.clinic)[0] != null &&
+      clinicService.getClinicByID(row.clinic)[0] !== undefined
+        ? clinicService.getClinicByID(row.clinic)[0].clinicname
+        : 'Sem Info.',
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -96,23 +103,7 @@ onMounted(() => {
   Computed
 */
 const allClinicSectors = computed(() => {
-  const clinicSectorList = [];
-  for (const clinicSector of clinicSectorService.getAllFromStorage()) {
-    const clinicSectorID = clinicSector.clinicsectortype;
-    const clinicUUID = clinicSector.clinic;
-    clinicSector.clinicsectortype =
-      clinicSectorTypeService.getClinicSectorTypeByID(clinicSectorID)[0] !==
-      null
-        ? clinicSectorTypeService.getClinicSectorTypeByID(clinicSectorID)[0]
-            .description
-        : null;
-    clinicSector.clinic =
-      clinicService.getClinicByID(clinicUUID)[0] !== null
-        ? clinicService.getClinicByID(clinicUUID)[0].clinicname
-        : null;
-    clinicSectorList.push(clinicSector);
-  }
-  return clinicSectorList;
+  return clinicSectorService.getAllFromStorage();
 });
 
 /*

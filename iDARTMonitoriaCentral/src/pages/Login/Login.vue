@@ -156,7 +156,7 @@
                   <q-img src="../../assets/logo_graphic.png" />
                 </q-avatar>
               </div>
-              <div class="row justify-center">Versão v.1.3.0-SNAPSHOT</div>
+              <div class="row justify-center">Versão v.1.3.0</div>
             </q-card-section>
           </q-card>
         </transition>
@@ -229,6 +229,8 @@ const addUserAcess = () => {
   menuService
     .get(0)
     .then((menus) => {
+      console.log('Response menus', menus);
+
       profileService
         .get(0)
         .then((profiles) => {

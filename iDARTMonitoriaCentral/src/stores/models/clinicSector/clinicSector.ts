@@ -21,7 +21,7 @@ export default class ClinicSector extends Model {
       // Relationship
 
       clinicsectortypee: this.belongsTo(ClinicSectorType, 'clinicsectortype'),
-      //  clinic: this.belongsTo(Clinic, 'clinic'),
+      // mainclinic: this.belongsTo(Clinic, 'clinic'),
     };
   }
 }

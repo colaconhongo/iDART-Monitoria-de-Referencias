@@ -46,25 +46,8 @@ const title = inject('titleList');
 const district = inject('district');
 const pharmacy = inject('pharmacy');
 const us = inject('us');
-const selectedModel = reactive(
-  ref({
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  })
-);
-const dispenseModels = ref([
-  {
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  },
-  {
-    id: 1,
-    description: 'Distribuição Comunitária',
-    abbreviation: 'MDC',
-  },
-]);
+const selectedModel = inject('selectedModel');
+const dispenseModels = inject('dispenseModels');
 
 const columns = [
   {
@@ -188,6 +171,5 @@ const getAllClinicSectorFromAPI = (offset) => {
 
 provide('allPatients', allPatients);
 provide('currPatient', currPatient);
-inject('selectedModel');
 provide('dispenseModels', dispenseModels);
 </script>
