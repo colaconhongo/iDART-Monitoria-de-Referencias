@@ -57,11 +57,7 @@
                 transition-show="scale"
                 transition-hide="scale"
               >
-                <q-date
-                  v-model="paramEndDate"
-                  mask="DD-MM-YYYY"
-                  :options="blockDataFutura"
-                >
+                <q-date v-model="paramEndDate" mask="DD-MM-YYYY">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
