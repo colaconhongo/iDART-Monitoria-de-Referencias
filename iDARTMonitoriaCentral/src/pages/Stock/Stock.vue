@@ -2,6 +2,18 @@
   <div class="q-pa-sm q-gutter-md">
     <Filter :is="true" v-if="showStockSearch" />
     <q-bar v-if="showStockSearch" dense dark class="bg-primary"> </q-bar>
+    <div class="row">
+      <q-space />
+      <q-select
+        class="col-2 q-my-md"
+        dense
+        outlined
+        option-label="description"
+        v-model="selectedModel"
+        :options="dispenseModels"
+        label="Tipo de Modelo de Dispensa"
+      />
+    </div>
     <stockDetails v-if="!showStockSearch" @goBack="goBack" />
     <stockSearch v-if="showStockSearch" />
   </div>
@@ -21,7 +33,6 @@ import DistrictService from 'src/services/districtService/districtService';
 import DashboardUtils from '../../use/DashboardUtils';
 import ClinicService from 'src/services/clinicService/clinicService';
 import PatientService from 'src/services/patientService/patientService';
-
 import {
   onMounted,
   reactive,
@@ -45,7 +56,6 @@ let us = ref();
 let loaded = reactive({
   loaded: false,
 });
-
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
 /*
@@ -107,6 +117,7 @@ onUpdated ==
     provinceService.get(0);
     DistrictService.get(0);
     clinicService.get(0);
+    clinicSectorService.get(0);
   });
 
 /*
@@ -199,6 +210,7 @@ provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
 provide('selectedModel', selectedModel);
+provide('dispenseModels', dispenseModels);
 </script>
 
 <style></style>

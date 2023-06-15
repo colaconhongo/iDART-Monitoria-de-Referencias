@@ -20,6 +20,8 @@
 import { computed, onMounted, reactive, ref, inject, watch } from 'vue';
 import stockList from 'src/components/Shared/CRUD/TableList.vue';
 import stockReportService from 'src/services/ReportServices/stock/stockReportService';
+import StockReport from 'src/stores/models/reportModels/stock/stockReport';
+ 
 
 /*
   Props
@@ -37,6 +39,7 @@ const mode = reactive(ref('list'));
 const viewStock = inject('viewStock');
 let district = inject('district');
 let pharmacy = inject('pharmacy');
+const selectedModel = inject('selectedModel');
 let stockReportList = reactive(ref([]));
 
 const columns = [
@@ -95,7 +98,6 @@ const loadAllStock = () => {
 
   return stockReportList.value;
 };
-
 /*
   Computed
 */
@@ -143,6 +145,28 @@ watch(pharmacy, () => {
   reloadByClinic();
 });
 
+watch(selectedModel, () => {
+  reloadByModel();
+});
+
+const reloadByModel = () => {
+
+  if (selectedModel.value != null) {
+
+    if (selectedModel.value.id == 1) {
+      stockReportService.deleteAllFromStorage();
+      getStockReportClinicSectorAPI(0);
+      loadAllStock();
+    
+  } else {
+    stockReportService.deleteAllFromStorage();
+    getStockReportFromAPI(0);
+     loadAllStock();
+  }
+    console.log('STockList: ', stockReportList)
+  }
+};
+
 /*
     Methods
   */
@@ -151,6 +175,12 @@ const getStockReportFromAPI = (offset) => {
     stockReportService.get(offset);
   }
 };
+
+const getStockReportClinicSectorAPI = (offset) => {
+  if (offset>= 0) {
+    stockReportService.getStockClinicSector(offset)
+  }
+}
 </script>
 
 <style></style>
