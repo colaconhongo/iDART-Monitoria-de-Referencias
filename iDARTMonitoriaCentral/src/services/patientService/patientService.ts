@@ -11,6 +11,7 @@ import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
 import { off } from 'process';
 import useUtils from 'src/use/useUtils';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const sync_temp_patients = useRepo(Patient);
 const sync_temp_episode = useRepo(Episode);
@@ -25,6 +26,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get(
@@ -36,11 +43,13 @@ export default {
           sync_temp_patients.save(resp.data);
           if (resp.data.length > 0) {
             offset = offset + 100;
-            // setTimeout(this.get, 1000,offset);
             this.get(offset);
+          } else {
+            Loading.hide();
           }
         })
         .catch((error) => {
+          Loading.hide();
           // if (error.request != null) {
           //   const arrayErrors = JSON.parse(error.request.response);
           //   const listErrors = [];
@@ -115,6 +124,11 @@ export default {
   },
 
   getPatientsByYear(year: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
@@ -127,6 +141,10 @@ export default {
       )
       .then((resp) => {
         sync_temp_patients.save(resp.data);
+        Loading.hide();
+      })
+      .catch(() => {
+        Loading.hide();
       });
   },
 

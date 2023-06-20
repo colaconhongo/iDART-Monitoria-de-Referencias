@@ -6,6 +6,7 @@ import moment from 'moment';
 import District from 'src/stores/models/district/district';
 import Clinic from 'src/stores/models/clinic/clinic';
 import useUtils from 'src/use/useUtils';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const sync_temp_dispense = useRepo(Dispense);
 
@@ -19,6 +20,11 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('sync_temp_dispense?offset=' + offset + '&limit=100')
@@ -27,7 +33,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },
@@ -80,6 +91,11 @@ export default {
   },
 
   getDispensesByRegimeByYear(year: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     const yearBefore = year - 1;
     const startDate = useUtils.getDateFormatMMDDYYYY('12-21-' + yearBefore);
     const endDate = useUtils.getDateFormatMMDDYYYY('12-20-' + year);
@@ -93,6 +109,10 @@ export default {
       )
       .then((resp) => {
         sync_temp_dispense.save(resp.data);
+        Loading.hide();
+      })
+      .catch(() => {
+        Loading.hide();
       });
   },
 

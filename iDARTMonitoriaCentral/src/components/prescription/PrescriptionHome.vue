@@ -2,20 +2,15 @@
   <q-page class="q-pa-sm q-gutter-sm">
     <listClinic
       :columns="columns"
-      :mode="mode"
       :with_downloadButton="true"
       :rows="allPrescription"
-      :title="props.title"
+      :title="title"
       :with_actionRemoveButton="false"
       :with_actionEditButton="false"
       :with_actionDetailButton="true"
       :visualizar="visualizar"
     />
-    <prescriptionDetailsModal
-      :is="true"
-      :prescription="prescription"
-      :patient="patient"
-    />
+    <prescriptionDetailsModal :is="true" :patient="patient" />
   </q-page>
 </template>
 <script setup>
@@ -30,22 +25,16 @@ import moment from 'moment';
 Props
 */
 
-const props = defineProps({
-  title: {
-    type: String,
-  },
-});
-
 /*
 Declarations
 */
 const $q = new useQuasar();
-const mode = reactive(ref('list'));
 const prescription = ref({});
 const show_dialog = reactive(ref(false));
 
 const editedIndex = reactive(ref(0));
 const patient = inject('patient');
+const title = inject('title');
 
 const columns = [
   {
@@ -135,7 +124,7 @@ const allPrescription = computed(() => {
 
 const getAllPrescriptionFromAPI = (offset) => {
   if (offset >= 0) {
-    prescriptionService.get(offset);
+    prescriptionService.getByPatientID(patient.value.patientid, offset);
   }
 };
 

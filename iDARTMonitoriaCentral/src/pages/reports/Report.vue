@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm q-gutter-md">
-    <Filter class="q-mb-lg" />
+    <Filter :isStockSearch="isReportPanel" class="q-mb-lg" />
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm" style="max-width: 500px">
         <q-bar dark class="bg-primary text-white">
@@ -13,7 +13,18 @@
         </q-bar>
       </div>
     </div>
-
+    <div class="row">
+      <q-space />
+      <q-select
+        class="col-2"
+        dense
+        outlined
+        option-label="description"
+        v-model="selectedModeReport"
+        :options="dispenseModels"
+        label="Tipo de Modelo de Dispensa"
+      />
+    </div>
     <div class="row">
       <div class="col-3 q-ml-sm q-mr-sm panel" style="max-width: 500px">
         <ListReportMenu @changeTab="changeTab" />
@@ -73,12 +84,13 @@ import {
 } from 'vue';
 
 const $q = useQuasar();
-let us = ref();
+const us = ref('');
 let loaded = reactive({
   loaded: false,
 });
 
 let year = ref(new Date().getFullYear());
+const isReportPanel = ref(true);
 const yearsToShow = DashboardUtils.getLastFiveYears();
 let components = reactive([]);
 
@@ -124,7 +136,6 @@ const pharmacy = reactive(ref());
 const changeTab = (tabName) => {
   const uidValue = 'report' + uid();
   const comp = { id: uidValue, name: tabName };
-  console.log(comp);
   components.push(comp);
 };
 
@@ -133,14 +144,6 @@ const changeTab = (tabName) => {
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
@@ -204,17 +207,15 @@ onDeactivated(() => {
 
 const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return PatientService.getUSByPatientsOnDistrict(district.value.name);
+    return clinicService.getReferralClinicByDistrict(district.value.name);
   } else return [];
 });
 
-const selectedModel = reactive(
-  ref({
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  })
-);
+const selectedModeReport = ref({
+  id: 0,
+  description: 'Dispensa Discentralizada',
+  abbreviation: 'MDD',
+});
 const dispenseModels = ref([
   {
     id: 0,
@@ -238,7 +239,7 @@ provide('facility', facility);
 provide('pharmacy', pharmacy);
 provide('allUSFromDistrict', allUS);
 provide('us', us);
-provide('selectedModel', selectedModel);
+provide('selectedModel', selectedModeReport);
 
 provide('yearsToShow', yearsToShow);
 provide('year', year);

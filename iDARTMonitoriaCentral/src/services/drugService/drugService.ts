@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import Drug from 'src/stores/models/drugs/drug';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const drug = useRepo(Drug);
 
@@ -15,6 +16,11 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('drug?offset=' + offset + '&limit=100')
@@ -23,7 +29,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },
@@ -53,11 +64,11 @@ export default {
     return drug.getModel().$newInstance();
   },
   getAllFromStorage() {
-    return drug.all();
+    return drug.withAll().all();
   },
 
   getAllGroupByStateClinic() {
-    return drug.query().withAll().group;
+    return drug.query().withAll().groupBy('stockcode');
   },
   getFromStorage(id: string) {
     return drug.find(id);

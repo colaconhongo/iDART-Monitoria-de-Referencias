@@ -10,8 +10,8 @@ import { provide, reactive, ref } from 'vue';
 /*
 Declarations
 */
-const titleList = reactive(ref('Dispensas'));
-const titleAddEdit = reactive(ref('Dispensas'));
+const titleList = ref('Dispensas');
+const titleAddEdit = ref('Dispensas');
 const show_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
 const dispense = reactive(ref([]));
@@ -20,7 +20,6 @@ const activeDispenseHome = reactive(ref(true));
 
 provide('title', titleAddEdit);
 provide('show_dialog', show_dialog);
-// provide('clinic', clinic);
 provide('submitting', submitting);
 
 /*

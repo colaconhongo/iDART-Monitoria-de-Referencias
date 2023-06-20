@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <UserHome :is="activeUserHome" v-model:title="titleList" />
-    <UserDetailsVue :is="activeDetails" v-model:title="titleDetails" />
+    <UserHome :is="activeUserHome" />
+    <UserDetailsVue :is="activeDetails" />
     <CreateEditUser />
 
     <div class="absolute-bottom">
@@ -25,9 +25,10 @@ import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog'
 /*
 Declarations
 */
+
 const titleList = reactive(ref('Lista de Utilizadores'));
 const titleAddEdit = reactive(ref('Dados do Utilizador'));
-const titleDetails = reactive(ref('Detalhes do Utilizador'));
+const titleDetails = reactive(ref('Dados do Utilizador'));
 const show_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
 const user = reactive(ref([]));

@@ -9,7 +9,7 @@
         dense
         outlined
         option-label="description"
-        v-model="selectedModel"
+        v-model="selectedMode"
         :options="dispenseModels"
         label="Tipo de Modelo de Dispensa"
       />
@@ -50,6 +50,7 @@ import lineChart from '../../components/Dashboard/PieLineDispenseTypeAndRegime.v
 import chartBarReffered from '../../components/Dashboard/BarReportRefferedPatient.vue';
 import PatientService from 'src/services/patientService/patientService';
 import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
+import clinicService from 'src/services/clinicService/clinicService';
 
 let district = ref();
 let pharmacy = ref();
@@ -62,13 +63,11 @@ let loaded = reactive({
   loaded: false,
 });
 
-const selectedModel = reactive(
-  ref({
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  })
-);
+const selectedMode = ref({
+  id: 0,
+  description: 'Dispensa Discentralizada',
+  abbreviation: 'MDD',
+});
 const dispenseModels = ref([
   {
     id: 0,
@@ -172,7 +171,7 @@ const DDPharmByDistrict = computed(() => {
 
 const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return PatientService.getUSByPatientsOnDistrict(district.value.name);
+    return clinicService.getReferralClinicByDistrict(district.value.name);
   } else return [];
 });
 
@@ -186,49 +185,22 @@ let total = reactive({
 });
 
 /*
-   On Page Mounted
-*/
-onMounted(() => {
-  // EpisodeService.get(0);
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-
-  EpisodeService.getEpisodesByYear(year.value).then(() => {
-    DispenseService.getDispensesByRegimeByYear(year.value).then(() => {
-      patientService.getPatientsByYear(year.value).then(() => {
-        loaded.loaded = ref(true);
-        //   district = DistrictService.getDistrictFromStorage(LocalStorage.getItem('district').id)
-        //  if (SessionStorage.getItem('district') !== null) {
-        //  district = SessionStorage.getItem('district')
-        // }
-        setTimeout(() => {
-          $q.loading.hide();
-        }, 3000);
-      });
-    });
-  });
-});
-
-/*
   Mounted Hooks
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 3000);
     ProvinceService.get(0);
     DistrictService.get(0);
     ClinicService.get(0);
     clinicSectorService.get(0);
+
+    EpisodeService.getEpisodesByYear(year.value).then(() => {
+      DispenseService.getDispensesByRegimeByYear(year.value).then(() => {
+        patientService.getPatientsByYear(year.value).then(() => {
+          loaded.loaded = ref(true);
+        });
+      });
+    });
   });
 
 /*
@@ -270,7 +242,7 @@ provide('allUSFromDistrict', allUS);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
-provide('selectedModel', selectedModel);
+provide('selectedModel', selectedMode);
 provide('dispenseModels', dispenseModels);
 </script>
 

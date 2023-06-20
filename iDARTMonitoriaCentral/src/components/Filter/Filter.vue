@@ -23,7 +23,9 @@
       clearable
       @clear="clearDistrict()"
     />
+
     <SelectField
+      v-if="!isStockSearch || selectedModel.id !== 0"
       :label="usLabel"
       class="col q-ml-md"
       v-model="us"
@@ -64,19 +66,25 @@
 </template>
 
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, onMounted, onUpdated, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { SessionStorage } from 'quasar';
 import SelectField from '../Shared/Input/SelectField.vue';
+import clinicService from 'src/services/clinicService/clinicService';
 
 const { t } = useI18n();
 const provinceLabel = ref(t('province'));
 const districtLabel = ref(t('district'));
 const pharmacyLabel = ref('Farmácia');
-const usLabel = ref('Unidade Sanirária de Proveniência');
+const usLabel = ref('Unidade Sanitária de Proveniência');
 const yearLabel = ref(t('year'));
 
-const props = defineProps(['isDashboard']);
+const props = defineProps(['isDashboard', 'isStockSearch', 'isReportPanel']);
+
+onUpdated ==
+  onMounted(() => {
+    clinicService.getReferralClinics(0);
+  });
 
 /*
   Inject

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <PrescriptionHome :is="activePrescriptionHome" v-model:title="titleList" />
+    <PrescriptionHome :is="activePrescriptionHome" />
   </q-page>
 </template>
 <script setup>
@@ -11,8 +11,7 @@ import prescriptionService from 'src/services/prescriptionService/prescriptionSe
 /*
 Declarations
 */
-const titleList = reactive(ref('Prescrições'));
-const titleAddEdit = reactive(ref('Prescrições'));
+const titleAddEdit = ref('Prescrições');
 const show_dialog = reactive(ref(false));
 const submitting = reactive(ref(false));
 const prescription = reactive(ref([]));
@@ -30,7 +29,6 @@ provide('submitting', submitting);
 
 const close = () => {
   show_dialog.value = false;
-  precription.value = [];
   editedIndex.value = -1;
 };
 </script>

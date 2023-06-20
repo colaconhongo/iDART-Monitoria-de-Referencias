@@ -18,9 +18,8 @@
   </q-page>
 </template>
 <script setup>
-import { useQuasar, QSpinnerBall } from 'quasar';
 import drugService from 'src/services/drugService/drugService';
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, onUpdated, reactive, ref } from 'vue';
 import listDrug from 'src/components/Shared/CRUD/TableListActiveButton.vue';
 import { useI18n } from 'vue-i18n';
 import formService from 'src/services/formService/formService';
@@ -28,7 +27,6 @@ import formService from 'src/services/formService/formService';
 /*
 Declarations
 */
-const $q = new useQuasar();
 const { t } = useI18n();
 const mode = reactive(ref('list'));
 const viewDrug = inject('viewDrug');
@@ -82,17 +80,11 @@ const columns = [
 /*
   Mounted Hooks
 */
-onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
+onUpdated ==
+  onMounted(() => {
+    drugService.get(0);
+    formService.get(0);
   });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-  getAllDrugFromAPI(0);
-});
 
 /*
   Computed
@@ -100,24 +92,20 @@ onMounted(() => {
 const allDrugs = computed(() => {
   const drugList = [];
   for (const drug of drugService.getAllFromStorage()) {
-    const formID = drug.form;
-    drug.form =
-      formService.getFormByID(formID)[0] !== null
-        ? formService.getFormByID(formID)[0].form
-        : null;
-    drugList.push(drug);
+    if (drug.form !== null) {
+      const formID = drug.form;
+      drug.form =
+        formService.getFormByID(formID) !== null
+          ? formService.getFormByID(formID).form
+          : null;
+      drugList.push(drug);
+    }
   }
+
   return drugList;
 });
 
 /*
   Methods
 */
-
-const getAllDrugFromAPI = (offset) => {
-  if (offset >= 0) {
-    drugService.get(offset);
-    formService.get(offset);
-  }
-};
 </script>

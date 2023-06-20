@@ -2,7 +2,6 @@
   <q-page class="q-pa-sm q-gutter-sm">
     <listClinic
       :columns="columns"
-      :mode="mode"
       :with_downloadButton="true"
       :with_actionDetailButton="true"
       :with_actionEditButton="true"
@@ -23,7 +22,6 @@ import listClinic from 'src/components/Shared/CRUD/TableList.vue';
 import { useI18n } from 'vue-i18n';
 import provinceService from 'src/services/provinceService/provinceService';
 import districtService from 'src/services/districtService/districtService';
-import District from 'src/stores/models/district/district';
 
 /*
 Declarations
@@ -93,14 +91,6 @@ const columns = [
   Mounted Hooks
 */
 onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
   getAllClinicFromAPI(0);
 });
 

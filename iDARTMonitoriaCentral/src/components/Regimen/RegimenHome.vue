@@ -66,14 +66,6 @@ const columns = [
   Mounted Hooks
 */
 onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
   getAllRegimenFromAPI(0);
 });
 

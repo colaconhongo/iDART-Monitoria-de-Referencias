@@ -21,7 +21,6 @@ import { computed, onMounted, reactive, ref, inject, watch } from 'vue';
 import stockList from 'src/components/Shared/CRUD/TableList.vue';
 import stockReportService from 'src/services/ReportServices/stock/stockReportService';
 import StockReport from 'src/stores/models/reportModels/stock/stockReport';
- 
 
 /*
   Props
@@ -39,8 +38,9 @@ const mode = reactive(ref('list'));
 const viewStock = inject('viewStock');
 let district = inject('district');
 let pharmacy = inject('pharmacy');
+const us = inject('us');
 const selectedModel = inject('selectedModel');
-let stockReportList = reactive(ref([]));
+let stockReportList = ref([]);
 
 const columns = [
   {
@@ -102,8 +102,14 @@ const loadAllStock = () => {
   Computed
 */
 const fullStockList = computed(() => {
-  if (district.value != null && district.value.id > 0) {
-    return stockReportList.value;
+  if (district.value !== null && district.value !== undefined) {
+    if (us.value !== null && us.value !== undefined && us.value !== '') {
+      return stockReportService.getAllFromStorageByClinicUuid(
+        us.value.mainclinicuuid
+      );
+    } else {
+      return stockReportList.value;
+    }
   } else {
     return loadAllStock();
   }
@@ -150,20 +156,16 @@ watch(selectedModel, () => {
 });
 
 const reloadByModel = () => {
-
   if (selectedModel.value != null) {
-
     if (selectedModel.value.id == 1) {
       stockReportService.deleteAllFromStorage();
       getStockReportClinicSectorAPI(0);
       loadAllStock();
-    
-  } else {
-    stockReportService.deleteAllFromStorage();
-    getStockReportFromAPI(0);
-     loadAllStock();
-  }
-    console.log('STockList: ', stockReportList)
+    } else {
+      stockReportService.deleteAllFromStorage();
+      getStockReportFromAPI(0);
+      loadAllStock();
+    }
   }
 };
 
@@ -177,10 +179,10 @@ const getStockReportFromAPI = (offset) => {
 };
 
 const getStockReportClinicSectorAPI = (offset) => {
-  if (offset>= 0) {
-    stockReportService.getStockClinicSector(offset)
+  if (offset >= 0) {
+    stockReportService.getStockClinicSector(offset);
   }
-}
+};
 </script>
 
 <style></style>

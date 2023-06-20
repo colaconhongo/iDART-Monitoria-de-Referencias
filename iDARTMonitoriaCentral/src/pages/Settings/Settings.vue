@@ -80,6 +80,8 @@ import DashboardUtils from '../../use/DashboardUtils';
 import { QSpinnerBall, SessionStorage, useQuasar } from 'quasar';
 import ClinicService from 'src/services/clinicService/clinicService';
 import PatientService from 'src/services/patientService/patientService';
+import MenuService from 'src/services/secUsersService/MenuService';
+import ProfileService from 'src/services/secUsersService/ProfileService';
 
 /*
   Declaraftion
@@ -101,17 +103,11 @@ let loaded = reactive({
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
+    MenuService.get(0);
+    ProfileService.get(0);
   });
 
 /*
@@ -218,6 +214,7 @@ provide('us', us);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
 provide('selectedModel', selectedModel);
+provide('dispenseModels', dispenseModels);
 
 const tabs = [
   { name: 'clinic', icon: 'local_hospital', label: 'Farmácia' },

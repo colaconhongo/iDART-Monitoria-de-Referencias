@@ -8,7 +8,7 @@
     >
       <q-card style="width: 1100px; max-width: 90vw">
         <q-card-section>
-          <div class="text-h5 text-center">{{ title }} {{ clinic.value }}</div>
+          <div class="text-h5 text-center">{{ title }}</div>
         </q-card-section>
 
         <q-separator />
@@ -120,6 +120,7 @@ const telephone = ref(null);
 const notes = ref(null);
 
 const createOrUpdate = inject('createOrUpdate');
+const clinic = inject('clinic');
 
 /*
   Props
@@ -130,9 +131,6 @@ const props = defineProps({
   },
   createOrUpdate: {
     type: Function,
-  },
-  clinic: {
-    type: Object,
   },
 });
 /*

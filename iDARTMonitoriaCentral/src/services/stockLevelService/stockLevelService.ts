@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import StockLevel from 'src/stores/models/stockLevel/stockLevel';
 import api from '../apiService/apiService';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const stocklevel = useRepo(StockLevel);
 
@@ -14,6 +15,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('stocklevel?offset=' + offset + '&limit=100')
@@ -22,7 +29,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },

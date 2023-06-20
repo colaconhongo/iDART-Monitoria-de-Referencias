@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import ClinicSector from 'src/stores/models/clinicSector/clinicSector';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const clinicsector = useRepo(ClinicSector);
 
@@ -33,6 +34,11 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('clinicsector?offset=' + offset + '&limit=100')
@@ -41,9 +47,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             setTimeout(this.get, 2);
+          } else {
+            Loading.hide();
           }
         })
         .catch((error) => {
+          Loading.hide();
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = {};
@@ -77,10 +86,16 @@ export default {
           clinicsector.save(resp.data);
           offset = offset + 100;
           if (resp.data.length > 0) {
-            setTimeout(this.get, 2);
+            setTimeout(
+              this.getAllFromClinicUuidList(clinicUuidList, offset),
+              2
+            );
+          } else {
+            Loading.hide();
           }
         })
         .catch((error) => {
+          Loading.hide();
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = {};

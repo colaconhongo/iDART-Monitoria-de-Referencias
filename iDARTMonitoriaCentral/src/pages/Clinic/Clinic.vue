@@ -1,12 +1,11 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <clinicHome :is="activeClinicHome" v-model:title="titleList" />
+    <ClinicHome :is="activeClinicHome" v-model:title="titleList" />
     <ClinicDetailsVue :is="activeDetails" v-model:title="titleDetails" />
     <CreateEditClinic
       :is="true"
       v-model:createOrUpdate="createOrUpdate"
       v-model:close="close"
-      v-model:clinic="clinic"
     />
     <div class="absolute-bottom">
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -29,6 +28,7 @@ import { provide, reactive, ref } from 'vue';
 import clinicService from 'src/services/clinicService/clinicService';
 import { confirm } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 import { useI18n } from 'vue-i18n';
+import Clinic from 'src/stores/models/clinic/clinic';
 
 /*
 Declarations
@@ -43,7 +43,7 @@ const submitting = reactive(ref(false));
 const activeEditDialog = reactive(ref(false));
 const activeDetails = reactive(ref(false));
 const activeClinicHome = reactive(ref(true));
-const clinic = reactive(ref([]));
+const clinic = reactive(ref(new Clinic()));
 const editedIndex = reactive(ref(0));
 
 /*

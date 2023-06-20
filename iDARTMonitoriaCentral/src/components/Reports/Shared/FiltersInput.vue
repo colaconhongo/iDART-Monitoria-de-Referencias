@@ -171,7 +171,7 @@ import useUtils from 'src/use/useUtils';
   */
 const province = inject('province');
 const district = inject('district');
-const facility = inject('facility');
+const facility = inject('us');
 const pharmacy = inject('pharmacy');
 const loadingPDF = inject('loadingPDF');
 const loadingXLS = inject('loadingXLS');

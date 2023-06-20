@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 const instance = axios.create({
   baseURL: 'http://dev.fgh.org.mz:3910/',

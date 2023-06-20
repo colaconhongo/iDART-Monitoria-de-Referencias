@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="q-pa-xs" style="max-width: 1000px">
-      <q-list separator>
+      <q-list v-for="men in menu" :key="men.tabName" separator>
         <q-item
-          v-for="men in menu"
-          :key="men.tabName"
+          v-if="men.model.includes(selectedModel.abbreviation)"
           clickable
           class="menu-item q-mt-xs"
           @click="changeTab(men.tabName)"
@@ -15,6 +14,7 @@
         </q-item>
       </q-list>
       <q-expansion-item
+        v-if="selectedModel.abbreviation === 'MDD'"
         expand-separator
         label="Indicadores de Pesquisa"
         class="menu-item q-mt-xs"
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 /*
   Declarations
 */
@@ -46,35 +46,48 @@ const menu = ref([
   {
     description: 'Lista de Pacientes Referidos para outras Farmácias',
     tabName: 'ReferedPatientsList',
+    model: ['MDD'],
   },
   {
     description: 'Lista de Pacientes Referidos para Sectores Clinicos',
     tabName: 'ReferedPatientsClinicSectorList',
+    model: ['MDC'],
   },
   {
     description: 'Lista de Pacientes que Voltaram da Referência',
     tabName: 'ReturnedReferedPatient',
+    model: ['MDD'],
   },
   {
     description: 'Lista de Pacientes Faltosos ao Levantamento',
     tabName: 'PatientsWithMissDispenses',
+    model: ['MDD'],
   },
   {
     description: 'Histórico de Levantamentos de Pacientes Referidos',
     tabName: 'PatientDispenseHistory',
+    model: ['MDD'],
   },
-  { description: 'Lista de Pacientes Activos', tabName: 'ActivePatientList' },
+  {
+    description: 'Lista de Pacientes Activos',
+    tabName: 'ActivePatientList',
+    model: ['MDD'],
+  },
   {
     description: 'Lista de Dispensas por Frasco e Regime',
     tabName: 'DispenseByDrugAndRegimen',
+    model: ['MDD'],
   },
   {
     description: 'Lista de Pacientes com Atenção Farmaceutica',
     tabName: 'PatientWithScreeningList',
+
+    model: ['MDD'],
   },
   {
     description: 'Lista de Dispensas que não Foram Sincronizadas',
     tabName: 'NotSyncDispenses',
+    model: ['MDD'],
   },
 ]);
 
@@ -82,14 +95,17 @@ const menuResearch = ref([
   {
     description: 'Listar pacientes activos na farmácia (Modelo DDD)',
     tabName: 'ActivePatientDDDModel',
+    model: ['MDD'],
   },
   {
     description: 'Listar pacientes inactivos na farmácia (Modelo DDD)',
     tabName: 'InactivePatientDDDModel',
+    model: ['MDD'],
   },
   {
     description: 'Número de pacientes Inscritos em DDD',
     tabName: 'EnrolledPatientIndicator',
+    model: ['MDD'],
   },
 ]);
 
@@ -97,6 +113,14 @@ const menuResearch = ref([
       Emits
     */
 const emit = defineEmits(['changeTab']);
+/*
+Inject
+*/
+const selectedModel = inject('selectedModel');
+
+/*
+Computed
+*/
 /*
       Methods
     */

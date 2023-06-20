@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Form from 'src/stores/models/form/form';
 import api from '../apiService/apiService';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const form = useRepo(Form);
 
@@ -14,6 +15,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('form?offset=' + offset + '&limit=100')
@@ -22,7 +29,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             setTimeout(this.get, 2);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },
@@ -48,7 +60,7 @@ export default {
     return form.all();
   },
   getFormByID(id: number) {
-    return form.query().where('id', id).get();
+    return form.query().where('id', id).first();
   },
   getFormByName(drugname: string) {
     return form.query().where('form', drugname).get();

@@ -90,8 +90,6 @@ import districtService from 'src/services/districtService/districtService';
 /*
   Props
 */
-const $q = new useQuasar();
-
 const show_dialog = inject('show_dialog');
 const submitting = inject('submitting');
 const patient = inject('patient');
@@ -104,14 +102,6 @@ const close = inject('close');
   Mounted Hooks
 */
 onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
   getAllClinicFromAPI(0);
 });
 
