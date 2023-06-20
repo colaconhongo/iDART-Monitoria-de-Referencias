@@ -29,7 +29,7 @@ import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 /*
   Declarations
   */
-const titleList = reactive(ref('Lista de Perfis'));
+
 const titleAddEdit = reactive(ref('Dados do Perfil'));
 const titleDetails = reactive(ref('Detalhes do Perfil'));
 const show_dialog = reactive(ref(false));
@@ -186,7 +186,6 @@ const codeRules = (val) => {
 };
 
 provide('title', titleAddEdit);
-provide('titleList', titleList);
 provide('titleDetails', titleDetails);
 provide('show_dialog', show_dialog);
 provide('details_dialog', details_dialog);

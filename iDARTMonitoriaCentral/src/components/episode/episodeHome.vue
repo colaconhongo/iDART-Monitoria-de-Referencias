@@ -2,7 +2,6 @@
   <q-page class="q-pa-sm q-gutter-sm">
     <listEpisode
       :columns="columns"
-      :mode="mode"
       :rows="allEpisodes"
       :title="title"
       :editar="editEpisode"
@@ -103,16 +102,6 @@ const columns = [
   Mounted Hooks
 */
 onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 600);
-
-  // getPatientEpisodesFromAPI(patient.uuidopenmrs);
   getPatientEpisodesFromAPI(patient.value.uuidopenmrs);
 });
 

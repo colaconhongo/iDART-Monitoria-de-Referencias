@@ -30,21 +30,6 @@
           @click="show_filter = !show_filter"
         />
         <q-btn
-          flat
-          round
-          dense
-          :icon="mode === 'grid' ? 'list' : 'grid_on'"
-          @click="
-            mode = mode === 'grid' ? 'list' : 'grid';
-            separator = mode === 'grid' ? 'none' : 'horizontal';
-          "
-          v-if="!props.inFullscreen"
-        >
-          <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
-            >{{ mode === 'grid' ? 'List' : 'Grid' }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn
           color="primary"
           icon-right="archive"
           label="Imprimir em Excel"

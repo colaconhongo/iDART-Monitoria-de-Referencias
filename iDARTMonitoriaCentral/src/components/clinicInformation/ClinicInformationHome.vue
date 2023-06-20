@@ -2,10 +2,9 @@
   <q-page class="q-pa-sm q-gutter-sm">
     <listClinic
       :columns="columns"
-      :mode="mode"
       :with_downloadButton="true"
       :rows="allClinicInformation"
-      :title="props.title"
+      :title="title"
       :with_actionRemoveButton="false"
       :with_actionEditButton="false"
       :with_actionDetailButton="true"
@@ -28,15 +27,11 @@ import clinicInformationModal from 'src/components/clinicInformation/ClinicInfor
 import moment from 'moment';
 
 const patient = inject('patient');
+const title = inject('title');
+
 /*
 Props
 */
-
-const props = defineProps({
-  title: {
-    type: String,
-  },
-});
 
 /*
 Declarations
@@ -104,11 +99,6 @@ const columns = [
   Mounted Hooks
 */
 onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
   getAllClinicInformationFromAPI(0);
 });
 
@@ -120,10 +110,6 @@ const allClinicInformation = computed(() => {
   return clinicInformationService.getClinicInformationByPatientUuid(
     patient.value.uuidopenmrs
   );
-  // getClinicInformationByPatientUuid
-  //'40b17748-05d6-44db-9d44-581f4853c854'
-  // patient.uuidopenmrs
-  //0104011401/2019/00524
 });
 
 /*
@@ -132,7 +118,10 @@ const allClinicInformation = computed(() => {
 
 const getAllClinicInformationFromAPI = (offset) => {
   if (offset >= 0) {
-    clinicInformationService.get(offset);
+    clinicInformationService.getByPatientUUID(
+      patient.value.uuidopenmrs,
+      offset
+    );
   }
   setTimeout(() => {
     $q.loading.hide();

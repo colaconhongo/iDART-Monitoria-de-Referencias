@@ -3,7 +3,6 @@
     <PatientSearchFields></PatientSearchFields>
     <listPatient
       :columns="columns"
-      :mode="mode"
       :rows="allPatients"
       :title="title"
       :visualizar="viewPatient"
@@ -16,31 +15,19 @@
   </q-page>
 </template>
 <script setup>
-import { useQuasar, QSpinnerBall } from 'quasar';
-import {
-  computed,
-  inject,
-  onMounted,
-  reactive,
-  ref,
-  provide,
-  onUpdated,
-} from 'vue';
+import { computed, inject, reactive, provide } from 'vue';
 import patientService from 'src/services/patientService/patientService';
 import listPatient from 'src/components/Shared/CRUD/TableList.vue';
 import PatientSearchFields from 'src/components/patients/PatientSearchFields.vue';
 import { useI18n } from 'vue-i18n';
 import Patient from 'src/stores/models/patient/patient';
 import useUtils from 'src/use/useUtils';
-import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 /*
 Declarations
 */
 
 const currPatient = reactive(new Patient());
-const $q = new useQuasar();
 const { t } = useI18n();
-const mode = reactive(ref('list'));
 const viewPatient = inject('viewPatient');
 const title = inject('titleList');
 const district = inject('district');
@@ -102,23 +89,6 @@ const columns = [
 ];
 
 /*
-  Mounted Hooks
-*/
-onUpdated ==
-  onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
-    getAllPatientsFromAPI(0);
-    getAllClinicSectorFromAPI(0);
-  });
-
-/*
   Computed
 */
 const allPatients = computed(() => {
@@ -156,18 +126,6 @@ const allPatients = computed(() => {
 /*
   Methods
 */
-
-const getAllPatientsFromAPI = (offset) => {
-  if (offset >= 0) {
-    patientService.get(offset);
-  }
-};
-
-const getAllClinicSectorFromAPI = (offset) => {
-  if (offset >= 0) {
-    clinicSectorService.get(offset);
-  }
-};
 
 provide('allPatients', allPatients);
 provide('currPatient', currPatient);

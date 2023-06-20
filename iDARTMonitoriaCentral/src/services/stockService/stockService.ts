@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import Stock from 'src/stores/models/stock/stock';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const stock = useRepo(Stock);
 
@@ -15,6 +16,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('stock?select=*,drug(*)?offset=' + offset + '&limit=100')
@@ -23,8 +30,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          }else{
+            Loading.hide()
           }
-        }).catch((error) => {
+        })
+        .catch((error) => {
+          Loading.hide()
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = [];
@@ -41,7 +52,7 @@ export default {
           } else {
             alert('Erro no registo', error.message, null, null, null);
           }
-        });
+        })
     }
   },
   patch(id: number, params: string) {
@@ -63,12 +74,15 @@ export default {
     return stock.getModel().$newInstance();
   },
   getAllFromStorage() {
-    return stock.query().withAll().get()
+    return stock.query().withAll().get();
   },
   getByDrugIdFromStorage(drugId: string) {
-    const list = stock.query().with('mainDrug', (query) => {
-      query.where('id', drugId)
-    }).get()
-    return list
-  }
+    const list = stock
+      .query()
+      .with('mainDrug', (query) => {
+        query.where('id', drugId);
+      })
+      .get();
+    return list;
+  },
 };

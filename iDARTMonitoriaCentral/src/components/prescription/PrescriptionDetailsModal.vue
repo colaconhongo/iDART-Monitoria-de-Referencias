@@ -64,7 +64,6 @@ import prescriptionService from 'src/services/prescriptionService/prescriptionSe
 import moment from 'moment';
 
 const patient = inject('patient');
-const prescription = inject('prescription');
 /*
   Props
 */
@@ -89,6 +88,7 @@ Declarations
 */
 const mode = reactive(ref('list'));
 let show_dialog = inject('show_dialog');
+const prescription = inject('prescription');
 
 const columns = [
   {
@@ -140,7 +140,8 @@ const columns = [
 
 const allDispenses = computed(() => {
   return prescriptionService.getPrescriptionsByPrescriptionId(
-    prescription.value.prescriptionid, patient.value.patientid
+    prescription.value.prescriptionid,
+    patient.value.patientid
   );
 });
 

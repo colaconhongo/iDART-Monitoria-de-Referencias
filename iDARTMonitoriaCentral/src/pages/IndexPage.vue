@@ -126,27 +126,19 @@ import { onMounted, onUpdated } from 'vue';
   Declaration
 */
 
-const $q = useQuasar();
 /*
   Mounted Hooks
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    $q.loading.hide();
-  //  menuService.get(0);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
   });
 
-  const menusVisible = (name) => {
-    return menusAcessUtils.menusVisible(name)
-      }
+const menusVisible = (name) => {
+  return menusAcessUtils.menusVisible(name);
+};
 </script>
 <style scoped>
 @keyframes rotating {

@@ -189,6 +189,17 @@ export default {
       conditionString =
         conditionString + '&clinicuuid=eq.' + params.value.clinic.uuid;
     }
+    if (
+      params.value !== undefined &&
+      params.value.facility !== undefined &&
+      params.value.facility !== null &&
+      params.value.facility.id !== undefined
+    ) {
+      conditionString =
+        conditionString +
+        '&mainclinicuuid=eq.' +
+        params.value.facility.mainclinicuuid;
+    }
     return conditionString;
   },
   buildGenericFuncCondition(params) {
@@ -212,6 +223,17 @@ export default {
     ) {
       conditionString =
         conditionString + '&clinicuuid=' + params.value.clinic.uuid;
+    }
+    if (
+      params.value !== undefined &&
+      params.value.facility !== undefined &&
+      params.value.facility !== null &&
+      params.value.facility.id !== undefined
+    ) {
+      conditionString =
+        conditionString +
+        '&mainclinicuuid=eq.' +
+        params.value.facility.mainclinicuuid;
     }
     return conditionString;
   },

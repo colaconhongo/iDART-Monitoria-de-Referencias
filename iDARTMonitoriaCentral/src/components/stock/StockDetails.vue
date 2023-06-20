@@ -29,7 +29,6 @@
     <div class="q-mx-xl q-mt-lg">
       <stockTable
         :columns="columns"
-        :mode="mode"
         :with_downloadButton="false"
         :with_actionDetailButton="false"
         :with_actionEditButton="false"
@@ -120,14 +119,6 @@ const emit = defineEmits(['goBack']);
   */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
     getStockDetailsFromAPI();
   });
 

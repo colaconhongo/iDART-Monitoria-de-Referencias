@@ -1,9 +1,6 @@
 <template>
   <q-page class="q-pa-sm q-gutter-sm">
-    <ClinicInformationHome
-      :is="activeClinicInformationHome"
-      v-model:title="titleList"
-    />
+    <ClinicInformationHome :is="activeClinicInformationHome" />
   </q-page>
 </template>
 <script setup>
@@ -23,9 +20,8 @@ const clinicInformation = reactive(ref([]));
 const editedIndex = reactive(ref(0));
 const activeClinicInformationHome = reactive(ref(true));
 
-provide('title', titleAddEdit);
+provide('title', titleList);
 provide('show_dialog', show_dialog);
-// provide('clinic', clinic);
 provide('submitting', submitting);
 
 /*

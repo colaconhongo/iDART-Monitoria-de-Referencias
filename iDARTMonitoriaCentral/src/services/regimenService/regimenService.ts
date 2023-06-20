@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import Regimen from 'src/stores/models/regimen/regimen';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const regimeterapeutico = useRepo(Regimen);
 
@@ -15,6 +16,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('regimeterapeutico?offset=' + offset + '&limit=100')
@@ -23,7 +30,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },

@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Line from 'src/stores/models/line/line';
 import api from '../apiService/apiService';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const linhat = useRepo(Line);
 
@@ -14,6 +15,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('linhat?offset=' + offset + '&limit=100')
@@ -22,7 +29,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             setTimeout(this.get, 2);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },

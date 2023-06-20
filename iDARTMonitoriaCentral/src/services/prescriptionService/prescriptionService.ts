@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 import Prescription from 'src/stores/models/prescription/prescription';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const sync_temp_dispense = useRepo(Prescription);
 
@@ -15,6 +16,12 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
     if (offset >= 0) {
       return api()
         .get('sync_temp_dispense?offset=' + offset + '&limit=100')
@@ -23,7 +30,42 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
+        });
+    }
+  },
+  getByPatientID(patientId: string, offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+
+    if (offset >= 0) {
+      return api()
+        .get(
+          'sync_temp_dispense?patientid=eq.' +
+            patientId +
+            '&offset=' +
+            offset +
+            '&limit=100'
+        )
+        .then((resp) => {
+          sync_temp_dispense.save(resp.data);
+          offset = offset + 100;
+          if (resp.data.length > 0) {
+            this.getByPatientID(patientId, offset);
+          } else {
+            Loading.hide();
+          }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },

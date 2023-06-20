@@ -19,7 +19,8 @@ export default {
           if (resp.data.length > 0) {
             setTimeout(this.get, 2);
           }
-        }).catch((error) => {
+        })
+        .catch((error) => {
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = [];
@@ -50,7 +51,8 @@ export default {
           if (resp.data.length > 0) {
             setTimeout(this.get, 2);
           }
-        }).catch((error) => {
+        })
+        .catch((error) => {
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = [];
@@ -71,42 +73,44 @@ export default {
     }
   },
   getDetails(drugId: number, clinicId: string) {
-      return api()
-        .get(`stock_details_vw?drug=eq.${drugId}&clinicid=eq.${clinicId}`)
-        .then((resp) => {
-          stockDetail.save(resp.data);
-        }).catch((error) => {
-          if (error.request != null) {
-            const arrayErrors = JSON.parse(error.request.response);
-            const listErrors = [];
-            if (arrayErrors.total == null) {
-              listErrors.push(arrayErrors.message);
-            } else {
-              arrayErrors._embedded.errors.forEach((element) => {
-                listErrors.push(element.message);
-              });
-            }
-            alert('Erro no registo', listErrors, null, null, null);
-          } else if (error.request) {
-            alert('Erro no registo', error.request, null, null, null);
+    return api()
+      .get(`stock_details_vw?drug=eq.${drugId}&clinicid=eq.${clinicId}`)
+      .then((resp) => {
+        stockDetail.save(resp.data);
+      })
+      .catch((error) => {
+        if (error.request != null) {
+          const arrayErrors = JSON.parse(error.request.response);
+          const listErrors = [];
+          if (arrayErrors.total == null) {
+            listErrors.push(arrayErrors.message);
           } else {
-            alert('Erro no registo', error.message, null, null, null);
+            arrayErrors._embedded.errors.forEach((element) => {
+              listErrors.push(element.message);
+            });
           }
-        });
+          alert('Erro no registo', listErrors, null, null, null);
+        } else if (error.request) {
+          alert('Erro no registo', error.request, null, null, null);
+        } else {
+          alert('Erro no registo', error.message, null, null, null);
+        }
+      });
   },
   // Local Storage Pinia
   newInstanceEntity() {
     return stock.getModel().$newInstance();
   },
   getAllFromStorage() {
-    return stock.all()
+    return stock.all();
+  },
+  getAllFromStorageByClinicUuid(clinicuuid: string) {
+    return stock.where('clinicuuid', clinicuuid).get();
   },
   getAllDetailsOfDrugFromStorage(drugId: number, clinicId: string) {
-    return stockDetail.query()
-                .where('drug', drugId)
-                .get()
+    return stockDetail.query().where('drug', drugId).get();
   },
   deleteAllFromStorage() {
-      stock.flush()
+    stock.flush();
   },
 };

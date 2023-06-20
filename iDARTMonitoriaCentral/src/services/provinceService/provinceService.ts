@@ -1,6 +1,7 @@
 import { useRepo } from 'pinia-orm';
 import Province from 'src/stores/models/province/province';
 import api from '../apiService/apiService';
+import { Loading, QSpinnerBall, useQuasar } from 'quasar';
 
 const province = useRepo(Province);
 
@@ -14,6 +15,11 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('province?offset=' + offset + '&limit=100')
@@ -22,7 +28,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },

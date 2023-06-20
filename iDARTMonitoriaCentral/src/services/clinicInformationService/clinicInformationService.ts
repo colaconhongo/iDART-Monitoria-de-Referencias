@@ -2,6 +2,7 @@ import { useRepo } from 'pinia-orm';
 import api from '../apiService/apiService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 import ClinicInformation from 'src/stores/models/clinicInformation/clinicInformation';
+import { Loading, QSpinnerBall } from 'quasar';
 
 const sync_temp_clinic_information = useRepo(ClinicInformation);
 
@@ -15,6 +16,11 @@ export default {
       });
   },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('sync_temp_clinic_information?offset=' + offset + '&limit=100')
@@ -23,7 +29,41 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
+        })
+        .catch(() => {
+          Loading.hide();
+        });
+    }
+  },
+  getByPatientUUID(patientUuid: string, offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    if (offset >= 0) {
+      return api()
+        .get(
+          'sync_temp_clinic_information?patientuuid=eq.' +
+            patientUuid +
+            '&offset=' +
+            offset +
+            '&limit=100'
+        )
+        .then((resp) => {
+          sync_temp_clinic_information.save(resp.data);
+          offset = offset + 100;
+          if (resp.data.length > 0) {
+            this.getByPatientUUID(patientUuid, offset);
+          } else {
+            Loading.hide();
+          }
+        })
+        .catch(() => {
+          Loading.hide();
         });
     }
   },
@@ -49,8 +89,11 @@ export default {
     return sync_temp_clinic_information.all();
   },
   getClinicInformationByPatientUuid(patientUuid) {
-    const list =  sync_temp_clinic_information.query().where('patientuuid', patientUuid).orderBy('registerdate', 'desc').
-    get();
+    const list = sync_temp_clinic_information
+      .query()
+      .where('patientuuid', patientUuid)
+      .orderBy('registerdate', 'desc')
+      .get();
     return list;
   },
 };

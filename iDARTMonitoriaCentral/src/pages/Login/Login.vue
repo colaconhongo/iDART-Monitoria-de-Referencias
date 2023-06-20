@@ -160,6 +160,39 @@
             </q-card-section>
           </q-card>
         </transition>
+        <q-dialog
+          persistent
+          v-model="notice"
+          transition-show="slide-up"
+          transition-hide="slide-down"
+        >
+          <q-card class="bg-white text-red">
+            <q-card-section>
+              <div class="text-h6 text-weight-bold">
+                Aviso de Confidencialidade
+              </div>
+              <q-separator />
+            </q-card-section>
+            <q-card-section class="q-pt-md">
+              <div class="row">
+                <div class="col-2">
+                  <q-icon name="warning" color="red" size="4.5rem" />
+                </div>
+                <div class="col text-justify">
+                  Ao acessar este sistema, você está prestes a visualizar
+                  informações altamente confidenciais de utentes. É sua
+                  responsabilidade protegê-las adequadamente e usá-las somente
+                  para os fins autorizados. A Privacidade dos utentes é
+                  essencial para a nossa missão
+                </div>
+              </div>
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn color="red" label="Fechar" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -187,6 +220,7 @@ const submitting = ref(false);
 const router = useRouter();
 const provincia = ref([]);
 const accessGranted = ref(true);
+const notice = ref(true);
 
 /*
   Computed
@@ -305,9 +339,20 @@ const addUserAcess = () => {
                 }
                 alert('Erro no registo 1', listErrors, null, null, null);
               } else if (error.request) {
-                alert('Erro no registo 1', error.request, null, null, null);
+                alert('Erro no registo 2', error.request, null, null, null);
               } else {
-                alert('Erro no registo 1', error.message, null, null, null);
+                ShowNotification(
+                  'announcement',
+                  'Utilizador sem permissão ou Senha inválida, por favor contacte o Administrador ',
+                  'negative',
+                  true,
+                  4500,
+                  'center',
+                  'negative',
+                  'white',
+                  'glossy'
+                );
+                // alert('Erro no registo 3 '+error, error.message, null, null, null);
               }
             });
         })

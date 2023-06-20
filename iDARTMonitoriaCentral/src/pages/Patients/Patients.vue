@@ -3,7 +3,7 @@
     <Filter v-if="activePatientList" />
     <q-bar v-if="activePatientList" dense dark class="bg-primary"> </q-bar>
     <PatientList v-if="activePatientList" v-model:title="titleList" />
-    <PatientView v-else />
+    <PatientView v-if="activePatientDetails" />
   </q-page>
 </template>
 
@@ -31,13 +31,17 @@ import provinceService from 'src/services/provinceService/provinceService';
 import districtService from 'src/services/districtService/districtService';
 import clinicService from 'src/services/clinicService/clinicService';
 import PatientService from 'src/services/patientService/patientService';
+import patientService from 'src/services/patientService/patientService';
+import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
+import Patient from 'src/stores/models/patient/patient';
 
 const $q = useQuasar();
 const district = reactive(ref());
 const pharmacy = reactive(ref());
 const titleList = reactive(ref('Pacientes'));
-const localPatient = reactive(ref([]));
-const activePatientList = reactive(ref(true));
+const localPatient = reactive(ref(new Patient()));
+const activePatientList = ref(true);
+const activePatientDetails = ref(false);
 let year = ref(new Date().getFullYear());
 const yearsToShow = DashboardUtils.getLastFiveYears();
 let us = ref();
@@ -72,19 +76,15 @@ const DDPharmByDistrict = computed(() => {
 });
 
 const viewPatient = (patientRow) => {
-  localPatient.value = patientRow;
   activePatientList.value = false;
+  activePatientDetails.value = true;
+  localPatient.value = patientRow;
 };
 
-const patient = computed({
-  get() {
-    return PatientService.getPatientByUUidFromStorage(
-      localPatient.value.uuidopenmrs
-    );
-  },
-  set(newValue) {
-    patient = newValue;
-  },
+const patient = computed(() => {
+  return PatientService.getPatientByUUidFromStorage(
+    localPatient.value.uuidopenmrs
+  );
 });
 
 /*
@@ -92,17 +92,11 @@ const patient = computed({
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 1000);
     provinceService.get(0);
     districtService.get(0);
     clinicService.get(0);
+    patientService.get(0);
+    clinicSectorService.get(0);
   });
 
 /*
@@ -135,21 +129,20 @@ onDeactivated(() => {
 
 const goBack = () => {
   activePatientList.value = true;
+  activePatientDetails.value = false;
 };
 
 const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return PatientService.getUSByPatientsOnDistrict(district.value.name);
+    return clinicService.getReferralClinicByDistrict(district.value.name);
   } else return [];
 });
 
-const selectedModel = reactive(
-  ref({
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  })
-);
+const selectedModel = ref({
+  id: 0,
+  description: 'Dispensa Discentralizada',
+  abbreviation: 'MDD',
+});
 const dispenseModels = ref([
   {
     id: 0,
@@ -166,7 +159,6 @@ const dispenseModels = ref([
 provide('titleList', titleList);
 provide('viewPatient', viewPatient);
 provide('patient', patient);
-provide('activePatientList');
 provide('pharmacy', pharmacy);
 provide('allProvincias', allProvincias);
 provide('province', provincia);

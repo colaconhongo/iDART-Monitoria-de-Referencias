@@ -5,8 +5,11 @@ import patientService from '../patientService/patientService';
 import { alert } from '../../components/Shared/Directives/Plugins/Dialog/dialog';
 import District from 'src/stores/models/district/district';
 import { timeStamp } from 'console';
+import { Loading, QSpinnerBall } from 'quasar';
+import ReferralClinic from 'src/stores/models/clinic/referalClinic';
 
 const clinic = useRepo(Clinic);
+const referralClinic = useRepo(ReferralClinic);
 
 export default {
   post(params: string) {
@@ -45,7 +48,52 @@ export default {
         }
       });
   },
+
+  getReferralClinics(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
+    if (offset >= 0) {
+      return api()
+        .get('referal_clinics_vw?offset=' + offset + '&limit=100')
+        .then((resp) => {
+          referralClinic.save(resp.data);
+          offset = offset + 100;
+          if (resp.data.length > 0) {
+            this.get(offset);
+          } else {
+            Loading.hide();
+          }
+        })
+        .catch((error) => {
+          Loading.hide();
+          if (error.request != null) {
+            const arrayErrors = JSON.parse(error.request.response);
+            const listErrors = [];
+            if (arrayErrors.total == null) {
+              listErrors.push(arrayErrors.message);
+            } else {
+              arrayErrors._embedded.errors.forEach((element) => {
+                listErrors.push(element.message);
+              });
+            }
+            alert('Erro no registo', listErrors, null, null, null);
+          } else if (error.request) {
+            alert('Erro no registo', error.request, null, null, null);
+          } else {
+            alert('Erro no registo', error.message, null, null, null);
+          }
+        });
+    }
+  },
   get(offset: number) {
+    Loading.show({
+      message: 'Carregando ...',
+      spinnerColor: 'grey-4',
+      spinner: QSpinnerBall,
+    });
     if (offset >= 0) {
       return api()
         .get('clinic?offset=' + offset + '&limit=100')
@@ -54,9 +102,12 @@ export default {
           offset = offset + 100;
           if (resp.data.length > 0) {
             this.get(offset);
+          } else {
+            Loading.hide();
           }
         })
         .catch((error) => {
+          Loading.hide();
           if (error.request != null) {
             const arrayErrors = JSON.parse(error.request.response);
             const listErrors = [];
@@ -282,5 +333,9 @@ export default {
     );
 
     return clinics;
+  },
+
+  getReferralClinicByDistrict(districtname: string) {
+    return referralClinic.where('district', districtname).get();
   },
 };

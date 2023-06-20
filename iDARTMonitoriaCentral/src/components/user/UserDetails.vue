@@ -13,12 +13,12 @@
 import ViewUser from 'src/components/Shared/CRUD/ModalDetails.vue';
 import { inject, ref } from 'vue';
 
+const titleDetails = ref('Detalhes do Utilizador');
 /*
   Injection
 */
 
 const details_dialog = inject('details_dialog');
-const titleDetails = inject('titleDetails');
 const localEntity = inject('localEntity');
 const close = inject('close');
 const excludeAttribute = ref(['id', 'userid', 'pass', 'role']);

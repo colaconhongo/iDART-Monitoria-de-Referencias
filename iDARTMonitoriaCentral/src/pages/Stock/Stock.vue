@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm q-gutter-md">
-    <Filter :is="true" v-if="showStockSearch" />
+    <Filter :is="true" :isStockSearch="isStockSearch" v-if="showStockSearch" />
     <q-bar v-if="showStockSearch" dense dark class="bg-primary"> </q-bar>
     <div class="row">
       <q-space />
@@ -9,12 +9,12 @@
         dense
         outlined
         option-label="description"
-        v-model="selectedModel"
+        v-model="selectedMode"
         :options="dispenseModels"
         label="Tipo de Modelo de Dispensa"
       />
     </div>
-    <stockDetails v-if="!showStockSearch" @goBack="goBack" />
+    <stockDetails v-if="showStockDetails" @goBack="goBack" />
     <stockSearch v-if="showStockSearch" />
   </div>
 </template>
@@ -43,16 +43,19 @@ import {
   onDeactivated,
   onUpdated,
 } from 'vue';
+import clinicSectorService from 'src/services/clinicSectorService/clinicSectorService';
 /*
 Declarations
 */
 const $q = new useQuasar();
-const showStockSearch = reactive(ref(true));
+const isStockSearch = ref(true);
+const showStockSearch = ref(true);
+const showStockDetails = ref(false);
 const stockData = reactive(ref([]));
 let selectRecord = reactive(ref({}));
 const district = reactive(ref());
 const pharmacy = reactive(ref());
-let us = ref();
+const us = ref('');
 let loaded = reactive({
   loaded: false,
 });
@@ -90,30 +93,12 @@ const DDPharmByDistrict = computed(() => {
 /*
   Mounted Hooks
 */
-onMounted(() => {
-  $q.loading.show({
-    message: 'Carregando ...',
-    spinnerColor: 'grey-4',
-    spinner: QSpinnerBall,
-  });
-  setTimeout(() => {
-    $q.loading.hide();
-  }, 800);
-});
 
 /*
   Mounted Hooks
 */
 onUpdated ==
   onMounted(() => {
-    $q.loading.show({
-      message: 'Carregando ...',
-      spinnerColor: 'grey-4',
-      spinner: QSpinnerBall,
-    });
-    setTimeout(() => {
-      $q.loading.hide();
-    }, 600);
     provinceService.get(0);
     DistrictService.get(0);
     clinicService.get(0);
@@ -134,10 +119,12 @@ const viewStock = (stockInfo) => {
   selectRecord.value = stockInfo;
   stockData.value = stockInfo;
   showStockSearch.value = false;
+  showStockDetails.value = true;
 };
 
 const goBack = () => {
   showStockSearch.value = true;
+  showStockDetails.value = false;
 };
 
 /*
@@ -171,17 +158,16 @@ onDeactivated(() => {
 
 const allUS = computed(() => {
   if (district.value != null || district.value != undefined) {
-    return PatientService.getUSByPatientsOnDistrict(district.value.name);
+    return clinicService.getReferralClinicByDistrict(district.value.name);
   } else return [];
 });
 
-const selectedModel = reactive(
-  ref({
-    id: 0,
-    description: 'Dispensa Discentralizada',
-    abbreviation: 'MDD',
-  })
-);
+const selectedMode = ref({
+  id: 0,
+  description: 'Dispensa Discentralizada',
+  abbreviation: 'MDD',
+});
+
 const dispenseModels = ref([
   {
     id: 0,
@@ -209,8 +195,8 @@ provide('us', us);
 provide('allPhamacyFromFacility', DDPharmByDistrict);
 provide('yearsToShow', yearsToShow);
 provide('year', year);
-provide('selectedModel', selectedModel);
-provide('dispenseModels', dispenseModels);
+provide('selectedModel', selectedMode);
+// provide('dispenseModels', dispenseModels);
 </script>
 
 <style></style>
