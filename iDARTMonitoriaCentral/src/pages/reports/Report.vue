@@ -169,7 +169,7 @@ const alldistrictsFromProvince = computed(() => {
 const allPhamacyFromFacility = computed(() => {
   if (district.value != null || district.value != undefined) {
     let pharmaciesResult;
-    if (us.value != null || us.value != undefined) {
+    if (us.value !== null && us.value !== undefined && us.value !== '') {
       // Query com filtro por US
       const lst = PatientService.getPharmaciesIdsByUS(us.value.mainclinicuuid);
       pharmaciesResult = ClinicService.getPharmaciesByUuidList(lst); // Retorna Clinicas privadas para as quais a 'US' referenciou seus pacientes
