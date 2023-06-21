@@ -211,8 +211,6 @@
                   selection="multiple"
                   dense
                   v-model:selected="user.profiles"
-                  v-if="!onlyView"
-                  rows-per-page-options="8"
                 >
                 </q-table>
               </div>
@@ -362,9 +360,7 @@ const validateForm = () => {
   }
 };
 
-const profiles = reactive(
-  computed(() => {
-    return ProfileService.getAllActiveProfiles();
-  })
-);
+const profiles = computed(() => {
+  return ProfileService.getAllActiveProfiles();
+});
 </script>

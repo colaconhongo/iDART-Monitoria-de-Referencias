@@ -42,8 +42,6 @@
                   selection="multiple"
                   v-model:selected="profile.menus"
                   class="my-sticky-header-table"
-                  v-if="!onlyView"
-                  rows-per-page-options="8"
                 >
                 </q-table>
               </div>
@@ -143,15 +141,11 @@ onMounted(() => {
   databaseCodes();
 });
 
-const menus = reactive(
-  computed(() => {
-    return MenuService.getAllFromStorage();
-  })
-);
+const menus = computed(() => {
+  return MenuService.getAllFromStorage();
+});
 
-const profiles = reactive(
-  computed(() => {
-    return ProfileService.getAllProfiles();
-  })
-);
+const profiles = computed(() => {
+  return ProfileService.getAllProfiles();
+});
 </script>

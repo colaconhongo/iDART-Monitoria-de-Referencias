@@ -29,7 +29,7 @@ import { alert } from 'src/components/Shared/Directives/Plugins/Dialog/dialog';
 /*
   Declarations
   */
-
+const titleList = ref('Perfil');
 const titleAddEdit = reactive(ref('Dados do Perfil'));
 const titleDetails = reactive(ref('Detalhes do Perfil'));
 const show_dialog = reactive(ref(false));
